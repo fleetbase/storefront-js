@@ -23,13 +23,9 @@ export default class Storefront {
             storeKey
         };
 
-        // if (typeof publicKey !== 'string' || publicKey.length === 0) {
-        //     throw new Error('⚠️ Invalid public key given to Fleetbase SDK');
-        // }
-
-        // if (!isNodeEnvironment() && publicKey.toLowerCase().startsWith('$')) {
-        //     throw new Error('Secret key provided. You must use a public key with Fleetbase Javascript SDK!');
-        // }
+        if (typeof storeKey !== 'string' || storeKey.length === 0 || !storeKey.startsWith('store_')) {
+            throw new Error('⚠️ Invalid storefront key given to Storefront SDK');
+        }
     }
 
 }
