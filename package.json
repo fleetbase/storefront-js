@@ -1,0 +1,24 @@
+{
+  "name": "@fleetbase/storefront",
+  "version": "1.0.0",
+  "description": "Fleetbase Storefront JS & Node SDK",
+  "main": "src/storefront.js",
+  "scripts": {
+    "test": "mocha --require @babel/polyfill --require @babel/register --require source-map-support/register tests/*.test.js"
+  },
+  "keywords": [
+    "fleetbase",
+    "ecommerce",
+    "api",
+    "ondemand",
+    "ecommerce",
+    "last",
+    "mile",
+    "delivery",
+    "logistics",
+    "ecommerce",
+    "app"
+  ],
+  "author": "Ronald A. Richardson <ron@fleetbase.io> (https://ron.dev)",
+  "license": "BSD-3-Clause"
+}
