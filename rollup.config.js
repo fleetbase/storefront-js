@@ -4,11 +4,11 @@ import { eslint } from 'rollup-plugin-eslint';
 import resolve from 'rollup-plugin-node-resolve';
 
 export default {
-	input: 'src/fleetbase.js',
+	input: 'src/storefront.js',
 	output: {
 		format: 'umd',
 		file: 'dist/bundle.js',
-		name: '@fleetbase/sdk'
+		name: '@fleetbase/storefront'
 	},
 	watch: {
 		exclude: ['node_modules/**'],
