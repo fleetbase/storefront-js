@@ -2,8 +2,7 @@
   <img src="https://flb-assets.s3.ap-southeast-1.amazonaws.com/static/fleetbase-logo-svg.svg" width="380" height="100" />
 </p>
 <p align="center">
-Fast, powerful, and easy to use JavaScript SDK for building on-demand and last-mile apps using Fleetbase API.
-Build custom real-time on-demand experiences, and easily manage the flow from start to finish.
+Ecommerce companion SDK & API for Fleetbase, build custom shopping experiences for on-demand orders.
 </p>
 
 <p align="center">
@@ -42,16 +41,31 @@ If you would like to make contributions to the Fleetbase Javascript SDK document
 ## Quick Start for Browser
 
 ```
-import Storefront from '@fleetbase/storefront';
+import Storefront, { Product } from '@fleetbase/storefront';
 
 const storefront = new Storefront('Your Store Key');
 
 // list products
-// add to cart
+storefront.products.findAll();
+
+// create a product
+const product = new Product({ name, description, price });
+
+// retrieve cart & add item
+storefront.cart.retrieve().then(cart => {
+  cart.add('product_xyxyxyx', 1);
+
+  // empty cart
+  cart.empty();
+});
+
 // checkout
+storefront.checkout.capture();
 ```
 
 
 ## Create a custom adapter
+
+Storefront will eventually allow you to bring your own ecommerce adapter.
 
 ```@todo```
