@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://flb-assets.s3.ap-southeast-1.amazonaws.com/static/fleetbase-logo-svg.svg" width="380" height="100" />
+  <img src="https://flb-assets.s3.ap-southeast-1.amazonaws.com/static/storefront-logo.svg" width="380" height="100" />
 </p>
 <p align="center">
 Ecommerce companion SDK & API for Fleetbase, build custom shopping experiences for on-demand orders.
