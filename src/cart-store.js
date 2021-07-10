@@ -17,12 +17,12 @@ export default class CartStore extends Store  {
         return this.request('post', `${this.namespace}/${id}/${productId}`, { ...data, quantity }, options);
     }
 
-    update(id, lineItemId, quantity, data = {}, options = {}) {
-        return this.request('put', `${this.namespace}/${id}/${lineItemId}`, { ...data, quantity }, options);
+    update(id, cartItemId, quantity, data = {}, options = {}) {
+        return this.request('put', `${this.namespace}/${id}/${cartItemId}`, { ...data, quantity }, options);
     }
 
-    remove(id, lineItemId, options = {}) {
-        return this.request('delete', `${this.namespace}/${id}/${lineItemId}`, {}, options);
+    remove(id, cartItemId, options = {}) {
+        return this.request('delete', `${this.namespace}/${id}/${cartItemId}`, {}, options);
     }
 
     empty(id, options = {}) {

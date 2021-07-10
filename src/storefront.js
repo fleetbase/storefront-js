@@ -1,7 +1,8 @@
 import Store from './store';
 import CartStore from './cart-store';
+import CustomerStore from './customer-store';
 import { detectAdapter } from './utils';
-import { Product, Category, Cart } from './resources';
+import { Product, Category, Customer, Cart } from './resources';
 
 /**
  * // instance
@@ -36,6 +37,7 @@ export default class Storefront {
 
         this.products = new Store('product', this.adapter);
         this.categories = new Store('category', this.adapter);
+        this.customers = new CustomerStore('customer', this.adapter);
         this.cart = new CartStore('cart', this.adapter);
     }
 
@@ -57,4 +59,4 @@ export default class Storefront {
     }
 }
 
-export { Product, Category, Cart, CartStore };
+export { Product, Category, Customer, Cart, CartStore, CustomerStore };

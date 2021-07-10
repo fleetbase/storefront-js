@@ -1,8 +1,8 @@
-import { Product, Category, Cart } from './resources';
+import { Product, Category, Customer, Cart } from './resources';
 import { BrowserAdapter, NodeAdapter, pluralize, singularize } from '@fleetbase/sdk';
 
 const resources = {
-    Product, Category, Cart
+    Product, Category, Customer, Cart
 };
 
 const adapters = {

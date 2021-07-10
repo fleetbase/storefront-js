@@ -22,12 +22,12 @@ export default class Cart extends Resource {
         return this.store.add(this.id, productId, quantity, data, options);
     }
 
-    update(lineItemId, quantity, data = {}, options = {}) {
-        return this.store.update(this.id, lineItemId, quantity, data, options);
+    update(cartItemId, quantity, data = {}, options = {}) {
+        return this.store.update(this.id, cartItemId, quantity, data, options);
     }
 
-    remove(lineItemId, options = {}) {
-        return this.store.remove(this.id, lineItemId, options);
+    remove(cartItemId, options = {}) {
+        return this.store.remove(this.id, cartItemId, options);
     }
 
     empty(options = {}) {
@@ -43,10 +43,18 @@ export default class Cart extends Resource {
     }
 
     contents() {
-        return this.getAttribute('line_items');
+        return this.getAttribute('items');
     }
 
     hasProduct(productId) {
-        return this.contents().findIndex(lineItem => lineItem.product_id === productId) !== -1;
+        return this.contents().findIndex(cartItem => cartItem.product_id === productId) !== -1;
+    }
+
+    get isEmpty() {
+        return this.contents().length === 0;
+    }
+
+    get isNotEmpty() {
+        return !this.isEmpty;
     }
 }

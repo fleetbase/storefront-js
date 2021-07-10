@@ -5,6 +5,14 @@ export default class Product extends Resource {
         super(attributes, adapter, 'product', options);
     }
 
+    variants() {
+        return this.getAttribute('variants');
+    }
+
+    addons() {
+        return this.getAttribute('addon_categories');
+    }
+
     get isOnSale() {
         return this.getAttribute('is_on_sale');
     }
