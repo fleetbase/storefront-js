@@ -38,7 +38,7 @@ export default class Customer extends Contact {
 
     }
 
-    getAddresses() {
+    getSavedPlaces() {
         return this.adapter.setHeaders({'Customer-Token': this.token }).get('customers/places').then((places) => {
             return new Collection(places.map(attributes => new Place(attributes, this.adapter)));
         });
