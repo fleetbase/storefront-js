@@ -1,4 +1,4 @@
-import { Contact, Place } from '@fleetbase/sdk';
+import { Contact, Place, Collection } from '@fleetbase/sdk';
 import CustomerStore from '../customer-store';
 
 export default class Customer extends Contact {
@@ -40,7 +40,7 @@ export default class Customer extends Contact {
 
     getAddresses() {
         return this.adapter.setHeaders({'Customer-Token': this.token }).get('customers/places').then((places) => {
-            return places.map(attributes => new Place(attributes).setAdapter(this.adapter));
+            return new Collection(places.map(attributes => new Place(attributes, this.adapter)));
         });
     }
 }
