@@ -1,8 +1,8 @@
-import Store from './store';
+import DataStore from './store';
 import CartStore from './cart-store';
 import CustomerStore from './customer-store';
 import { detectAdapter } from './utils';
-import { Product, Category, Customer, Cart } from './resources';
+import { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote } from './resources';
 
 /**
  * // instance
@@ -35,8 +35,8 @@ export default class Storefront {
 
         this.adapter = config.adapter || detectAdapter(this.options);
 
-        this.products = new Store('product', this.adapter);
-        this.categories = new Store('category', this.adapter);
+        this.products = new DataStore('product', this.adapter);
+        this.categories = new DataStore('category', this.adapter);
         this.customers = new CustomerStore('customer', this.adapter);
         this.cart = new CartStore('cart', this.adapter);
     }
@@ -59,4 +59,4 @@ export default class Storefront {
     }
 }
 
-export { Product, Category, Customer, Cart, CartStore, CustomerStore };
+export { Product, Category, Customer, Cart, CartStore, CustomerStore, Store, StoreLocation, StoreHour, DeliveryServiceQuote };

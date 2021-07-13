@@ -1,10 +1,17 @@
 import { Resource } from '@fleetbase/sdk';
+import Product from './product';
 import CartStore from '../cart-store';
 
 export default class Cart extends Resource {
     constructor(attributes = {}, adapter, options = {}) {
         super(attributes, adapter, 'cart', options);
     }
+
+    // extendStore = {
+    //     request: () => {
+
+    //     }
+    // }
 
     /**
      * !!! Overwrite adapter set to use CartStore
@@ -19,6 +26,10 @@ export default class Cart extends Resource {
     }
 
     add(productId, quantity = 1, data = {}, options = {}) {
+        if (productId instanceof Product) {
+            productId = productId.id;
+        }
+
         return this.store.add(this.id, productId, quantity, data, options);
     }
 
