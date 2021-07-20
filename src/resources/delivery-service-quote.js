@@ -1,3 +1,4 @@
+import StorefrontStore from '../store';
 import Cart from './cart';
 import StoreLocation from './store-location';
 import { ServiceQuote, ServiceRate, Place, Collection, Adapter } from '@fleetbase/sdk';
@@ -14,8 +15,28 @@ export default class DeliveryServiceQuote extends ServiceQuote {
         super(attributes, adapter, 'service-quote', options);
     }
 
+    /**
+     * Set a new adapter to the resource instance, this will update the Store instance
+     *
+     * @param {Adapter} adapter
+     * @return {Resource} this
+     */
+    setAdapter(adapter) {
+        this.adapter = adapter;
+        this.store = new StorefrontStore(this.resource, adapter, {
+            onAfterFetch: this.syncAttributes.bind(this),
+            actions: this.options?.actions,
+        });
+
+        return this;
+    }
+
     get formattedAmount() {
         const { amount, currency } = this.getAttributes(['amount', 'currency']);
+
+        if (!amount || !currency) {
+            return null;
+        }
 
         return formatCurrency(amount / 100, currency);
     }

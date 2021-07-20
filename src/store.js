@@ -1,9 +1,13 @@
-import { Store as BaseStore, classify } from '@fleetbase/sdk';
+import { Store, classify, extendStoreActions } from '@fleetbase/sdk';
 import { lookup } from './resolver';
 
-export default class Store extends BaseStore {
+export default class StorefrontStore extends Store {
     constructor() {
         super(...arguments);
+    }
+
+    extendActions(actions = []) {
+        return extendStoreActions(this, actions);
     }
 
     serialize(json) {

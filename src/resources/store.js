@@ -1,5 +1,6 @@
-import { Resource, Collection, Place } from '@fleetbase/sdk';
+import Resource from '../resource';
 import StoreLocation from './store-location';
+import { Collection, Place } from '@fleetbase/sdk';
 
 export default class Store extends Resource {
     constructor(attributes = {}, adapter, options = {}) {

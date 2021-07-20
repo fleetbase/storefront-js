@@ -6,6 +6,7 @@ import Store from './resources/store';
 import StoreLocation from './resources/store-location';
 import StoreHour from './resources/store-hour';
 import DeliveryServiceQuote from './resources/delivery-service-quote';
+import Checkout from './resources/checkout';
 
 export {
     Product,
@@ -15,5 +16,6 @@ export {
     Store,
     StoreLocation,
     StoreHour,
-    DeliveryServiceQuote
+    DeliveryServiceQuote,
+    Checkout
 };

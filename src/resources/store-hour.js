@@ -1,4 +1,4 @@
-import { Resource } from '@fleetbase/sdk';
+import Resource from '../resource';
 import { format, parse, isValid } from 'date-fns';
 
 export default class StoreHour extends Resource {

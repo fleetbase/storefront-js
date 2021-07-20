@@ -1,8 +1,10 @@
-import DataStore from './store';
-import CartStore from './cart-store';
-import CustomerStore from './customer-store';
+import StorefrontStore from './store';
 import { detectAdapter } from './utils';
-import { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote } from './resources';
+import { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout } from './resources';
+import { cartActions } from './resources/cart';
+import { customerActions } from './resources/customer';
+import { checkoutActions } from './resources/checkout';
+import { Collection } from '@fleetbase/sdk';
 
 /**
  * // instance
@@ -35,15 +37,23 @@ export default class Storefront {
 
         this.adapter = config.adapter || detectAdapter(this.options);
 
-        this.products = new DataStore('product', this.adapter);
-        this.categories = new DataStore('category', this.adapter);
-        this.customers = new CustomerStore('customer', this.adapter);
-        this.cart = new CartStore('cart', this.adapter);
+        this.products = new StorefrontStore('product', this.adapter);
+        this.categories = new StorefrontStore('category', this.adapter);
+        this.customers = new StorefrontStore('customer', this.adapter).extendActions(customerActions);
+        this.cart = new StorefrontStore('cart', this.adapter).extendActions(cartActions);
+        this.checkout = new StorefrontStore('checkout', this.adapter).extendActions(checkoutActions);
     }
 
     /** loads information about this storefront */
     about() {
         return this.adapter.get('about');
+    }
+
+    /** search products in store or network */
+    search(query) {
+        return this.adapter.get('search', { query }).then(products => {
+            return new Collection(products.map(product => new Product(product)));
+        });
     }
 
     static newInstance() {
@@ -59,4 +69,4 @@ export default class Storefront {
     }
 }
 
-export { Product, Category, Customer, Cart, CartStore, CustomerStore, Store, StoreLocation, StoreHour, DeliveryServiceQuote };
+export { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout };
