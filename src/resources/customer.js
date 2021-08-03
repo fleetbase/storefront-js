@@ -50,6 +50,15 @@ export default class Customer extends Contact {
         return this.getAttribute('token');
     }
 
+    syncDevice(token) {
+        return this.adapter
+            .setHeaders({ 'Customer-Token': this.token })
+            .post('customers/register-device', token)
+            .then(() => {
+                return this;
+            });
+    }
+
     getSavedPlaces() {
         return this.adapter
             .setHeaders({ 'Customer-Token': this.token })
