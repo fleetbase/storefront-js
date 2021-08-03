@@ -4,6 +4,11 @@
   "description": "Fleetbase Storefront JS & Node SDK",
   "main": "src/storefront.js",
   "scripts": {
+    "prebuild": "npm run lint",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "lint:tests": "eslint tests",
+    "bundle": "rollup -c",
     "test": "mocha --require @babel/polyfill --require @babel/register --require source-map-support/register tests/*.test.js"
   },
   "keywords": [
