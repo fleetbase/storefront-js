@@ -41,7 +41,7 @@
     "source-map-support": "^0.5.19"
   },
   "dependencies": {
-    "@fleetbase/sdk": "../fleetbase-js",
+    "@fleetbase/sdk": "^1.1.1",
     "date-fns": "^2.22.1"
   }
 }
