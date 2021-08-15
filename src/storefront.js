@@ -31,7 +31,7 @@ export default class Storefront {
             debug
         };
 
-        if (typeof storeKey !== 'string' || storeKey.length === 0 || !storeKey.startsWith('store_')) {
+        if (typeof storeKey !== 'string' || storeKey.length === 0 || !storeKey.startsWith('store_') || !storeKey.startsWith('network_')) {
             throw new Error('⚠️ Invalid storefront key given to Storefront SDK');
         }
 
