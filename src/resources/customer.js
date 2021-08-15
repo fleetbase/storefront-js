@@ -3,6 +3,7 @@ import { Contact, Place, Order, Collection, StoreActions } from '@fleetbase/sdk'
 import { isPhone } from '../utils';
 
 const customerActions = new StoreActions({
+    // const { error } = await storefront.customers.login('+1 111-1111');
     login: function (identity, password = null, attributes = {}) {
         // handle phone number authentication
         if (isPhone(identity)) {
@@ -16,8 +17,16 @@ const customerActions = new StoreActions({
         return this.adapter.post('customers/login', { identity, password, ...attributes }).then(this.afterFetch.bind(this));
     },
 
-    verifySmsCode: function (phone, code, attributes = {}) {
-        return this.adapter.post('customers/verify-sms', { phone, code, ...attributes }).then(this.afterFetch.bind(this));
+    verifyCode: function (identity, code, attributes = {}) {
+        return this.adapter.post('customers/verify-code', { identity, code, ...attributes }).then(this.afterFetch.bind(this));
+    },
+
+    requestCreationCode(identity, mode = 'email') {
+        return this.adapter.post('customers/request-creation-code', { identity, mode });
+    },
+
+    create(identity, code, attributes = {}) {
+        return this.adapter.post('customers', { identity, code, ...attributes }).then(this.afterFetch.bind(this));
     },
 
     retrieve: function (id) {
