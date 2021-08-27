@@ -1,5 +1,5 @@
 import StorefrontStore from './store';
-import { detectAdapter } from './utils';
+import { detectAdapter, isKeyValid } from './utils';
 import { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout } from './resources';
 import { cartActions } from './resources/cart';
 import { customerActions } from './resources/customer';
@@ -31,8 +31,8 @@ export default class Storefront {
             debug
         };
 
-        if (typeof storeKey !== 'string' || storeKey.length === 0 || !storeKey.startsWith('store_') || !storeKey.startsWith('network_')) {
-            throw new Error('⚠️ Invalid storefront key given to Storefront SDK');
+        if (!isKeyValid(storeKey)) {
+            throw new Error('⚠️ Invalid Storefront key given to Storefront SDK');
         }
 
         this.adapter = config.adapter || detectAdapter(this.options);
