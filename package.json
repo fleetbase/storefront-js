@@ -1,6 +1,6 @@
 {
   "name": "@fleetbase/storefront",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Fleetbase Storefront JS & Node SDK",
   "main": "src/storefront.js",
   "scripts": {

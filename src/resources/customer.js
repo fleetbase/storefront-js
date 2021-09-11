@@ -1,4 +1,5 @@
 import StorefrontStore from '../store';
+import Resource from '../resource';
 import { Contact, Place, Order, Collection, StoreActions } from '@fleetbase/sdk';
 import { isPhone } from '../utils';
 
@@ -34,7 +35,7 @@ const customerActions = new StoreActions({
     },
 });
 
-export default class Customer extends Contact {
+export default class Customer extends Resource {
     constructor(attributes = {}, adapter, options = {}) {
         super(attributes, adapter, 'customer', { actions: customerActions, ...options });
     }
