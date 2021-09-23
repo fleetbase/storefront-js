@@ -2,6 +2,7 @@ import Resource from '../resource';
 import Product from './product';
 import { StoreActions } from '@fleetbase/sdk';
 
+const { isArray } = Array;
 const cartActions = new StoreActions({
     create: undefined,
     findAll: undefined,
@@ -81,7 +82,13 @@ export default class Cart extends Resource {
     }
 
     get isEmpty() {
-        return this.contents().length === 0;
+        const contents = this.contents();
+
+        if (!isArray(contents)) {
+            return true;
+        }
+
+        return contents.length === 0;
     }
 
     get isNotEmpty() {

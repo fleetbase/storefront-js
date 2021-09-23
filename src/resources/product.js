@@ -1,5 +1,5 @@
 import Resource from '../resource';
-import { formatCurrency } from '../utils';
+import { formatCurrency, isEmpty } from '../utils';
 
 export default class Product extends Resource {
     constructor(attributes = {}, adapter, options = {}) {
@@ -26,8 +26,17 @@ export default class Product extends Resource {
         const { price, sale_price, currency } = this.getAttributes(['price', 'sale_price', 'currency']);
 
         if (this.isOnSale) {
+
+            if (isEmpty(sale_price) || isEmpty(currency)) {
+                return null;
+            }
+
             return formatCurrency(sale_price / 100, currency);
         }
+
+        if (isEmpty(price) || isEmpty(currency)) {
+                return null;
+            }
 
         return formatCurrency(price / 100, currency);
     }

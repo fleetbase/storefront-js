@@ -8,7 +8,7 @@ const checkoutActions = new StoreActions({
     query: undefined,
     queryRecord: undefined,
 
-    initialize: function (customer, cart, serviceQuote, gateway, options = {}) {
+    initialize: function (customer, cart, serviceQuote, gateway, orderOptions = {}, options = {}) {
         if (isResource(customer)) {
             customer = customer.id;
         }
@@ -21,7 +21,7 @@ const checkoutActions = new StoreActions({
             serviceQuote = serviceQuote.id;
         }
         
-        return this.adapter.get(`${this.namespace}/before`, { customer, cart, serviceQuote, gateway}, options);
+        return this.adapter.get(`${this.namespace}/before`, { ...orderOptions, customer, cart, serviceQuote, gateway}, options);
     },
 
     captureOrder: function (token, transactionDetails = {}, options = {}) {

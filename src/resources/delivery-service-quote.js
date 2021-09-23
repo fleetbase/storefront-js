@@ -2,7 +2,7 @@ import StorefrontStore from '../store';
 import Cart from './cart';
 import StoreLocation from './store-location';
 import { ServiceQuote, ServiceRate, Place, Collection, Adapter } from '@fleetbase/sdk';
-import { formatCurrency } from '../utils';
+import { formatCurrency, isEmpty } from '../utils';
 
 const { isArray } = Array;
 
@@ -34,7 +34,7 @@ export default class DeliveryServiceQuote extends ServiceQuote {
     get formattedAmount() {
         const { amount, currency } = this.getAttributes(['amount', 'currency']);
 
-        if (!amount || !currency) {
+        if (isEmpty(amount) || isEmpty(currency)) {
             return null;
         }
 
