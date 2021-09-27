@@ -1,14 +1,19 @@
 {
   "name": "@fleetbase/storefront",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Fleetbase Storefront JS & Node SDK",
-  "main": "src/storefront.js",
+  "main": "dist/cjs/storefront.js",
+  "module": "dist/esm/storefront.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "prebuild": "npm run lint",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "lint:tests": "eslint tests",
     "bundle": "rollup -c",
+    "dev": "rollup -c -w",
     "test": "mocha --require @babel/polyfill --require @babel/register --require source-map-support/register tests/*.test.js"
   },
   "keywords": [
@@ -35,18 +40,22 @@
     "@babel/polyfill": "^7.12.1",
     "@babel/preset-env": "^7.14.1",
     "@babel/register": "^7.13.16",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-node-resolve": "^13.0.5",
     "chai": "^4.3.4",
     "eslint": "^7.26.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.16.0",
     "mocha": "^8.4.0",
     "rollup-plugin-eslint": "^5.1.0",
-    "rollup-plugin-node-resolve": "^4.0.1",
     "rollup-plugin-terser": "^7.0.2",
     "source-map-support": "^0.5.19"
   },
   "dependencies": {
-    "@fleetbase/sdk": "^1.1.2",
-    "date-fns": "^2.22.1"
+    "@babel/runtime": "^7.15.4",
+    "@fleetbase/sdk": "^1.1.6",
+    "core-js": "^3.18.1",
+    "date-fns": "^2.22.1",
+    "regenerator-runtime": "^0.13.9"
   }
 }
