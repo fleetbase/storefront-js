@@ -1,11 +1,12 @@
 {
   "name": "@fleetbase/storefront",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Fleetbase Storefront JS & Node SDK",
   "main": "dist/cjs/storefront.js",
   "module": "dist/esm/storefront.js",
   "files": [
-    "dist"
+    "dist", 
+    "src"
   ],
   "scripts": {
     "prebuild": "npm run lint",
@@ -53,7 +54,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.15.4",
-    "@fleetbase/sdk": "^1.1.7",
+    "@fleetbase/sdk": "1.1.8",
     "core-js": "^3.18.1",
     "date-fns": "^2.22.1",
     "regenerator-runtime": "^0.13.9"
