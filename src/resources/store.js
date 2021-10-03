@@ -1,5 +1,6 @@
 import Resource from '../resource';
 import StoreLocation from './store-location';
+import PaymentGateway from './payment-gateway';
 import { Collection, Place } from '@fleetbase/sdk';
 
 export default class Store extends Resource {
@@ -15,6 +16,14 @@ export default class Store extends Resource {
                 }
                 
                 return new StoreLocation(attributes, this.adapter);
+            }));
+        });
+    }
+    
+    getPaymentGateways() {
+        return this.adapter.get('gateways').then((gateways) => {
+            return new Collection(gateways.map(attributes => {
+                return new PaymentGateway(attributes, this.adapter);
             }));
         });
     }

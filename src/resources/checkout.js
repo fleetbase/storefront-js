@@ -20,6 +20,10 @@ const checkoutActions = new StoreActions({
         if (isResource(serviceQuote)) {
             serviceQuote = serviceQuote.id;
         }
+
+        if (isResource(gateway)) {
+            gateway = gateway.getAttribute('code');
+        }
         
         return this.adapter.get(`${this.namespace}/before`, { ...orderOptions, customer, cart, serviceQuote, gateway}, options);
     },
@@ -31,7 +35,7 @@ const checkoutActions = new StoreActions({
 
 export default class Checkout extends Resource {
     constructor(attributes = {}, adapter, options = {}) {
-        super(attributes, adapter, 'cart', options);
+        super(attributes, adapter, 'checkout', options);
     }
 
     initialize() {
