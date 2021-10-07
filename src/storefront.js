@@ -1,6 +1,6 @@
 import StorefrontStore from './store';
 import { detectAdapter, isKeyValid } from './utils';
-import { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout } from './resources';
+import { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Network } from './resources';
 import { cartActions } from './resources/cart';
 import { customerActions } from './resources/customer';
 import { checkoutActions } from './resources/checkout';
@@ -69,4 +69,4 @@ export default class Storefront {
     }
 }
 
-export { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout };
+export { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Network };
