@@ -40,7 +40,7 @@ If you would like to make contributions to the Fleetbase Javascript SDK document
 
 ## Quick Start for Browser
 
-```
+```js
 import Storefront, { Product } from '@fleetbase/storefront';
 
 const storefront = new Storefront('Your Store Key');
