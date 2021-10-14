@@ -48,15 +48,15 @@ export default class DeliveryServiceQuote extends ServiceQuote {
     }
 
     fromCart(origin, destination, cart, config = 'storefront', all = false) {
-        if (origin instanceof StoreLocation || origin instanceof Place) {
+        if (origin?.id) {
             origin = origin.id;
         }
 
-        if (destination instanceof StoreLocation || destination instanceof Place) {
+        if (destination?.id) {
             destination = destination.id;
         }
 
-        if (cart instanceof Cart) {
+        if (cart?.id) {
             cart = cart.id;
         }
 

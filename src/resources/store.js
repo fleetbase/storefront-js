@@ -9,7 +9,7 @@ export default class Store extends Resource {
     }
 
     getLocations() {
-        return this.adapter.get('locations').then((storeLocations) => {
+        return this.adapter.get('locations', { store: this.id }).then((storeLocations) => {
             return new Collection(storeLocations.map(attributes => {
                 if (attributes.place) {
                     attributes.place = new Place(attributes.place);

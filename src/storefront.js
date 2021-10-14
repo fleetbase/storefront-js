@@ -50,8 +50,8 @@ export default class Storefront {
     }
 
     /** search products in store or network */
-    search(query) {
-        return this.adapter.get('search', { query }).then(products => {
+    search(query, options = {}) {
+        return this.adapter.get('search', { query, ...options }).then(products => {
             return new Collection(products.map(product => new Product(product)));
         });
     }
