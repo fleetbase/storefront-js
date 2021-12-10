@@ -1,6 +1,6 @@
 {
   "name": "@fleetbase/storefront",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Fleetbase Storefront JS & Node SDK",
   "main": "dist/cjs/storefront.js",
   "module": "dist/esm/storefront.js",
@@ -52,7 +52,7 @@
     "source-map-support": "^0.5.19"
   },
   "dependencies": {
-    "@fleetbase/sdk": "1.2.0",
+    "@fleetbase/sdk": "1.2.1",
     "date-fns": "^2.22.1"
   }
 }
