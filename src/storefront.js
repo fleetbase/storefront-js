@@ -1,9 +1,10 @@
 import StorefrontStore from './store';
 import { detectAdapter, isKeyValid } from './utils';
-import { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Network } from './resources';
+import { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Review, Network } from './resources';
 import { cartActions } from './resources/cart';
 import { customerActions } from './resources/customer';
 import { checkoutActions } from './resources/checkout';
+import { reviewActions } from './resources/review';
 import { Collection } from '@fleetbase/sdk';
 
 /**
@@ -39,6 +40,7 @@ export default class Storefront {
 
         this.products = new StorefrontStore('product', this.adapter);
         this.categories = new StorefrontStore('category', this.adapter);
+        this.reviews = new StorefrontStore('review', this.adapter).extendActions(reviewActions);
         this.customers = new StorefrontStore('customer', this.adapter).extendActions(customerActions);
         this.cart = new StorefrontStore('cart', this.adapter).extendActions(cartActions);
         this.checkout = new StorefrontStore('checkout', this.adapter).extendActions(checkoutActions);
@@ -69,4 +71,4 @@ export default class Storefront {
     }
 }
 
-export { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Network };
+export { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Review, Network };

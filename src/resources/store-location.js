@@ -44,9 +44,4 @@ export default class StoreLocation extends Resource {
     destroy() {
         throw new Error('There is no destroy() method store location!');
     }
-
-    // remove default resource methods
-    reload() {
-        throw new Error('There is no reload() method store location!');
-    }
 }

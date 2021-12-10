@@ -9,6 +9,7 @@ import StoreHour from './resources/store-hour';
 import DeliveryServiceQuote from './resources/delivery-service-quote';
 import Checkout from './resources/checkout';
 import PaymentGateway from './resources/payment-gateway';
+import Review from './resources/review';
 
 export {
     Product,
@@ -21,5 +22,6 @@ export {
     StoreHour,
     DeliveryServiceQuote,
     Checkout,
-    PaymentGateway
+    PaymentGateway,
+    Review
 };
