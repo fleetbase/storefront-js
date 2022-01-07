@@ -7,6 +7,14 @@ export default class StoreLocation extends Resource {
         super(attributes, adapter, 'store-location', options);
     }
 
+    get latitude() {
+        return this.getAttribute('place.location.coordinates.1');
+    }
+
+    get longitude() {
+        return this.getAttribute('place.location.coordinates.0');
+    }
+
     get hours() {
         return new Collection(this.getAttribute('hours').map(attributes => new StoreHour(attributes)));
     }

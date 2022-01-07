@@ -9,10 +9,22 @@ export default class Network extends Resource {
         super(attributes, adapter, 'network', options);
     }
 
+    getTags(params = {}) {
+        return this.adapter.get('tags', params);
+    }
+
     getStores(params = {}) {
         return this.adapter.get('stores', params).then((stores) => {
             return new Collection(stores.map(attributes => {
                 return new Store(attributes, this.adapter);
+            }));
+        });
+    }
+
+    getStoreLocations(params = {}) {
+        return this.adapter.get('store-locations', params).then((locations) => {
+            return new Collection(locations.map(attributes => {
+                return new StoreLocation(attributes, this.adapter);
             }));
         });
     }
