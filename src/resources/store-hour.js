@@ -15,10 +15,11 @@ export default class StoreHour extends Resource {
             return null;
         }
 
-        const includesSeconds = this.getAttribute('start').split(':').length === 3;
-        const format = includesSeconds ? 'k:mm:ss' : 'k:mm';
+        const start = this.getAttribute('start');
+        const includesSeconds = start.split(':').length === 3;
+        const format = includesSeconds ? 'HH:mm:ss' : 'HH:mm';
 
-        return parse(this.getAttribute('start'), format, new Date());
+        return parse(start, format, new Date());
     }
 
     get endDateInstance() {
@@ -26,10 +27,11 @@ export default class StoreHour extends Resource {
             return null;
         }
 
-        const includesSeconds = this.getAttribute('end').split(':').length === 3;
-        const format = includesSeconds ? 'k:mm:ss' : 'k:mm';
+        const end = this.getAttribute('end');
+        const includesSeconds = end.split(':').length === 3;
+        const format = includesSeconds ? 'HH:mm:ss' : 'HH:mm';
 
-        return parse(this.getAttribute('end'), format, new Date());
+        return parse(end, format, new Date());
     }
 
     get humanReadableHours() {
