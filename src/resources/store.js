@@ -9,14 +9,14 @@ export default class Store extends Resource {
         super(attributes, adapter, 'store', options);
     }
 
-    getReviews() {
-        return this.adapter.get('reviews', { store: this.id }).then((reviews) => {
+    getReviews(params = {}) {
+        return this.adapter.get('reviews', { store: this.id, ...params }).then((reviews) => {
             return new Collection(reviews.map((attributes) => new Review(attributes, this.adapter)));
         });
     }
 
-    getLocations() {
-        return this.adapter.get('locations', { store: this.id }).then((storeLocations) => {
+    getLocations(params = {}) {
+        return this.adapter.get('locations', { store: this.id, ...params }).then((storeLocations) => {
             return new Collection(
                 storeLocations.map((attributes) => {
                     if (attributes.place) {
@@ -35,8 +35,8 @@ export default class Store extends Resource {
         });
     }
 
-    getPaymentGateways() {
-        return this.adapter.get('gateways').then((gateways) => {
+    getPaymentGateways(params = {}) {
+        return this.adapter.get('gateways', params).then((gateways) => {
             return new Collection(
                 gateways.map((attributes) => {
                     return new PaymentGateway(attributes, this.adapter);
