@@ -1,6 +1,7 @@
 import Resource from '../resource';
 import StoreHour from './store-hour';
 import { Collection } from '@fleetbase/sdk';
+import { format } from 'date-fns';
 
 export default class StoreLocation extends Resource {
     constructor(attributes = {}, adapter, options = {}) {
@@ -17,6 +18,16 @@ export default class StoreLocation extends Resource {
 
     get hours() {
         return new Collection(this.getAttribute('hours').map(attributes => new StoreHour(attributes)));
+    }
+
+    get isAlwaysOpen() {
+        return this.hours.every((hour) => hour?.is24Hours);
+    }
+
+    get today() {
+        const today = format(new Date(), 'EEEE');
+
+        return this.schedule[today];
     }
 
     get schedule() {

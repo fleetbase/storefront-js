@@ -10,6 +10,19 @@ export default class StoreHour extends Resource {
         return this.getAttribute('day');
     }
 
+    get isClosed() {
+        return this.getAttribute('start') === null && this.getAttribute('end') === null;
+    }
+
+    get is24Hours() {
+        const start = this.startDateInstance;
+        const end = this.endDateInstance;
+        const diff = Math.abs(start - end);
+        const hours = Math.floor(diff / 1000 / 60) / 60;
+
+        return hours > 23;
+    }
+
     get startDateInstance() {
         if (!this.hasAttribute('start')) {
             return null;
@@ -34,13 +47,26 @@ export default class StoreHour extends Resource {
         return parse(end, format, new Date());
     }
 
-    get humanReadableHours() {
+    get humanReadableHoursRange() {
         if (!isValid(this.startDateInstance) || !isValid(this.endDateInstance)) {
             return `${this.start} - ${this.end}`;
         }
 
         return `${format(this.startDateInstance, 'p')} - ${format(this.endDateInstance, 'p')}`;
     }
+
+    get humanReadableHours() {
+        if (this.isClosed) {
+            return 'Closed';
+        }
+
+        if (this.is24Hours) {
+            return '24 Hours';
+        }
+
+        return this.humanReadableHoursRange;
+    }
+    
 
     // remove default resource methods
     create() {
