@@ -1,7 +1,7 @@
 import Store from './store';
 import { isPhone } from './utils';
 
-export default class CustomerStore extends Store  {
+export default class CustomerStore extends Store {
     constructor() {
         super(...arguments);
     }
@@ -24,11 +24,19 @@ export default class CustomerStore extends Store  {
             throw new Error('Login requires password!');
         }
 
-        return this.request('post', 'customers/login', { identity, password, ...attributes });
+        return this.request('post', 'customers/login', {
+            identity,
+            password,
+            ...attributes,
+        });
     }
 
     verifySmsCode(phone, code, attributes = {}) {
-        return this.request('post', 'customers/verify-sms', { phone, code, ...attributes });
+        return this.request('post', 'customers/verify-sms', {
+            phone,
+            code,
+            ...attributes,
+        });
     }
 
     retrieve(id) {

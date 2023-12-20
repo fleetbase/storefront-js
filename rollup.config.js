@@ -17,8 +17,8 @@ export default [
                 modulesOnly: true,
             }),
             babel({
-				babelHelpers: 'bundled',
-			}),
+                babelHelpers: 'bundled',
+            }),
             terser(),
         ],
         output: [
@@ -44,10 +44,10 @@ export default [
                 browser: true,
                 modulesOnly: true,
             }),
-			babel({
-				babelHelpers: 'bundled',
-			}),
-			terser()
+            babel({
+                babelHelpers: 'bundled',
+            }),
+            terser(),
         ],
         output: [
             {
@@ -63,6 +63,6 @@ export default [
                 sourcemap: true,
             },
         ],
-		external: ['axios']
+        external: ['axios'],
     },
 ];

@@ -1,0 +1,9 @@
+# compiled output
+/dist/
+dist/
+/tmp/
+
+# dependencies
+/node_modules/
+LICENSE.md
+README.md

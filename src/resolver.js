@@ -2,16 +2,25 @@ import { Product, Category, Customer, Cart, DeliveryServiceQuote, Store, StoreLo
 import { BrowserAdapter, NodeAdapter, pluralize, singularize } from '@fleetbase/sdk';
 
 const resources = {
-    Product, Category, Customer, Cart, DeliveryServiceQuote, Store, StoreLocation, StoreHour, Checkout, Review
+    Product,
+    Category,
+    Customer,
+    Cart,
+    DeliveryServiceQuote,
+    Store,
+    StoreLocation,
+    StoreHour,
+    Checkout,
+    Review,
 };
 
 const adapters = {
     BrowserAdapter,
-    NodeAdapter
+    NodeAdapter,
 };
 
 class Resolver {
-    constructor () {
+    constructor() {
         this.resources = resources;
         this.adapters = adapters;
 
@@ -20,7 +29,7 @@ class Resolver {
 
     lookup(type, className) {
         const key = pluralize(type);
-        const params = [ ...arguments ].slice(2);
+        const params = [...arguments].slice(2);
 
         if (!this[key]) {
             throw new Error('Attempted to resolve invalid type');
@@ -34,11 +43,8 @@ class Resolver {
     }
 }
 
-const lookup = function() {
+const lookup = function () {
     return new Resolver(...arguments);
 };
 
-export {
-    Resolver,
-    lookup
-};
+export { Resolver, lookup };

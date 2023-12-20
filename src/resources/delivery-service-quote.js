@@ -11,7 +11,7 @@ export default class DeliveryServiceQuote extends ServiceQuote {
         if (attributes instanceof Adapter) {
             return super({}, attributes, 'service-quote', options);
         }
-            
+
         super(attributes, adapter, 'service-quote', options);
     }
 
@@ -60,12 +60,20 @@ export default class DeliveryServiceQuote extends ServiceQuote {
             cart = cart.id;
         }
 
-        return this.adapter.get('service-quotes/from-cart', { origin, destination, cart, config, all }).then(serviceQuotes => {
-            if (isArray(serviceQuotes)) {
-                return new Collection(serviceQuotes.map(serviceQuote => new DeliveryServiceQuote(serviceQuote, this.adapter)));
-            }
+        return this.adapter
+            .get('service-quotes/from-cart', {
+                origin,
+                destination,
+                cart,
+                config,
+                all,
+            })
+            .then((serviceQuotes) => {
+                if (isArray(serviceQuotes)) {
+                    return new Collection(serviceQuotes.map((serviceQuote) => new DeliveryServiceQuote(serviceQuote, this.adapter)));
+                }
 
-            return new DeliveryServiceQuote(serviceQuotes, this.adapter);
-        });
+                return new DeliveryServiceQuote(serviceQuotes, this.adapter);
+            });
     }
 }

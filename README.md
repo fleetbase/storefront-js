@@ -41,9 +41,9 @@ If you would like to make contributions to the Fleetbase Javascript SDK document
 ## Quick Start for Browser
 
 ```js
-import Storefront, { Product } from '@fleetbase/storefront';
+import Storefront, { Product } from "@fleetbase/storefront";
 
-const storefront = new Storefront('Your Store Key');
+const storefront = new Storefront("Your Store Key");
 
 // list products
 storefront.products.findAll();
@@ -52,8 +52,8 @@ storefront.products.findAll();
 const product = new Product({ name, description, price });
 
 // retrieve cart & add item
-storefront.cart.retrieve().then(cart => {
-  cart.add('product_xyxyxyx', 1);
+storefront.cart.retrieve().then((cart) => {
+  cart.add("product_xyxyxyx", 1);
 
   // empty cart
   cart.empty();
@@ -63,9 +63,8 @@ storefront.cart.retrieve().then(cart => {
 storefront.checkout.capture();
 ```
 
-
 ## Create a custom adapter
 
 Storefront will eventually allow you to bring your own ecommerce adapter.
 
-```@todo```
+`@todo`

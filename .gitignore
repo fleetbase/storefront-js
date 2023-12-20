@@ -20,3 +20,7 @@
 /yarn.lock
 /package-lock.json
 .DS_Store
+
+# Ignore artifacts:
+build
+coverage

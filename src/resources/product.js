@@ -28,7 +28,6 @@ export default class Product extends Resource {
         const { price, sale_price, currency } = this.getAttributes(['price', 'sale_price', 'currency']);
 
         if (this.isOnSale) {
-
             if (isEmpty(sale_price) || isEmpty(currency)) {
                 return null;
             }

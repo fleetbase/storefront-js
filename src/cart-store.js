@@ -1,6 +1,6 @@
 import Store from './store';
 
-export default class CartStore extends Store  {
+export default class CartStore extends Store {
     constructor() {
         super(...arguments);
     }

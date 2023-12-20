@@ -23,7 +23,10 @@ const customerActions = new StoreActions({
     },
 
     requestCreationCode(identity, mode = 'email') {
-        return this.adapter.post('customers/request-creation-code', { identity, mode });
+        return this.adapter.post('customers/request-creation-code', {
+            identity,
+            mode,
+        });
     },
 
     create(identity, code, attributes = {}) {
@@ -37,7 +40,10 @@ const customerActions = new StoreActions({
 
 export default class Customer extends Resource {
     constructor(attributes = {}, adapter, options = {}) {
-        super(attributes, adapter, 'customer', { actions: customerActions, ...options });
+        super(attributes, adapter, 'customer', {
+            actions: customerActions,
+            ...options,
+        });
     }
 
     /**

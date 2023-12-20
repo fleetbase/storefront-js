@@ -17,7 +17,7 @@ export default class StoreLocation extends Resource {
     }
 
     get hours() {
-        return new Collection(this.getAttribute('hours').map(attributes => new StoreHour(attributes)));
+        return new Collection(this.getAttribute('hours').map((attributes) => new StoreHour(attributes)));
     }
 
     get isAlwaysOpen() {
@@ -35,7 +35,7 @@ export default class StoreLocation extends Resource {
         const week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
         for (let i = 0; i < week.length; i++) {
-            const day = week[i]
+            const day = week[i];
 
             schedule[day] = new Collection();
         }

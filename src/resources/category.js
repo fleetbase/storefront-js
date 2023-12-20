@@ -2,8 +2,6 @@ import Resource from '../resource';
 import Product from './product';
 import { Collection } from '@fleetbase/sdk';
 
-const { isArray } = Array;
-
 export default class Category extends Resource {
     constructor(attributes = {}, adapter, options = {}) {
         super(attributes, adapter, 'category', options);
