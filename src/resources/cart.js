@@ -3,6 +3,7 @@ import Product from './product';
 import { StoreActions } from '@fleetbase/sdk';
 
 const { isArray } = Array;
+
 const cartActions = new StoreActions({
     create: undefined,
     findAll: undefined,

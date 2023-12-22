@@ -1,6 +1,5 @@
+import { Order, StoreActions, isResource } from '@fleetbase/sdk';
 import Resource from '../resource';
-import Product from './product';
-import { StoreActions, isResource, Order } from '@fleetbase/sdk';
 
 const checkoutActions = new StoreActions({
     create: undefined,
@@ -24,13 +23,13 @@ const checkoutActions = new StoreActions({
         if (isResource(gateway)) {
             gateway = gateway.getAttribute('code');
         }
-        
-        return this.adapter.get(`${this.namespace}/before`, { ...orderOptions, customer, cart, serviceQuote, gateway}, options);
+
+        return this.adapter.get(`${this.namespace}/before`, { ...orderOptions, customer, cart, serviceQuote, gateway }, options);
     },
 
     captureOrder: function (token, transactionDetails = {}, options = {}) {
-        return this.adapter.get(`${this.namespace}/capture`, { token, transactionDetails }, options).then(orderJson => new Order(orderJson));
-    }
+        return this.adapter.get(`${this.namespace}/capture`, { token, transactionDetails }, options).then((orderJson) => new Order(orderJson));
+    },
 });
 
 export default class Checkout extends Resource {

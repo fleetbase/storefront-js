@@ -5,11 +5,4 @@ import formatCurrency from './format-currency';
 import isKeyValid from './is-key-valid';
 import isEmpty from './is-empty';
 
-export {
-    detectAdapter,
-    isKeyValid,
-    isEmail,
-    isPhone,
-    isEmpty,
-    formatCurrency
-};
+export { detectAdapter, isKeyValid, isEmail, isPhone, isEmpty, formatCurrency };
