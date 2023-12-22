@@ -66,7 +66,7 @@ export default class Customer extends Resource {
         return this.getAttribute('token');
     }
 
-    syncDevice(token) {
+    async syncDevice(token) {
         return this.adapter
             .setHeaders({ 'Customer-Token': this.token })
             .post('customers/register-device', token)
@@ -75,22 +75,33 @@ export default class Customer extends Resource {
             });
     }
 
-    getSavedPlaces() {
-        return this.adapter
-            .setHeaders({ 'Customer-Token': this.token })
-            .get('customers/places')
-            .then((places) => {
-                return new Collection(places.map((attributes) => new Place(attributes, this.adapter)));
-            });
+    async performAuthorizedRequest(endpoint, params = {}, method = 'GET') {
+        try {
+            const headers = { 'Customer-Token': this.token };
+            const response = await this.adapter.setHeaders(headers)[method.toLowerCase()](endpoint, params);
+            return response;
+        } catch (error) {
+            console.error(`Error in ${method} request to ${endpoint}:`, error);
+            throw error;
+        }
     }
 
-    getOrderHistory(params = {}) {
-        return this.adapter
-            .setHeaders({ 'Customer-Token': this.token })
-            .get('customers/orders', params)
-            .then((orders) => {
-                return new Collection(orders.map((attributes) => new Order(attributes, this.adapter)));
-            });
+    async getSavedPlaces() {
+        try {
+            const places = await this.performAuthorizedRequest('customers/places');
+            return new Collection(places.map((attributes) => new Place(attributes, this.adapter)));
+        } catch (error) {
+            throw new Error('Failed to retrieve saved places');
+        }
+    }
+
+    async getOrderHistory(params = {}) {
+        try {
+            const orders = await this.performAuthorizedRequest('customers/orders', params);
+            return new Collection(orders.map((attributes) => new Order(attributes, this.adapter)));
+        } catch (error) {
+            throw new Error('Failed to retrieve order history');
+        }
     }
 }
 

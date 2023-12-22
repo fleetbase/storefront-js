@@ -39,39 +39,39 @@ export default class DeliveryServiceQuote extends ServiceQuote {
         return formatCurrency(amount / 100, currency);
     }
 
-    static getFromCart(adapter, ...params) {
-        const quote = new DeliveryServiceQuote(adapter);
-
-        return quote.fromCart(...params);
-    }
-
-    fromCart(origin, destination, cart, config = 'storefront', all = false) {
+    async fetchServiceQuotesFromCart(origin, destination, cart, config = 'storefront', all = false) {
         if (origin?.id) {
             origin = origin.id;
         }
-
         if (destination?.id) {
             destination = destination.id;
         }
-
         if (cart?.id) {
             cart = cart.id;
         }
 
-        return this.adapter
-            .get('service-quotes/from-cart', {
+        try {
+            const serviceQuotes = await this.adapter.get('service-quotes/from-cart', {
                 origin,
                 destination,
                 cart,
                 config,
                 all,
-            })
-            .then((serviceQuotes) => {
-                if (isArray(serviceQuotes)) {
-                    return new Collection(serviceQuotes.map((serviceQuote) => new DeliveryServiceQuote(serviceQuote, this.adapter)));
-                }
-
-                return new DeliveryServiceQuote(serviceQuotes, this.adapter);
             });
+
+            if (isArray(serviceQuotes)) {
+                return new Collection(serviceQuotes.map((serviceQuote) => new DeliveryServiceQuote(serviceQuote, this.adapter)));
+            }
+
+            return new DeliveryServiceQuote(serviceQuotes, this.adapter);
+        } catch (error) {
+            console.error('Error fetching service quotes:', error);
+            throw error;
+        }
+    }
+
+    static async getFromCart(adapter, origin, destination, cart, config = 'storefront', all = false) {
+        const quote = new DeliveryServiceQuote(adapter);
+        return quote.fetchServiceQuotesFromCart(origin, destination, cart, config, all);
     }
 }
