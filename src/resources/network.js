@@ -1,8 +1,8 @@
+import { Collection } from '@fleetbase/sdk';
 import Resource from '../resource';
-import StoreLocation from './store-location';
 import PaymentGateway from './payment-gateway';
 import Store from './store';
-import { Collection, Place } from '@fleetbase/sdk';
+import StoreLocation from './store-location';
 
 export default class Network extends Resource {
     constructor(attributes = {}, adapter, options = {}) {
@@ -13,27 +13,25 @@ export default class Network extends Resource {
         return this.adapter.get('tags', params);
     }
 
-    getStores(params = {}) {
-        return this.adapter.get('stores', params).then((stores) => {
-            return new Collection(stores.map(attributes => {
-                return new Store(attributes, this.adapter);
-            }));
-        });
+    async getResourceCollection(endpoint, ResourceClass, params = {}) {
+        try {
+            const resources = await this.adapter.get(endpoint, params);
+            return new Collection(resources.map((attributes) => new ResourceClass(attributes, this.adapter)));
+        } catch (error) {
+            console.error(`Error fetching ${endpoint}:`, error);
+            throw error;
+        }
     }
 
-    getStoreLocations(params = {}) {
-        return this.adapter.get('store-locations', params).then((locations) => {
-            return new Collection(locations.map(attributes => {
-                return new StoreLocation(attributes, this.adapter);
-            }));
-        });
+    async getStores(params = {}) {
+        return this.getResourceCollection('stores', Store, params);
     }
-    
-    getPaymentGateways() {
-        return this.adapter.get('gateways').then((gateways) => {
-            return new Collection(gateways.map(attributes => {
-                return new PaymentGateway(attributes, this.adapter);
-            }));
-        });
+
+    async getStoreLocations(params = {}) {
+        return this.getResourceCollection('store-locations', StoreLocation, params);
+    }
+
+    async getPaymentGateways() {
+        return this.getResourceCollection('gateways', PaymentGateway);
     }
 }
