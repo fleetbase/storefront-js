@@ -62,6 +62,6 @@
     },
     "dependencies": {
         "@fleetbase/sdk": "1.2.7",
-        "date-fns": "^3.0.1"
+        "date-fns": "^3.0.5"
     }
 }

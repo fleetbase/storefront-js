@@ -1,8 +1,8 @@
+import { Collection } from '@fleetbase/sdk';
 import Resource from '../resource';
-import StoreLocation from './store-location';
 import PaymentGateway from './payment-gateway';
 import Store from './store';
-import { Collection, Place } from '@fleetbase/sdk';
+import StoreLocation from './store-location';
 
 export default class Network extends Resource {
     constructor(attributes = {}, adapter, options = {}) {

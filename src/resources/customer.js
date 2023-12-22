@@ -1,6 +1,6 @@
-import StorefrontStore from '../store';
+import { Collection, Order, Place, StoreActions } from '@fleetbase/sdk';
 import Resource from '../resource';
-import { Contact, Place, Order, Collection, StoreActions } from '@fleetbase/sdk';
+import StorefrontStore from '../store';
 import { isPhone } from '../utils';
 
 const customerActions = new StoreActions({

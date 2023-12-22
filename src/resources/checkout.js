@@ -1,6 +1,5 @@
+import { Order, StoreActions, isResource } from '@fleetbase/sdk';
 import Resource from '../resource';
-import Product from './product';
-import { StoreActions, isResource, Order } from '@fleetbase/sdk';
 
 const checkoutActions = new StoreActions({
     create: undefined,

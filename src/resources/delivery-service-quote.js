@@ -1,7 +1,5 @@
+import { Adapter, Collection, ServiceQuote } from '@fleetbase/sdk';
 import StorefrontStore from '../store';
-import Cart from './cart';
-import StoreLocation from './store-location';
-import { ServiceQuote, ServiceRate, Place, Collection, Adapter } from '@fleetbase/sdk';
 import { formatCurrency, isEmpty } from '../utils';
 
 const { isArray } = Array;
