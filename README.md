@@ -6,14 +6,14 @@ Ecommerce companion SDK & API for Fleetbase, build custom shopping experiences f
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@fleetbase/sdk">
-    <img src="https://img.shields.io/npm/v/@fleetbase/sdk" alt="Version" />
+  <a href="https://www.npmjs.com/package/@fleetbase/storefront">
+    <img src="https://img.shields.io/npm/v/@fleetbase/storefront" alt="Version" />
   </a>
-  <a href="https://www.npmjs.com/package/@fleetbase/sdk">
-    <img src="https://img.shields.io/npm/dw/@fleetbase/sdk" alt="Downloads/week" />
+  <a href="https://www.npmjs.com/package/@fleetbase/storefront">
+    <img src="https://img.shields.io/npm/dw/@fleetbase/storefront" alt="Downloads/week" />
   </a>
-  <a href="https://bundlephobia.com/package/@fleetbase/sdk@1.0.0">
-    <img src="https://img.shields.io/bundlephobia/min/@fleetbase/sdk" alt="Bundle Size" />
+  <a href="https://bundlephobia.com/package/@fleetbase/storefront@1.0.0">
+    <img src="https://img.shields.io/bundlephobia/min/@fleetbase/storefront" alt="Bundle Size" />
   </a>
   <a href="https://github.com/fleetbase/fleetbase-js/blob/master/LICENSE.md">
     <img src="https://img.shields.io/github/license/fleetbase/fleetbase-js" alt="License" />
