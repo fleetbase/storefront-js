@@ -1,9 +1,13 @@
 lockfileVersion: '6.0'
 
+settings:
+    autoInstallPeers: true
+    excludeLinksFromLockfile: false
+
 dependencies:
     '@fleetbase/sdk':
-        specifier: 1.2.7
-        version: 1.2.7
+        specifier: 1.2.8
+        version: 1.2.8
     date-fns:
         specifier: ^3.0.5
         version: 3.0.5
@@ -1351,8 +1355,8 @@ packages:
         engines: { node: ^12.22.0 || ^14.17.0 || >=16.0.0 }
         dev: true
 
-    /@fleetbase/sdk@1.2.7:
-        resolution: { integrity: sha512-SfpMRD6Gz4AitUrhq2sMsDrQwvh9z5hkKRjjzpocD3Q2lcKqkEi3VVmzGm2HUuEKKL+huZ2B3BQwPzUWlWXLaw== }
+    /@fleetbase/sdk@1.2.8:
+        resolution: { integrity: sha512-JekAyVswxTy+YWr7gpWOYvkLnNBLQPIPEm1awKr/Fcv68M2O1d05ysnsYeiid6K47i3mWO2Y0/7z4APViuJY1Q== }
         dependencies:
             '@babel/runtime': 7.23.6
             axios: 0.21.1
