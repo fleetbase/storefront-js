@@ -1,6 +1,6 @@
 {
     "name": "@fleetbase/storefront",
-    "version": "1.1.6",
+    "version": "1.1.7",
     "description": "Fleetbase Storefront JS & Node SDK",
     "main": "dist/cjs/storefront.js",
     "module": "dist/esm/storefront.js",
@@ -62,7 +62,7 @@
         "typescript": "^5.3.3"
     },
     "dependencies": {
-        "@fleetbase/sdk": "1.2.7",
+        "@fleetbase/sdk": "1.2.8",
         "date-fns": "^3.0.5"
     }
 }
