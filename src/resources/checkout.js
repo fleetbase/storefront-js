@@ -28,7 +28,7 @@ const checkoutActions = new StoreActions({
     },
 
     captureOrder: function (token, transactionDetails = {}, options = {}) {
-        return this.adapter.get(`${this.namespace}/capture`, { token, transactionDetails }, options).then((orderJson) => new Order(orderJson));
+        return this.adapter.post(`${this.namespace}/capture`, { token, transactionDetails }, options).then((orderJson) => new Order(orderJson));
     },
 });
 
