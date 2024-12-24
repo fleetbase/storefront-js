@@ -8,6 +8,16 @@
         "dist",
         "src"
     ],
+    "exports": {
+      ".": {
+        "import": "./dist/esm/storefront.js",
+        "require": "./dist/cjs/storefront.js"
+      },
+      "./resolver": {
+        "import": "./dist/esm/resolver.js",
+        "require": "./dist/cjs/resolver.js"
+      }
+    },
     "scripts": {
         "prebuild": "npm run lint",
         "lint": "eslint src",
