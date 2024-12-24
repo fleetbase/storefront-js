@@ -1,11 +1,11 @@
-import { terser } from 'rollup-plugin-terser';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
-import babel from '@rollup/plugin-babel';
-import pkg from './package.json';
+const { terser } = require('rollup-plugin-terser');
+const { nodeResolve } = require('@rollup/plugin-node-resolve');
+const babel = require('@rollup/plugin-babel');
+const pkg = require('./package.json');
 
 const inputFiles = ['src/storefront.js', 'src/resolver.js'];
 
-export default [
+module.exports = [
     // Base UMD config for storefront.js
     {
         input: 'src/storefront.js',
