@@ -1,5 +1,6 @@
 import StorefrontStore from './store';
 import { detectAdapter, isKeyValid } from './utils';
+import { lookup } from './resolver';
 import { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Review, Network } from './resources';
 import { cartActions } from './resources/cart';
 import { customerActions } from './resources/customer';
@@ -51,6 +52,11 @@ export default class Storefront {
         return this.adapter.get('about');
     }
 
+    /** lookup a specific store or network provided the ID */
+    lookup(id) {
+        return this.adapter.get(`lookup/${id}`);
+    }
+
     /** search products in store or network */
     search(query, options = {}) {
         return this.adapter.get('search', { query, ...options }).then(products => {
@@ -71,4 +77,4 @@ export default class Storefront {
     }
 }
 
-export { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Review, Network };
+export { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Review, Network, lookup };

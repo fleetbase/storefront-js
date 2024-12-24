@@ -1,24 +1,22 @@
-// rollup.config.js
 import { terser } from 'rollup-plugin-terser';
-// import { eslint } from 'rollup-plugin-eslint';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import babel from '@rollup/plugin-babel';
 import pkg from './package.json';
 
-const input = ['src/storefront.js'];
+const inputFiles = ['src/storefront.js', 'src/resolver.js'];
 
 export default [
+    // Base UMD config for storefront.js
     {
-        // umd
-        input,
+        input: 'src/storefront.js',
         plugins: [
             nodeResolve({
                 browser: true,
                 modulesOnly: true,
             }),
             babel({
-				babelHelpers: 'bundled',
-			}),
+                babelHelpers: 'bundled',
+            }),
             terser(),
         ],
         output: [
@@ -36,18 +34,46 @@ export default [
             include: ['lib/**'],
         },
     },
+    // Additional UMD config for resolver.js
     {
-        // esm and cjs
-        input,
+        input: 'src/resolver.js',
         plugins: [
             nodeResolve({
                 browser: true,
                 modulesOnly: true,
             }),
-			babel({
-				babelHelpers: 'bundled',
-			}),
-			terser()
+            babel({
+                babelHelpers: 'bundled',
+            }),
+            terser(),
+        ],
+        output: [
+            {
+                file: `dist/${pkg.name}/resolver.min.js`,
+                format: 'umd',
+                name: '@fleetbase/storefront/resolver',
+                esModule: false,
+                exports: 'named',
+                sourcemap: true,
+            },
+        ],
+        watch: {
+            exclude: ['node_modules/**'],
+            include: ['lib/**'],
+        },
+    },
+    // Config for ESM and CJS
+    {
+        input: inputFiles,
+        plugins: [
+            nodeResolve({
+                browser: true,
+                modulesOnly: true,
+            }),
+            babel({
+                babelHelpers: 'bundled',
+            }),
+            terser(),
         ],
         output: [
             {
@@ -63,6 +89,6 @@ export default [
                 sourcemap: true,
             },
         ],
-		external: ['axios']
+        external: ['axios'],
     },
 ];

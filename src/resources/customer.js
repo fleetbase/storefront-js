@@ -86,6 +86,18 @@ export default class Customer extends Resource {
                 return new Collection(orders.map((attributes) => new Order(attributes, this.adapter)));
             });
     }
+
+    getStripeEphemeralKey(params = {}) {
+        return this.adapter
+            .setHeaders({ 'Customer-Token': this.token })
+            .post('customers/stripe-ephemeral-key', params);
+    }
+
+    getStripeSetupIntent(params = {}) {
+        return this.adapter
+            .setHeaders({ 'Customer-Token': this.token })
+            .post('customers/stripe-setup-intent', params);
+    }
 }
 
 export { customerActions };
