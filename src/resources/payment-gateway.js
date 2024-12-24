@@ -20,7 +20,7 @@ export default class PaymentGateway extends Resource {
     get isStripeGateway() {
         return this.type === 'stripe';
     }
-    
+
     setCheckoutToken(token) {
         this.token = token;
     }

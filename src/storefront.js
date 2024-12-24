@@ -16,13 +16,13 @@ import { Collection } from '@fleetbase/sdk';
 
 export default class Storefront {
     /**
-	 * Builds an instance of the Fleetbase Storefront SDK
-	 *
-	 * @param  {String} storeKey  The access key for the storefront store
-	 * @param  {Object} config    The config object
-	 * @param  {Boolean} debug    Enable debug mode
-	 * @return {Storefront}        Instance
-	 */
+     * Builds an instance of the Fleetbase Storefront SDK
+     *
+     * @param  {String} storeKey  The access key for the storefront store
+     * @param  {Object} config    The config object
+     * @param  {Boolean} debug    Enable debug mode
+     * @return {Storefront}        Instance
+     */
     constructor(storeKey, config = {}, debug = false) {
         this.version = config.version || 'v1';
         this.options = {
@@ -30,7 +30,7 @@ export default class Storefront {
             host: config.host || 'https://api.fleetbase.io',
             namespace: `storefront/${this.version}` || config.namespace,
             publicKey: storeKey,
-            debug
+            debug,
         };
 
         if (!isKeyValid(storeKey)) {
@@ -59,8 +59,8 @@ export default class Storefront {
 
     /** search products in store or network */
     search(query, options = {}) {
-        return this.adapter.get('search', { query, ...options }).then(products => {
-            return new Collection(products.map(product => new Product(product)));
+        return this.adapter.get('search', { query, ...options }).then((products) => {
+            return new Collection(products.map((product) => new Product(product)));
         });
     }
 

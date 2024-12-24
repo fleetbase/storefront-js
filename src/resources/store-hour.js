@@ -66,7 +66,6 @@ export default class StoreHour extends Resource {
 
         return this.humanReadableHoursRange;
     }
-    
 
     // remove default resource methods
     create() {

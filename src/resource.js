@@ -12,7 +12,7 @@ export default class StorefrontResource extends Resource {
         this.adapter = adapter;
         this.store = new StorefrontStore(this.resource, adapter, {
             onAfterFetch: this.syncAttributes.bind(this),
-            actions: this.options?.actions
+            actions: this.options?.actions,
         });
 
         return this;

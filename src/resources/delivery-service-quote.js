@@ -1,7 +1,5 @@
+import { Adapter, Collection, ServiceQuote } from '@fleetbase/sdk';
 import StorefrontStore from '../store';
-import Cart from './cart';
-import StoreLocation from './store-location';
-import { ServiceQuote, ServiceRate, Place, Collection, Adapter } from '@fleetbase/sdk';
 import { formatCurrency, isEmpty } from '../utils';
 
 const { isArray } = Array;
@@ -11,7 +9,7 @@ export default class DeliveryServiceQuote extends ServiceQuote {
         if (attributes instanceof Adapter) {
             return super({}, attributes, 'service-quote', options);
         }
-            
+
         super(attributes, adapter, 'service-quote', options);
     }
 
@@ -41,31 +39,39 @@ export default class DeliveryServiceQuote extends ServiceQuote {
         return formatCurrency(amount / 100, currency);
     }
 
-    static getFromCart(adapter, ...params) {
-        const quote = new DeliveryServiceQuote(adapter);
-
-        return quote.fromCart(...params);
-    }
-
-    fromCart(origin, destination, cart, config = 'storefront', all = false) {
+    async fetchServiceQuotesFromCart(origin, destination, cart, config = 'storefront', all = false) {
         if (origin?.id) {
             origin = origin.id;
         }
-
         if (destination?.id) {
             destination = destination.id;
         }
-
         if (cart?.id) {
             cart = cart.id;
         }
 
-        return this.adapter.get('service-quotes/from-cart', { origin, destination, cart, config, all }).then(serviceQuotes => {
+        try {
+            const serviceQuotes = await this.adapter.get('service-quotes/from-cart', {
+                origin,
+                destination,
+                cart,
+                config,
+                all,
+            });
+
             if (isArray(serviceQuotes)) {
-                return new Collection(serviceQuotes.map(serviceQuote => new DeliveryServiceQuote(serviceQuote, this.adapter)));
+                return new Collection(serviceQuotes.map((serviceQuote) => new DeliveryServiceQuote(serviceQuote, this.adapter)));
             }
 
             return new DeliveryServiceQuote(serviceQuotes, this.adapter);
-        });
+        } catch (error) {
+            console.error('Error fetching service quotes:', error);
+            throw error;
+        }
+    }
+
+    static async getFromCart(adapter, origin, destination, cart, config = 'storefront', all = false) {
+        const quote = new DeliveryServiceQuote(adapter);
+        return quote.fetchServiceQuotesFromCart(origin, destination, cart, config, all);
     }
 }

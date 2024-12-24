@@ -11,17 +11,4 @@ import Checkout from './resources/checkout';
 import PaymentGateway from './resources/payment-gateway';
 import Review from './resources/review';
 
-export {
-    Product,
-    Category,
-    Customer,
-    Cart,
-    Network,
-    Store,
-    StoreLocation,
-    StoreHour,
-    DeliveryServiceQuote,
-    Checkout,
-    PaymentGateway,
-    Review
-};
+export { Product, Category, Customer, Cart, Network, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Review };

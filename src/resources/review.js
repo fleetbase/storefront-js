@@ -10,7 +10,7 @@ const reviewActions = new StoreActions({
         }
 
         return this.adapter.get(`${this.namespace}/count`, params, options);
-    }
+    },
 });
 
 export default class Review extends Resource {
