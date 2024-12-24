@@ -103,6 +103,18 @@ export default class Customer extends Resource {
             throw new Error('Failed to retrieve order history');
         }
     }
+
+    getStripeEphemeralKey(params = {}) {
+        return this.adapter
+            .setHeaders({ 'Customer-Token': this.token })
+            .post('customers/stripe-ephemeral-key', params);
+    }
+
+    getStripeSetupIntent(params = {}) {
+        return this.adapter
+            .setHeaders({ 'Customer-Token': this.token })
+            .post('customers/stripe-setup-intent', params);
+    }
 }
 
 export { customerActions };

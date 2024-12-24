@@ -3,12 +3,12 @@ const { nodeResolve } = require('@rollup/plugin-node-resolve');
 const babel = require('@rollup/plugin-babel');
 const pkg = require('./package.json');
 
-const input = ['src/storefront.js'];
+const inputFiles = ['src/storefront.js', 'src/resolver.js'];
 
 module.exports = [
+    // Base UMD config for storefront.js
     {
-        // umd
-        input,
+        input: 'src/storefront.js',
         plugins: [
             nodeResolve({
                 browser: true,
@@ -34,9 +34,37 @@ module.exports = [
             include: ['lib/**'],
         },
     },
+    // Additional UMD config for resolver.js
     {
-        // esm and cjs
-        input,
+        input: 'src/resolver.js',
+        plugins: [
+            nodeResolve({
+                browser: true,
+                modulesOnly: true,
+            }),
+            babel({
+                babelHelpers: 'bundled',
+            }),
+            terser(),
+        ],
+        output: [
+            {
+                file: `dist/${pkg.name}/resolver.min.js`,
+                format: 'umd',
+                name: '@fleetbase/storefront/resolver',
+                esModule: false,
+                exports: 'named',
+                sourcemap: true,
+            },
+        ],
+        watch: {
+            exclude: ['node_modules/**'],
+            include: ['lib/**'],
+        },
+    },
+    // Config for ESM and CJS
+    {
+        input: inputFiles,
         plugins: [
             nodeResolve({
                 browser: true,
