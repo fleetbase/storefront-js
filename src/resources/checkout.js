@@ -1,32 +1,7 @@
-import { Order, StoreActions, isResource } from '@fleetbase/sdk';
-import Resource from '../resource';
+import Resource from '../resource.js';
+import { Order, StoreActions, isResource, register } from '@fleetbase/sdk';
 
-const objectToParams = (obj = {}, prefix = null) => {
-    if (obj === null || obj === undefined) {
-        return {};
-    }
-
-    const parsed = {};
-    const keys = Object.keys(obj);
-
-    for (let index = 0; index < keys.length; index++) {
-        const key = keys[index];
-        const value = obj[key];
-
-        if (key && value) {
-            if (prefix && typeof prefix === 'string') {
-                parsed[`${prefix}[${key}]`] = value;
-                continue;
-            }
-
-            parsed[key] = value;
-        }
-    }
-
-    return parsed;
-};
-
-const checkoutActions = new StoreActions({
+export const checkoutActions = new StoreActions({
     create: undefined,
     findAll: undefined,
     query: undefined,
@@ -83,7 +58,7 @@ const checkoutActions = new StoreActions({
 
 export default class Checkout extends Resource {
     constructor(attributes = {}, adapter, options = {}) {
-        super(attributes, adapter, 'checkout', options);
+        super(attributes, adapter, 'checkout', { actions: checkoutActions, ...options });
     }
 
     initialize() {
@@ -95,4 +70,4 @@ export default class Checkout extends Resource {
     }
 }
 
-export { checkoutActions };
+register('resource', 'Checkout', Checkout);

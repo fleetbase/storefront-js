@@ -1,5 +1,4 @@
-import { Store, classify, extendStoreActions } from '@fleetbase/sdk';
-import { lookup } from './resolver';
+import { Store, classify, extendStoreActions, lookup } from '@fleetbase/sdk';
 
 export default class StorefrontStore extends Store {
     constructor() {

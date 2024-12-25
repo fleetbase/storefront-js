@@ -1,4 +1,5 @@
-import Resource from '../resource';
+import Resource from '../resource.js';
+import { register } from '@fleetbase/sdk';
 
 export default class PaymentGateway extends Resource {
     constructor(attributes = {}, adapter, options = {}) {
@@ -54,3 +55,5 @@ export default class PaymentGateway extends Resource {
         throw new Error('There is no reload() method for payment gateways!');
     }
 }
+
+register('resource', 'PaymentGateway', PaymentGateway);

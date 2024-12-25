@@ -1,4 +1,4 @@
-import Store from './store';
+import Store from './store.js';
 import { isPhone } from './utils';
 
 export default class CustomerStore extends Store {
@@ -6,12 +6,9 @@ export default class CustomerStore extends Store {
         super(...arguments);
     }
 
-    request(method, uri, data, options) {
-        return new Promise(async (resolve, reject) => {
-            const response = await this.adapter[method](uri, data, options).then(this.afterFetch.bind(this)).catch(reject);
-
-            resolve(response);
-        });
+    async request(method, uri, data, options) {
+        const response = await this.adapter[method](uri, data, options);
+        return this.afterFetch(response);
     }
 
     login(identity, password = null, attributes = {}) {

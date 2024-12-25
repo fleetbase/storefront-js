@@ -1,19 +1,17 @@
-import StorefrontStore from './store';
-import { detectAdapter, isKeyValid } from './utils';
-import { lookup } from './resolver';
-import { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Review, Network } from './resources';
-import { cartActions } from './resources/cart';
-import { customerActions } from './resources/customer';
-import { checkoutActions } from './resources/checkout';
-import { reviewActions } from './resources/review';
-import { Collection } from '@fleetbase/sdk';
+import StorefrontStore from './store.js';
+import { isKeyValid } from './utils/index.js';
+import { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Review, Network } from './resources.js';
+import { cartActions } from './resources/cart.js';
+import { customerActions } from './resources/customer.js';
+import { checkoutActions } from './resources/checkout.js';
+import { reviewActions } from './resources/review.js';
+import { Collection, lookup, detectAdapter } from '@fleetbase/sdk';
 
 /**
  * // instance
  * const storefront = new Storefront();
  *
  */
-
 export default class Storefront {
     /**
      * Builds an instance of the Fleetbase Storefront SDK
@@ -28,7 +26,7 @@ export default class Storefront {
         this.options = {
             version: this.version,
             host: config.host || 'https://api.fleetbase.io',
-            namespace: `storefront/${this.version}` || config.namespace,
+            namespace: config.namespace || `storefront/${this.version}`,
             publicKey: storeKey,
             debug,
         };

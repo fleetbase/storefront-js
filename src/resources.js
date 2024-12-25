@@ -1,14 +1,12 @@
-import Product from './resources/product';
-import Category from './resources/category';
-import Customer from './resources/customer';
-import Cart from './resources/cart';
-import Network from './resources/network';
-import Store from './resources/store';
-import StoreLocation from './resources/store-location';
-import StoreHour from './resources/store-hour';
-import DeliveryServiceQuote from './resources/delivery-service-quote';
-import Checkout from './resources/checkout';
-import PaymentGateway from './resources/payment-gateway';
-import Review from './resources/review';
-
-export { Product, Category, Customer, Cart, Network, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Review };
+export { default as Product } from './resources/product.js';
+export { default as Category } from './resources/category.js';
+export { default as Customer } from './resources/customer.js';
+export { default as Cart } from './resources/cart.js';
+export { default as Network } from './resources/network.js';
+export { default as Store } from './resources/store.js';
+export { default as StoreLocation } from './resources/store-location.js';
+export { default as StoreHour } from './resources/store-hour.js';
+export { default as DeliveryServiceQuote } from './resources/delivery-service-quote.js';
+export { default as Checkout } from './resources/checkout.js';
+export { default as PaymentGateway } from './resources/payment-gateway.js';
+export { default as Review } from './resources/review.js';

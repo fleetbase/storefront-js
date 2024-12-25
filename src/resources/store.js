@@ -1,8 +1,8 @@
-import Resource from '../resource';
-import StoreLocation from './store-location';
-import PaymentGateway from './payment-gateway';
-import Review from './review';
-import { Collection, Place } from '@fleetbase/sdk';
+import Resource from '../resource.js';
+import StoreLocation from './store-location.js';
+import PaymentGateway from './payment-gateway.js';
+import Review from './review.js';
+import { Collection, Place, register } from '@fleetbase/sdk';
 
 export default class Store extends Resource {
     constructor(attributes = {}, adapter, options = {}) {
@@ -51,3 +51,5 @@ export default class Store extends Resource {
         });
     }
 }
+
+register('resource', 'Store', Store);

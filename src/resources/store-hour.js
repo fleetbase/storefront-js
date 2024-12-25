@@ -1,5 +1,6 @@
-import Resource from '../resource';
+import Resource from '../resource.js';
 import { format, parse, isValid } from 'date-fns';
+import { register } from '@fleetbase/sdk';
 
 export default class StoreHour extends Resource {
     constructor(attributes = {}, adapter, options = {}) {
@@ -87,3 +88,5 @@ export default class StoreHour extends Resource {
         throw new Error('There is no reload() method store location!');
     }
 }
+
+register('resource', 'StoreHour', StoreHour);

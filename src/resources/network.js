@@ -1,8 +1,8 @@
-import { Collection } from '@fleetbase/sdk';
-import Resource from '../resource';
-import PaymentGateway from './payment-gateway';
-import Store from './store';
-import StoreLocation from './store-location';
+import Resource from '../resource.js';
+import PaymentGateway from './payment-gateway.js';
+import Store from './store.js';
+import StoreLocation from './store-location.js';
+import { Collection, register } from '@fleetbase/sdk';
 
 export default class Network extends Resource {
     constructor(attributes = {}, adapter, options = {}) {
@@ -35,3 +35,5 @@ export default class Network extends Resource {
         return this.getResourceCollection('gateways', PaymentGateway);
     }
 }
+
+register('resource', 'Network', Network);

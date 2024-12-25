@@ -1,9 +1,9 @@
-import { Collection, Order, Place, StoreActions } from '@fleetbase/sdk';
-import Resource from '../resource';
-import StorefrontStore from '../store';
-import { isPhone } from '../utils';
+import Resource from '../resource.js';
+import StorefrontStore from '../store.js';
+import { Collection, Order, Place, StoreActions, register } from '@fleetbase/sdk';
+import { isPhone } from '../utils/is-phone.js';
 
-const customerActions = new StoreActions({
+export const customerActions = new StoreActions({
     // const { error } = await storefront.customers.login('+1 111-1111');
     login: function (identity, password = null, attributes = {}) {
         // handle phone number authentication
@@ -91,7 +91,8 @@ export default class Customer extends Resource {
             const places = await this.performAuthorizedRequest('customers/places');
             return new Collection(places.map((attributes) => new Place(attributes, this.adapter)));
         } catch (error) {
-            throw new Error('Failed to retrieve saved places');
+            console.error('Failed to retrieve saved places');
+            throw error;
         }
     }
 
@@ -100,21 +101,18 @@ export default class Customer extends Resource {
             const orders = await this.performAuthorizedRequest('customers/orders', params);
             return new Collection(orders.map((attributes) => new Order(attributes, this.adapter)));
         } catch (error) {
-            throw new Error('Failed to retrieve order history');
+            console.error('Failed to retrieve order history');
+            throw error;
         }
     }
 
     getStripeEphemeralKey(params = {}) {
-        return this.adapter
-            .setHeaders({ 'Customer-Token': this.token })
-            .post('customers/stripe-ephemeral-key', params);
+        return this.adapter.setHeaders({ 'Customer-Token': this.token }).post('customers/stripe-ephemeral-key', params);
     }
 
     getStripeSetupIntent(params = {}) {
-        return this.adapter
-            .setHeaders({ 'Customer-Token': this.token })
-            .post('customers/stripe-setup-intent', params);
+        return this.adapter.setHeaders({ 'Customer-Token': this.token }).post('customers/stripe-setup-intent', params);
     }
 }
 
-export { customerActions };
+register('resource', 'Customer', Customer);

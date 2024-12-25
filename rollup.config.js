@@ -1,32 +1,37 @@
-const { terser } = require('rollup-plugin-terser');
-const { nodeResolve } = require('@rollup/plugin-node-resolve');
-const babel = require('@rollup/plugin-babel');
-const pkg = require('./package.json');
+import terser from '@rollup/plugin-terser';
+import commonjs from '@rollup/plugin-commonjs';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import { babel } from '@rollup/plugin-babel';
 
-const inputFiles = ['src/storefront.js', 'src/resolver.js'];
+const input = ['src/storefront.js'];
+const plugins = [
+    nodeResolve({
+        browser: true,
+    }),
+    commonjs(),
+    babel({
+        babelHelpers: 'bundled',
+    }),
+    terser(),
+];
 
-module.exports = [
-    // Base UMD config for storefront.js
+export default [
     {
-        input: 'src/storefront.js',
-        plugins: [
-            nodeResolve({
-                browser: true,
-                modulesOnly: true,
-            }),
-            babel({
-                babelHelpers: 'bundled',
-            }),
-            terser(),
-        ],
+        input,
+        plugins,
+        external: [],
         output: [
             {
-                file: `dist/${pkg.name}.min.js`,
+                file: `dist/@storefront.min.js`,
                 format: 'umd',
                 name: '@fleetbase/storefront',
                 esModule: false,
                 exports: 'named',
                 sourcemap: true,
+                globals: {
+                    '@fleetbase/sdk': 'FleetbaseSdk',
+                    'countries-list': 'CountriesList',
+                },
             },
         ],
         watch: {
@@ -34,47 +39,10 @@ module.exports = [
             include: ['lib/**'],
         },
     },
-    // Additional UMD config for resolver.js
     {
-        input: 'src/resolver.js',
-        plugins: [
-            nodeResolve({
-                browser: true,
-                modulesOnly: true,
-            }),
-            babel({
-                babelHelpers: 'bundled',
-            }),
-            terser(),
-        ],
-        output: [
-            {
-                file: `dist/${pkg.name}/resolver.min.js`,
-                format: 'umd',
-                name: '@fleetbase/storefront/resolver',
-                esModule: false,
-                exports: 'named',
-                sourcemap: true,
-            },
-        ],
-        watch: {
-            exclude: ['node_modules/**'],
-            include: ['lib/**'],
-        },
-    },
-    // Config for ESM and CJS
-    {
-        input: inputFiles,
-        plugins: [
-            nodeResolve({
-                browser: true,
-                modulesOnly: true,
-            }),
-            babel({
-                babelHelpers: 'bundled',
-            }),
-            terser(),
-        ],
+        input,
+        plugins,
+        external: [],
         output: [
             {
                 dir: 'dist/esm',
@@ -89,6 +57,5 @@ module.exports = [
                 sourcemap: true,
             },
         ],
-        external: ['axios'],
     },
 ];

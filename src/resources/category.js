@@ -1,6 +1,6 @@
-import Resource from '../resource';
-import Product from './product';
-import { Collection } from '@fleetbase/sdk';
+import Resource from '../resource.js';
+import Product from './product.js';
+import { Collection, register } from '@fleetbase/sdk';
 
 export default class Category extends Resource {
     constructor(attributes = {}, adapter, options = {}) {
@@ -13,3 +13,5 @@ export default class Category extends Resource {
         });
     }
 }
+
+register('resource', 'Category', Category);

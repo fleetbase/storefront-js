@@ -1,16 +1,20 @@
-import { Adapter, Collection, ServiceQuote } from '@fleetbase/sdk';
-import StorefrontStore from '../store';
-import { formatCurrency, isEmpty } from '../utils';
-
-const { isArray } = Array;
+import StorefrontStore from '../store.js';
+import { Adapter, Collection, ServiceQuote, register } from '@fleetbase/sdk';
+import { formatCurrency, isEmpty, isArray } from '../utils/index.js';
 
 export default class DeliveryServiceQuote extends ServiceQuote {
     constructor(attributes = {}, adapter, options = {}) {
+        let finalAttributes = attributes;
+        let finalAdapter = adapter;
+
+        // If `attributes` is actually an Adapter, adjust the arguments accordingly.
         if (attributes instanceof Adapter) {
-            return super({}, attributes, 'service-quote', options);
+            finalAttributes = {};
+            finalAdapter = attributes;
         }
 
-        super(attributes, adapter, 'service-quote', options);
+        // Call `super()` exactly once with the resolved arguments.
+        super(finalAttributes, finalAdapter, 'service-quote', options);
     }
 
     /**
@@ -75,3 +79,5 @@ export default class DeliveryServiceQuote extends ServiceQuote {
         return quote.fetchServiceQuotesFromCart(origin, destination, cart, config, all);
     }
 }
+
+register('resource', 'DeliveryServiceQuote', DeliveryServiceQuote);
