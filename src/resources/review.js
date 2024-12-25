@@ -1,7 +1,7 @@
-import Resource from '../resource';
-import { StoreActions } from '@fleetbase/sdk';
+import Resource from '../resource.js';
+import { StoreActions, register } from '@fleetbase/sdk';
 
-const reviewActions = new StoreActions({
+export const reviewActions = new StoreActions({
     count: function (storeId, options = {}) {
         const params = {};
 
@@ -31,4 +31,4 @@ export default class Review extends Resource {
     }
 }
 
-export { reviewActions };
+register('resource', 'Review', Review);

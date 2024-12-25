@@ -1,7 +1,7 @@
-import Resource from '../resource';
-import Review from './review';
-import { formatCurrency, isEmpty } from '../utils';
-import { Collection } from '@fleetbase/sdk';
+import Resource from '../resource.js';
+import Review from './review.js';
+import { formatCurrency, isEmpty } from '../utils/index.js';
+import { Collection, register } from '@fleetbase/sdk';
 
 export default class Product extends Resource {
     constructor(attributes = {}, adapter, options = {}) {
@@ -48,3 +48,5 @@ export default class Product extends Resource {
         });
     }
 }
+
+register('resource', 'Product', Product);

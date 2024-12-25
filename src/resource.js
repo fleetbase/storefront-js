@@ -1,5 +1,5 @@
-import { Resource } from '@fleetbase/sdk';
-import StorefrontStore from './store';
+import { Resource, register } from '@fleetbase/sdk';
+import StorefrontStore from './store.js';
 
 export default class StorefrontResource extends Resource {
     /**
@@ -18,3 +18,5 @@ export default class StorefrontResource extends Resource {
         return this;
     }
 }
+
+register('resource', 'StorefrontResource', StorefrontResource);

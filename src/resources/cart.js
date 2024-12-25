@@ -1,10 +1,10 @@
-import Resource from '../resource';
-import Product from './product';
-import { StoreActions } from '@fleetbase/sdk';
+import Resource from '../resource.js';
+import Product from './product.js';
+import { StoreActions, register } from '@fleetbase/sdk';
 
 const { isArray } = Array;
 
-const cartActions = new StoreActions({
+export const cartActions = new StoreActions({
     create: undefined,
     findAll: undefined,
     query: undefined,
@@ -97,4 +97,4 @@ export default class Cart extends Resource {
     }
 }
 
-export { cartActions };
+register('resource', 'Cart', Cart);

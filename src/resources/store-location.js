@@ -1,6 +1,6 @@
-import Resource from '../resource';
-import StoreHour from './store-hour';
-import { Collection } from '@fleetbase/sdk';
+import Resource from '../resource.js';
+import StoreHour from './store-hour.js';
+import { Collection, register } from '@fleetbase/sdk';
 import { format } from 'date-fns';
 
 export default class StoreLocation extends Resource {
@@ -64,3 +64,5 @@ export default class StoreLocation extends Resource {
         throw new Error('There is no destroy() method store location!');
     }
 }
+
+register('resource', 'StoreLocation', StoreLocation);

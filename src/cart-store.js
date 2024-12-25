@@ -1,16 +1,13 @@
-import Store from './store';
+import Store from './store.js';
 
 export default class CartStore extends Store {
     constructor() {
         super(...arguments);
     }
 
-    request(method, uri, data, options) {
-        return new Promise(async (resolve, reject) => {
-            const response = await this.adapter[method](uri, data, options).then(this.afterFetch.bind(this)).catch(reject);
-
-            resolve(response);
-        });
+    async request(method, uri, data, options) {
+        const response = await this.adapter[method](uri, data, options);
+        return this.afterFetch(response);
     }
 
     add(id, productId, quantity = 1, data = {}, options = {}) {
