@@ -38,6 +38,13 @@ jobs:
             - name: Install Dependencies
               run: pnpm install
 
+            - name: Test
+              run: pnpm test
+              env:
+                  STOREFRONT_KEY: ${{ secrets.STOREFRONT_KEY }}
+                  FLEETBASE_KEY: ${{ secrets.FLEETBASE_KEY }}
+                  FLEETBASE_HOST: ${{ secrets.FLEETBASE_HOST }}
+
             - name: Build
               run: pnpm run bundle
 

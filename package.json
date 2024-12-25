@@ -25,11 +25,11 @@
         "lint:tests": "eslint tests",
         "bundle": "rollup -c",
         "dev": "rollup -c -w",
-        "test": "mocha -r @babel/register -r dotenv/config tests/*.test.js",
+        "test": "mocha -r @babel/register -r dotenv/config 'tests/*.test.js' --timeout 10000",
         "format": "prettier . --write"
     },
     "dependencies": {
-        "@fleetbase/sdk": "link:../fleetbase-js",
+        "@fleetbase/sdk": "^1.2.11",
         "countries-list": "^3.1.1",
         "date-fns": "^4.1.0"
     },
