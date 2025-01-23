@@ -43,13 +43,19 @@ export default class DeliveryServiceQuote extends ServiceQuote {
         return formatCurrency(amount / 100, currency);
     }
 
+    async fromCart() {
+        return this.fetchServiceQuotesFromCart(...arguments);
+    }
+
     async fetchServiceQuotesFromCart(origin, destination, cart, config = 'storefront', all = false) {
         if (origin?.id) {
             origin = origin.id;
         }
+
         if (destination?.id) {
             destination = destination.id;
         }
+
         if (cart?.id) {
             cart = cart.id;
         }

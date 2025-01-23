@@ -18,6 +18,21 @@ export const customerActions = new StoreActions({
         return this.adapter.post('customers/login', { identity, password, ...attributes }).then(this.afterFetch.bind(this));
     },
 
+    // const customer = await storefront.customers.loginWithApple('<appleUserId>', '<identityToken>', '<authorizationCode>', '<email>', '<name>');
+    loginWithApple: function (appleUserId, identityToken, authorizationCode, email, name, attributes = {}) {
+        return this.adapter.post('customers/login-with-apple', { appleUserId, identityToken, authorizationCode, email, name, ...attributes }).then(this.afterFetch.bind(this));
+    },
+
+    // const customer = await storefront.customers.loginWithFacebook('<facebookUserId>', '<email>', '<name>', '<avatarUrl>');
+    loginWithFacebook: function (facebookUserId, email, name, avatarUrl, attributes = {}) {
+        return this.adapter.post('customers/login-with-facebook', { facebookUserId, email, name, avatarUrl, ...attributes }).then(this.afterFetch.bind(this));
+    },
+
+    // const customer = await storefront.customers.loginWithGoogle('<idToken>', '<clientId>');
+    loginWithGoogle: function (idToken, clientId, attributes = {}) {
+        return this.adapter.post('customers/login-with-google', { idToken, clientId, ...attributes }).then(this.afterFetch.bind(this));
+    },
+
     verifyCode: function (identity, code, attributes = {}) {
         return this.adapter.post('customers/verify-code', { identity, code, ...attributes }).then(this.afterFetch.bind(this));
     },
@@ -66,13 +81,15 @@ export default class Customer extends Resource {
         return this.getAttribute('token');
     }
 
-    async syncDevice(token) {
-        return this.adapter
-            .setHeaders({ 'Customer-Token': this.token })
-            .post('customers/register-device', token)
-            .then(() => {
-                return this;
-            });
+    async syncDevice(token, platform) {
+        try {
+            const headers = { 'Customer-Token': this.token };
+            const response = await this.adapter.setHeaders(headers).post('customers/register-device', { token, platform });
+            return response;
+        } catch (error) {
+            console.error(`Error making request to register customer device token:`, error);
+            throw error;
+        }
     }
 
     async performAuthorizedRequest(endpoint, params = {}, method = 'GET') {
