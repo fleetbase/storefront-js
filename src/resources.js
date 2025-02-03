@@ -10,3 +10,4 @@ export { default as DeliveryServiceQuote } from './resources/delivery-service-qu
 export { default as Checkout } from './resources/checkout.js';
 export { default as PaymentGateway } from './resources/payment-gateway.js';
 export { default as Review } from './resources/review.js';
+export { default as FoodTruck } from './resources/food-truck.js';
