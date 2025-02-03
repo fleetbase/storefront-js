@@ -1,6 +1,6 @@
 {
     "name": "@fleetbase/storefront",
-    "version": "1.1.12",
+    "version": "1.1.13",
     "description": "Fleetbase Storefront JS & Node SDK",
     "license": "AGPL-3.0-or-later",
     "author": "Ronald A. Richardson <ron@fleetbase.io> (https://ron.dev)",
@@ -29,7 +29,7 @@
         "format": "prettier . --write"
     },
     "dependencies": {
-        "@fleetbase/sdk": "^1.2.11",
+        "@fleetbase/sdk": "^1.2.13",
         "countries-list": "^3.1.1",
         "date-fns": "^4.1.0"
     },

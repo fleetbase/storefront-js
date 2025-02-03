@@ -1,6 +1,6 @@
 import StorefrontStore from './store.js';
 import { isKeyValid } from './utils/index.js';
-import { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Review, Network } from './resources.js';
+import { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Review, Network, FoodTruck } from './resources.js';
 import { cartActions } from './resources/cart.js';
 import { customerActions } from './resources/customer.js';
 import { checkoutActions } from './resources/checkout.js';
@@ -39,6 +39,7 @@ export default class Storefront {
 
         this.products = new StorefrontStore('product', this.adapter);
         this.categories = new StorefrontStore('category', this.adapter);
+        this.foodTrucks = new StorefrontStore('food-truck', this.adapter);
         this.reviews = new StorefrontStore('review', this.adapter).extendActions(reviewActions);
         this.customers = new StorefrontStore('customer', this.adapter).extendActions(customerActions);
         this.cart = new StorefrontStore('cart', this.adapter).extendActions(cartActions);
@@ -75,4 +76,4 @@ export default class Storefront {
     }
 }
 
-export { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Review, Network, lookup };
+export { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Review, Network, FoodTruck, lookup };
