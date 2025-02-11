@@ -27,16 +27,16 @@ export const checkoutActions = new StoreActions({
         return this.adapter.get(`${this.namespace}/before`, { ...orderOptions, customer, cart, serviceQuote, gateway }, options);
     },
 
-    captureOrder: function (token, transactionDetails = {}, options = {}) {
-        return this.adapter.post(`${this.namespace}/capture`, { token, transactionDetails }, options).then((orderJson) => new Order(orderJson));
+    captureOrder: function (token, params = {}, options = {}) {
+        return this.adapter.post(`${this.namespace}/capture`, { token, ...params }, options).then((orderJson) => new Order(orderJson));
     },
 
-    createStripeSetupIntent: function (customer, options = {}) {
+    createStripeSetupIntent: function (customer, params = {}, options = {}) {
         if (isResource(customer)) {
             customer = customer.id;
         }
 
-        return this.adapter.post(`${this.namespace}/stripe-setup-intent`, { customer }, options);
+        return this.adapter.post(`${this.namespace}/stripe-setup-intent`, { customer, ...params }, options);
     },
 
     updateStripePaymentIntent: function (paymentIntent, customer, cart, serviceQuote, orderOptions = {}, options = {}) {
