@@ -3,6 +3,9 @@ export default class StoreLocation extends Resource {
     get latitude(): any;
     get longitude(): any;
     get hours(): Collection;
+    get storeData(): any;
+    get storeId(): any;
+    get merchant(): Store | null;
     get isAlwaysOpen(): boolean;
     get today(): any;
     get schedule(): {};
@@ -12,3 +15,4 @@ export default class StoreLocation extends Resource {
 }
 import Resource from '../resource';
 import { Collection } from '@fleetbase/sdk';
+import Store from './store';

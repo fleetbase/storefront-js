@@ -2,6 +2,7 @@ import Resource from '../resource.js';
 import Review from './review.js';
 import { formatCurrency, isEmpty } from '../utils/index.js';
 import { Collection, register } from '@fleetbase/sdk';
+import Store from './store.js';
 
 export default class Product extends Resource {
     constructor(attributes = {}, adapter, options = {}) {
@@ -40,6 +41,12 @@ export default class Product extends Resource {
         }
 
         return formatCurrency(price / 100, currency);
+    }
+
+    get merchant() {
+        const attributes = this.getAttribute('store');
+
+        return attributes && typeof attributes === 'object' ? new Store(attributes, this.adapter) : null;
     }
 
     getReviews() {

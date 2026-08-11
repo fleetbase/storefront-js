@@ -1,5 +1,8 @@
 import Resource from '../resource.js';
 import PaymentGateway from './payment-gateway.js';
+import Category from './category.js';
+import Product from './product.js';
+import Review from './review.js';
 import Store from './store.js';
 import StoreLocation from './store-location.js';
 import { Collection, register } from '@fleetbase/sdk';
@@ -14,13 +17,8 @@ export default class Network extends Resource {
     }
 
     async getResourceCollection(endpoint, ResourceClass, params = {}) {
-        try {
-            const resources = await this.adapter.get(endpoint, params);
-            return new Collection(resources.map((attributes) => new ResourceClass(attributes, this.adapter)));
-        } catch (error) {
-            console.error(`Error fetching ${endpoint}:`, error);
-            throw error;
-        }
+        const resources = await this.adapter.get(endpoint, params);
+        return new Collection(resources.map((attributes) => new ResourceClass(attributes, this.adapter)));
     }
 
     async getStores(params = {}) {
@@ -31,8 +29,25 @@ export default class Network extends Resource {
         return this.getResourceCollection('store-locations', StoreLocation, params);
     }
 
-    async getPaymentGateways() {
-        return this.getResourceCollection('gateways', PaymentGateway);
+    async getCategories(params = {}) {
+        return this.getResourceCollection('categories', Category, params);
+    }
+
+    async search(query, params = {}) {
+        return this.getResourceCollection('search', Product, { query, with_store: true, ...params });
+    }
+
+    async lookupStore(id) {
+        const attributes = await this.adapter.get(`lookup/${id}`);
+        return new Store(attributes, this.adapter);
+    }
+
+    async getReviews(storeId, params = {}) {
+        return this.getResourceCollection('reviews', Review, { store: storeId, ...params });
+    }
+
+    async getPaymentGateways(params = {}) {
+        return this.getResourceCollection('gateways', PaymentGateway, params);
     }
 }
 

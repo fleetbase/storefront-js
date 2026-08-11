@@ -29,11 +29,17 @@ export default class Storefront {
     customers: any;
     cart: any;
     checkout: any;
+    initializeStores(): Storefront;
     /** loads information about this storefront */
-    about(): any;
+    about(options?: { resource?: boolean }): any;
+    getOwner(): Promise<Store | Network>;
+    /** lookup a specific store or network provided the ID */
+    lookup(id: string, options?: { resource?: boolean }): any;
+    lookupResource(id: string): Promise<Store | Network>;
     /** search products in store or network */
     search(query: any, options?: {}): any;
-    setAdapter(adapter: any): void;
+    hydrateOwner(attributes?: {}): Store | Network;
+    setAdapter(adapter: any): Storefront;
     getAdapter(): any;
 }
 import StorefrontStore from './store';

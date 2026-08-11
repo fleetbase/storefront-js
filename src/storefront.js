@@ -37,6 +37,10 @@ export default class Storefront {
 
         this.adapter = config.adapter || detectAdapter(this.options);
 
+        this.initializeStores();
+    }
+
+    initializeStores() {
         this.products = new StorefrontStore('product', this.adapter);
         this.categories = new StorefrontStore('category', this.adapter);
         this.foodTrucks = new StorefrontStore('food-truck', this.adapter);
@@ -44,23 +48,43 @@ export default class Storefront {
         this.customers = new StorefrontStore('customer', this.adapter).extendActions(customerActions);
         this.cart = new StorefrontStore('cart', this.adapter).extendActions(cartActions);
         this.checkout = new StorefrontStore('checkout', this.adapter).extendActions(checkoutActions);
+
+        return this;
     }
 
     /** loads information about this storefront */
-    about() {
-        return this.adapter.get('about');
+    about(options = {}) {
+        return this.adapter.get('about').then((attributes) => (options.resource ? this.hydrateOwner(attributes) : attributes));
+    }
+
+    /** loads the storefront owner as a typed Store or Network resource */
+    getOwner() {
+        return this.about({ resource: true });
     }
 
     /** lookup a specific store or network provided the ID */
-    lookup(id) {
-        return this.adapter.get(`lookup/${id}`);
+    lookup(id, options = {}) {
+        return this.adapter.get(`lookup/${id}`).then((attributes) => (options.resource ? this.hydrateOwner(attributes) : attributes));
+    }
+
+    /** lookup a store or network as a typed resource */
+    lookupResource(id) {
+        return this.lookup(id, { resource: true });
     }
 
     /** search products in store or network */
     search(query, options = {}) {
         return this.adapter.get('search', { query, ...options }).then((products) => {
-            return new Collection(products.map((product) => new Product(product)));
+            return new Collection(products.map((product) => new Product(product, this.adapter)));
         });
+    }
+
+    hydrateOwner(attributes = {}) {
+        if (attributes?.is_network === true) {
+            return new Network(attributes, this.adapter);
+        }
+
+        return new Store(attributes, this.adapter);
     }
 
     static newInstance() {
@@ -69,6 +93,8 @@ export default class Storefront {
 
     setAdapter(adapter) {
         this.adapter = adapter;
+
+        return this.initializeStores();
     }
 
     getAdapter() {
