@@ -1,11 +1,48 @@
 import { describe, expect, it, vi } from 'vitest';
 import { Order as FleetbaseOrder, Place } from '@fleetbase/sdk';
-import Storefront, { Cart, Checkout, Customer, DeliveryServiceQuote, Order, PaymentGateway } from '../src/storefront.js';
+import Storefront, { Cart, Category, Checkout, Customer, DeliveryServiceQuote, FoodTruck, Order, PaymentGateway, Product, Review } from '../src/storefront.js';
 import FakeAdapter from './helpers/fake-adapter.js';
 
 const STORE_KEY = `store_${'a'.repeat(32)}`;
 
 describe('store action wire contracts', () => {
+    it('maps standard resource stores to the public commerce CRUD routes', async () => {
+        const adapter = new FakeAdapter({
+            products: [{ id: 'product_1' }],
+            'products/product_1': { id: 'product_1' },
+            'post:products': { id: 'product_2' },
+            'put:products/product_1': { id: 'product_1', name: 'Updated' },
+            'delete:products/product_1': { id: 'product_1', deleted: true },
+            categories: [{ id: 'category_1' }],
+            'food-trucks': [{ id: 'food_truck_1' }],
+            reviews: [{ id: 'review_1' }],
+            'post:reviews': { id: 'review_2' },
+            'delete:reviews/review_1': { id: 'review_1', deleted: true },
+        });
+        const storefront = new Storefront(STORE_KEY, { adapter });
+
+        expect((await storefront.products.findAll())[0]).toBeInstanceOf(Product);
+        expect((await storefront.products.query({ category: 'category_1' }))[0]).toBeInstanceOf(Product);
+        await expect(storefront.products.findRecord('product_1')).resolves.toBeInstanceOf(Product);
+        await expect(storefront.products.create({ name: 'New' })).resolves.toBeInstanceOf(Product);
+        await expect(storefront.products.update('product_1', { name: 'Updated' })).resolves.toBeInstanceOf(Product);
+        await expect(storefront.products.destroy('product_1')).resolves.toBeInstanceOf(Product);
+        expect((await storefront.categories.findAll())[0]).toBeInstanceOf(Category);
+        expect((await storefront.foodTrucks.findAll())[0]).toBeInstanceOf(FoodTruck);
+        expect((await storefront.reviews.findAll())[0]).toBeInstanceOf(Review);
+        await expect(storefront.reviews.create({ rating: 5 })).resolves.toBeInstanceOf(Review);
+        await expect(storefront.reviews.destroy('review_1')).resolves.toBeInstanceOf(Review);
+
+        expect(adapter.calls).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ method: 'get', endpoint: 'products', params: { category: 'category_1' } }),
+                expect.objectContaining({ method: 'post', endpoint: 'products', params: { name: 'New' } }),
+                expect.objectContaining({ method: 'put', endpoint: 'products/product_1', params: { name: 'Updated' } }),
+                expect.objectContaining({ method: 'delete', endpoint: 'reviews/review_1' }),
+            ])
+        );
+    });
+
     it('covers customer authentication and creation actions', async () => {
         const adapter = new FakeAdapter({
             'customers/login-with-sms': { challenge: true },

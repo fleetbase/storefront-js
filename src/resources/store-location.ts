@@ -1,27 +1,29 @@
 import Resource from '../resource.js';
 import StoreHour from './store-hour.js';
-import { Collection, lookup, register } from '@fleetbase/sdk';
+import { Adapter, Collection, lookup, register } from '@fleetbase/sdk';
 import { format } from 'date-fns';
+import type { Attributes } from '../types.js';
 
 export default class StoreLocation extends Resource {
-    constructor(attributes = {}, adapter = undefined, options = {}) {
+    constructor(attributes: Attributes = {}, adapter?: Adapter, options: Attributes = {}) {
         super(attributes, adapter, 'store-location', options);
     }
 
-    get latitude() {
-        return this.getAttribute('place.location.coordinates.1');
+    get latitude(): number | undefined {
+        return this.getAttribute('place.location.coordinates.1') as number | undefined;
     }
 
-    get longitude() {
-        return this.getAttribute('place.location.coordinates.0');
+    get longitude(): number | undefined {
+        return this.getAttribute('place.location.coordinates.0') as number | undefined;
     }
 
-    get hours() {
-        return new Collection((this.getAttribute('hours') || []).map((attributes) => new StoreHour(attributes, this.adapter)));
+    get hours(): Collection<StoreHour> {
+        const hours = this.getAttribute<Attributes[]>('hours', []);
+        return new Collection((hours || []).map((attributes) => new StoreHour(attributes, this.adapter)));
     }
 
     /** Raw embedded merchant payload, normalized across API response versions. */
-    get storeData() {
+    get storeData(): unknown {
         const embeddedStore = this.getAttribute('store_data');
         const legacyStore = this.getAttribute('store');
 
@@ -29,14 +31,15 @@ export default class StoreLocation extends Resource {
     }
 
     /** Public store identifier for this location. */
-    get storeId() {
+    get storeId(): string | undefined {
         const store = this.getAttribute('store');
 
-        return typeof store === 'string' ? store : this.storeData?.id || this.storeData?.public_id;
+        const data = this.storeData as Attributes | null;
+        return (typeof store === 'string' ? store : data?.id || data?.public_id) as string | undefined;
     }
 
     /** Typed embedded merchant when requested with `with_store`. */
-    get merchant() {
+    get merchant(): Resource | null {
         return this.storeData ? lookup('resource', 'Store', this.storeData, this.adapter) : null;
     }
 
@@ -51,11 +54,11 @@ export default class StoreLocation extends Resource {
     }
 
     get schedule() {
-        const schedule = {};
+        const schedule: Record<string, Collection<StoreHour>> = {};
         const week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
         for (let i = 0; i < week.length; i++) {
-            const day = week[i];
+            const day = week[i]!;
 
             schedule[day] = new Collection();
         }
@@ -63,7 +66,7 @@ export default class StoreLocation extends Resource {
         for (let i = 0; i < this.hours.length; i++) {
             const hour = this.hours.objectAt(i);
 
-            if (schedule[hour.day]) {
+            if (hour && schedule[hour.day]) {
                 schedule[hour.day].pushObject(hour);
             }
         }

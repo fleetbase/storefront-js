@@ -1,1 +1,1 @@
-export const isArray: (arg: any) => arg is any[];
+export declare function isArray(value: unknown): value is unknown[];

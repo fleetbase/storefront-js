@@ -5,48 +5,49 @@ import Product from './product.js';
 import Review from './review.js';
 import Store from './store.js';
 import StoreLocation from './store-location.js';
-import { Collection, register } from '@fleetbase/sdk';
+import { Adapter, Collection, register } from '@fleetbase/sdk';
+import type { Attributes, ResourceConstructor } from '../types.js';
 
 export default class Network extends Resource {
-    constructor(attributes = {}, adapter = undefined, options = {}) {
+    constructor(attributes: Attributes = {}, adapter?: Adapter, options: Attributes = {}) {
         super(attributes, adapter, 'network', options);
     }
 
-    getTags(params = {}) {
+    getTags(params: Attributes = {}) {
         return this.adapter.get('tags', params);
     }
 
-    async getResourceCollection(endpoint, ResourceClass, params = {}) {
-        const resources = await this.adapter.get(endpoint, params);
-        return new Collection(resources.map((attributes) => new ResourceClass(attributes, this.adapter)));
+    async getResourceCollection<T>(endpoint: string, ResourceClass: ResourceConstructor<T>, params: Attributes = {}): Promise<Collection<T>> {
+        const resources = await this.adapter.get<Attributes[]>(endpoint, params);
+        return new Collection(resources.map((attributes: Attributes) => new ResourceClass(attributes, this.adapter)));
     }
 
-    async getStores(params = {}) {
+    async getStores(params: Attributes = {}) {
         return this.getResourceCollection('stores', Store, params);
     }
 
-    async getStoreLocations(params = {}) {
+    async getStoreLocations(params: Attributes = {}) {
         return this.getResourceCollection('store-locations', StoreLocation, params);
     }
 
-    async getCategories(params = {}) {
+    async getCategories(params: Attributes = {}) {
         return this.getResourceCollection('categories', Category, params);
     }
 
-    async search(query, params = {}) {
+    async search(query: string, params: Attributes = {}) {
         return this.getResourceCollection('search', Product, { query, with_store: true, ...params });
     }
 
-    async lookupStore(id) {
-        const attributes = await this.adapter.get(`lookup/${id}`);
+    async lookupStore(id: string) {
+        const attributes = await this.adapter.get<Attributes>(`lookup/${id}`);
         return new Store(attributes, this.adapter);
     }
 
-    async getReviews(storeId, params = {}) {
+    async getReviews(storeId: string, params: Attributes = {}) {
         return this.getResourceCollection('reviews', Review, { store: storeId, ...params });
     }
 
-    async getPaymentGateways(params = {}) {
+    async getPaymentGateways(params: Attributes = {}) {
         return this.getResourceCollection('gateways', PaymentGateway, params);
     }
 }

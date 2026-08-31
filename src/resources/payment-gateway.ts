@@ -1,17 +1,20 @@
 import Resource from '../resource.js';
-import { register } from '@fleetbase/sdk';
+import { Adapter, register } from '@fleetbase/sdk';
+import type { Attributes } from '../types.js';
 
 export default class PaymentGateway extends Resource {
-    constructor(attributes = {}, adapter = undefined, options = {}) {
+    private token?: string;
+
+    constructor(attributes: Attributes = {}, adapter?: Adapter, options: Attributes = {}) {
         super(attributes, adapter, 'payment-gateway', options);
     }
 
-    get type() {
-        return this.getAttribute('type');
+    get type(): string | undefined {
+        return this.getAttribute('type') as string | undefined;
     }
 
-    get code() {
-        return this.getAttribute('code');
+    get code(): string | undefined {
+        return this.getAttribute('code') as string | undefined;
     }
 
     get isCashGateway() {
@@ -26,7 +29,7 @@ export default class PaymentGateway extends Resource {
         return this.type === 'qpay' || this.code === 'qpay';
     }
 
-    setCheckoutToken(token) {
+    setCheckoutToken(token: string) {
         this.token = token;
     }
 

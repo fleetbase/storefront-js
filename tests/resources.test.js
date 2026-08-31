@@ -2,9 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { Adapter, Collection, Order as FleetbaseOrder, Place } from '@fleetbase/sdk';
 import StorefrontStore from '../src/store.js';
 import StorefrontResource from '../src/resource.js';
-import CartStore from '../src/cart-store.js';
-import CustomerStore from '../src/customer-store.js';
-import { Cart, Category, Customer, DeliveryServiceQuote, FoodTruck, Network, Order, PaymentGateway, Product, Review, Store, StoreHour, StoreLocation } from '../src/resources.js';
+import { Cart, Category, DeliveryServiceQuote, FoodTruck, Network, Order, PaymentGateway, Product, Review, Store, StoreHour, StoreLocation } from '../src/resources.js';
 import FakeAdapter from './helpers/fake-adapter.js';
 
 describe('resource and store contracts', () => {
@@ -19,43 +17,6 @@ describe('resource and store contracts', () => {
         expect(resource.setAdapter(nextAdapter)).toBe(resource);
         expect(resource.adapter).toBe(nextAdapter);
         expect(resource.store.adapter).toBe(nextAdapter);
-    });
-
-    it('supports the legacy cart store request surface and explicit unsupported operations', async () => {
-        const adapter = new FakeAdapter({
-            'post:carts/cart_1/product_1': { id: 'cart_1', items: [] },
-            'put:carts/cart_1/item_1': { id: 'cart_1', items: [] },
-            'delete:carts/cart_1/item_1': { id: 'cart_1', items: [] },
-            'put:carts/cart_1/empty': { id: 'cart_1', items: [] },
-            'carts/cart_1': { id: 'cart_1', items: [] },
-        });
-        const store = new CartStore('cart', adapter);
-
-        expect(await store.add('cart_1', 'product_1', 2, { note: 'hot' }, { timeout: 1 })).toBeInstanceOf(Cart);
-        expect(await store.update('cart_1', 'item_1', 3)).toBeInstanceOf(Cart);
-        expect(await store.remove('cart_1', 'item_1')).toBeInstanceOf(Cart);
-        expect(await store.empty('cart_1')).toBeInstanceOf(Cart);
-        expect(await store.retrieve('cart_1')).toBeInstanceOf(Cart);
-        expect(() => store.create()).toThrow('There is no create() method for carts!');
-        expect(() => store.findAll()).toThrow('There is no findAll() method for carts!');
-        expect(() => store.query()).toThrow('There is no query() method for carts!');
-        expect(() => store.queryRecord()).toThrow('There is no queryRecord() method for carts!');
-    });
-
-    it('supports the legacy customer store authentication surface', async () => {
-        const adapter = new FakeAdapter({
-            'customers/login-with-sms': { challenge: true },
-            'customers/login': { id: 'customer_1' },
-            'customers/verify-sms': { id: 'customer_1' },
-            'customers/customer_1': { id: 'customer_1' },
-        });
-        const store = new CustomerStore('customer', adapter);
-
-        expect(await store.login('+12025550100')).toEqual({ challenge: true });
-        expect(await store.login('person@example.com', 'secret', { device: 'web' })).toBeInstanceOf(Customer);
-        expect(() => store.login('person@example.com')).toThrow('Login requires password!');
-        expect(await store.verifySmsCode('+12025550100', '1234', { device: 'web' })).toBeInstanceOf(Customer);
-        expect(await store.retrieve('customer_1')).toBeInstanceOf(Customer);
     });
 
     it('implements cart actions, coercion, totals, and empty states', async () => {

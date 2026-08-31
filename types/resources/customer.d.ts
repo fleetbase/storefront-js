@@ -1,26 +1,26 @@
-export const customerActions: StoreActions;
+import Resource from '../resource.js';
+import { Adapter, Collection, Order, Place, StoreActions } from '@fleetbase/sdk';
+import type { Attributes, RequestOptions } from '../types.js';
+export declare const customerActions: StoreActions;
 export default class Customer extends Resource {
-    constructor(attributes?: {}, adapter?: any, options?: {});
+    constructor(attributes?: Attributes, adapter?: Adapter, options?: Attributes);
     /**
      * Set a new adapter to the resource instance, this will update the Store instance
      *
      * @param {import('@fleetbase/sdk').Adapter} adapter
      * @return {this}
      */
-    setAdapter(adapter: import('@fleetbase/sdk').Adapter): this;
-    get token(): any;
-    syncDevice(token: any, platform: any): Promise<any>;
-    performAuthorizedRequest(endpoint: any, params?: {}, method?: string, options?: {}): any;
-    getSavedPlaces(): Promise<Collection<any>>;
-    getOrderHistory(params?: {}): Promise<Collection<any>>;
-    getStripeEphemeralKey(params?: {}): any;
-    getStripeSetupIntent(params?: {}): any;
-    startAccountClosure(params?: {}, options?: {}): any;
-    confirmAccountClosure(code: any, params?: {}, options?: {}): any;
-    requestPhoneVerification(phone: any, params?: {}, options?: {}): any;
-    verifyPhoneNumber(code: any, phone: any, params?: {}, options?: {}): any;
-    updateContactAlias(attributes?: {}, options?: {}): any;
+    setAdapter(adapter: Adapter): this;
+    get token(): string | undefined;
+    syncDevice(token: string, platform: string): Promise<unknown>;
+    performAuthorizedRequest<T = unknown>(endpoint: string, params?: Attributes, method?: string, options?: RequestOptions): Promise<T>;
+    getSavedPlaces(): Promise<Collection<Place>>;
+    getOrderHistory(params?: Attributes): Promise<Collection<Order>>;
+    getStripeEphemeralKey(params?: Attributes): Promise<unknown>;
+    getStripeSetupIntent(params?: Attributes): Promise<unknown>;
+    startAccountClosure(params?: Attributes, options?: RequestOptions): Promise<unknown>;
+    confirmAccountClosure(code: string, params?: Attributes, options?: RequestOptions): Promise<unknown>;
+    requestPhoneVerification(phone: string, params?: Attributes, options?: RequestOptions): Promise<unknown>;
+    verifyPhoneNumber(code: string, phone: string, params?: Attributes, options?: RequestOptions): Promise<unknown>;
+    updateContactAlias(attributes?: Attributes, options?: RequestOptions): Promise<this>;
 }
-import { StoreActions } from '@fleetbase/sdk';
-import Resource from '../resource.js';
-import { Collection } from '@fleetbase/sdk';

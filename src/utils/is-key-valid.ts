@@ -1,4 +1,4 @@
-export function isKeyValid(key) {
+export function isKeyValid(key: unknown) {
     return typeof key === 'string' && key.length > 30 && (key.startsWith('store_') || key.startsWith('network_'));
 }
 

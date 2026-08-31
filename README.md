@@ -8,7 +8,6 @@
 
 <p align="center">
   <a href="https://github.com/fleetbase/storefront-js/actions/workflows/ci.yml"><img src="https://github.com/fleetbase/storefront-js/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
-  <a href="https://github.com/fleetbase/storefront-js/actions/workflows/codeql.yml"><img src="https://github.com/fleetbase/storefront-js/actions/workflows/codeql.yml/badge.svg" alt="CodeQL" /></a>
   <a href="https://www.npmjs.com/package/@fleetbase/storefront"><img src="https://img.shields.io/npm/v/@fleetbase/storefront" alt="npm version" /></a>
   <a href="https://www.npmjs.com/package/@fleetbase/storefront"><img src="https://img.shields.io/npm/dw/@fleetbase/storefront" alt="npm downloads per week" /></a>
   <a href="https://bundlephobia.com/package/@fleetbase/storefront"><img src="https://img.shields.io/bundlephobia/minzip/@fleetbase/storefront" alt="minified and compressed bundle size" /></a>
@@ -186,7 +185,7 @@ pnpm run check
 
 `pnpm run check` validates formatting, linting, strict consumer types, 100% statement/branch/function/line coverage, ESM, callable CommonJS, the browser bundle, package contents, and package declarations. CI additionally installs the packed tarball through npm, pnpm, Yarn, and Bun.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow, [SECURITY.md](SECURITY.md) for vulnerability reporting, and [docs/releasing.md](docs/releasing.md) for the release process. Existing consumers upgrading from v1.1 can use the [v1.2 migration guide](docs/migration-v1.2.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow, [SECURITY.md](SECURITY.md) for vulnerability reporting, [docs/api-contract.md](docs/api-contract.md) for the audited endpoint mapping, and [docs/releasing.md](docs/releasing.md) for the release process. Existing consumers upgrading from v1.1 can use the [v1.2 migration guide](docs/migration-v1.2.md).
 
 ## License
 

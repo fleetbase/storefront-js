@@ -1,14 +1,15 @@
 import Resource from '../resource.js';
 import { format, parse, isValid } from 'date-fns';
-import { register } from '@fleetbase/sdk';
+import { Adapter, register } from '@fleetbase/sdk';
+import type { Attributes } from '../types.js';
 
 export default class StoreHour extends Resource {
-    constructor(attributes = {}, adapter = undefined, options = {}) {
+    constructor(attributes: Attributes = {}, adapter?: Adapter, options: Attributes = {}) {
         super(attributes, adapter, 'store-hour', options);
     }
 
-    get day() {
-        return this.getAttribute('day');
+    get day(): string {
+        return this.getAttribute('day') as string;
     }
 
     get isClosed() {
@@ -19,7 +20,7 @@ export default class StoreHour extends Resource {
         const start = this.startDateInstance;
         const end = this.endDateInstance;
 
-        if (!isValid(start) || !isValid(end)) {
+        if (start === null || end === null || !isValid(start) || !isValid(end)) {
             return false;
         }
 
@@ -29,7 +30,7 @@ export default class StoreHour extends Resource {
         return hours > 23;
     }
 
-    get startDateInstance() {
+    get startDateInstance(): Date | null {
         if (!this.hasAttribute('start')) {
             return null;
         }
@@ -44,7 +45,7 @@ export default class StoreHour extends Resource {
         return parse(start, format, new Date());
     }
 
-    get endDateInstance() {
+    get endDateInstance(): Date | null {
         if (!this.hasAttribute('end')) {
             return null;
         }
@@ -60,11 +61,14 @@ export default class StoreHour extends Resource {
     }
 
     get humanReadableHoursRange() {
-        if (!isValid(this.startDateInstance) || !isValid(this.endDateInstance)) {
+        const start = this.startDateInstance;
+        const end = this.endDateInstance;
+
+        if (start === null || end === null || !isValid(start) || !isValid(end)) {
             return `${this.getAttribute('start')} - ${this.getAttribute('end')}`;
         }
 
-        return `${format(this.startDateInstance, 'p')} - ${format(this.endDateInstance, 'p')}`;
+        return `${format(start, 'p')} - ${format(end, 'p')}`;
     }
 
     get humanReadableHours() {

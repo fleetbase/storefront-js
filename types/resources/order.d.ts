@@ -1,4 +1,5 @@
+import { Adapter, Order as FleetbaseOrder } from '@fleetbase/sdk';
+import type { Attributes } from '../types.js';
 export default class Order extends FleetbaseOrder {
-    constructor(attributes?: {}, adapter?: any, options?: {});
+    constructor(attributes?: Attributes, adapter?: Adapter, options?: Attributes);
 }
-import { Order as FleetbaseOrder } from '@fleetbase/sdk';

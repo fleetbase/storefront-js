@@ -1,4 +1,4 @@
-export function getCountries(_country?: any):
+export declare function getCountries(_country?: string | number | null):
     | {
           iso2: string;
           alias?: string[];
@@ -26,5 +26,6 @@ export function getCountries(_country?: any):
           partOf?: string;
           phone: number[];
           userAssigned?: boolean;
-      }[];
+      }[]
+    | undefined;
 export default getCountries;
