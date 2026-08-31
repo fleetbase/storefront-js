@@ -42,6 +42,7 @@ describe('Storefront SDK marketplace contracts', () => {
         expect(await storefront.getOwner()).toBeInstanceOf(Network);
         expect(await storefront.lookup('store_public')).toEqual({ id: 'store_public', is_network: false, is_store: true });
         expect(await storefront.lookupResource('store_public')).toBeInstanceOf(Store);
+        expect(storefront.hydrateOwner(null)).toBeInstanceOf(Store);
     });
 
     it('hydrates searched products and their embedded merchants with the active adapter', async () => {

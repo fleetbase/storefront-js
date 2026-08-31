@@ -1,0 +1,35 @@
+name: Live Storefront smoke
+
+on:
+    workflow_dispatch:
+    schedule:
+        - cron: '17 3 * * 2'
+
+permissions:
+    contents: read
+
+concurrency:
+    group: live-storefront-smoke
+    cancel-in-progress: true
+
+jobs:
+    smoke:
+        name: Non-destructive API smoke
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        environment: storefront-smoke
+        steps:
+            - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+            - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+              with:
+                  version: 9.15.4
+            - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+              with:
+                  node-version: 24
+                  cache: pnpm
+            - run: pnpm install --frozen-lockfile
+            - run: pnpm run build
+            - run: node scripts/live-smoke.mjs
+              env:
+                  FLEETBASE_STOREFRONT_PUBLIC_KEY: ${{ secrets.FLEETBASE_STOREFRONT_PUBLIC_KEY }}
+                  FLEETBASE_STOREFRONT_HOST: ${{ vars.FLEETBASE_STOREFRONT_HOST }}

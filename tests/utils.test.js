@@ -7,11 +7,17 @@ describe('utility contracts', () => {
         expect(isKeyValid(`network_${'a'.repeat(32)}`)).toBe(true);
         expect(isKeyValid(`other_${'a'.repeat(32)}`)).toBe(false);
         expect(isKeyValid('store_short')).toBe(false);
+        expect(isKeyValid(`store_${'a'.repeat(24)}`)).toBe(false);
         expect(isKeyValid(null)).toBe(false);
         expect(isEmail('hello@fleetbase.io')).toBe(true);
+        expect(isEmail('a@fleetbase.io')).toBe(true);
+        expect(isEmail('hello@x.y')).toBe(true);
         expect(isEmail('invalid')).toBe(false);
+        expect(isEmail()).toBe(false);
         expect(isPhone('+1 (202) 555-0100')).toBe(true);
-        expect(isPhone('+1 (202) 555-0100')).toBe(true);
+        expect(isPhone('2025550100')).toBe(true);
+        expect(isPhone('prefix +1 (202) 555-0100')).toBe(false);
+        expect(isPhone('+1 (202) 555-0100 trailing')).toBe(false);
         expect(isPhone('not-a-phone')).toBe(false);
         expect(isPhone()).toBe(false);
         expect(isArray([])).toBe(true);

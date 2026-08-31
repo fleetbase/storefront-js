@@ -1,10 +1,20 @@
 # Storefront JavaScript SDK modernization and release plan
 
-Status: proposed for review
+Status: implementation complete on PR #12; prerelease acceptance and protected publication remain post-merge release gates
 
 Audit baseline: `main` at `dbc6456` (`v1.1.14`) on 2026-08-31
 
 Proposed release: `v1.2.0` if every compatibility gate passes; otherwise `v2.0.0`
+
+## Implementation checkpoint
+
+PR #12 now contains the strict TypeScript refactor, executable API/wire snapshots, exact 100% maintained-source coverage, generated declarations, genuine ESM/CommonJS/browser exports, packed npm/pnpm/Yarn/Bun fixtures, Vite/webpack/Next.js/Ember-Embroider builds, mutation testing, immutable action pins, dependency automation, a non-destructive live smoke workflow, Changesets release PR automation, npm trusted-publishing workflow, checksummed release artifacts, and updated public documentation.
+
+Final local evidence on Node 24: 364/364 statements, 306/306 branches, 189/189 functions, and 343/343 lines; 86.32% mutation score across 190 critical-path mutants; zero known production advisories; and a 360,212-byte compressed/1,767,919-byte unpacked tarball. The exact tarball passed ESM, callable CommonJS, Node16/NodeNext/Bundler declarations, pnpm clean-room installation, Vite 8, webpack 5, Next.js 16 client/server, and Ember 7 Vite/Embroider builds.
+
+The upstream `@fleetbase/sdk@1.2.13` package cannot safely remain external because its advertised CommonJS file is inside a `type: module` boundary and webpack reports its ESM entry as having no exports. Storefront therefore bundles a patched build-time copy into every runtime artifact and no longer installs the vulnerable upstream graph in consuming applications. This compatibility boundary is covered by packed CommonJS and framework fixtures and can be removed after an upstream packaging/security release.
+
+Review and merge do not themselves publish `v1.2.0`. The owner-only release gates remain: configure the documented GitHub environments and npm trusted publisher, record Storefront Web/App and marketplace acceptance against a prerelease, approve the protected production environment, and verify npm provenance and attached checksums after the first publish.
 
 ## Executive assessment
 

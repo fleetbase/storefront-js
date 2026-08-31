@@ -5,7 +5,7 @@ on:
         types: [published]
 
 permissions:
-    contents: read
+    contents: write
     id-token: write
 
 concurrency:
@@ -19,13 +19,13 @@ jobs:
         timeout-minutes: 30
         environment: npm-production
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
               with:
                   ref: ${{ github.event.release.tag_name }}
-            - uses: pnpm/action-setup@v4
+            - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
               with:
                   version: 9.15.4
-            - uses: actions/setup-node@v6
+            - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
               with:
                   node-version: 24
                   registry-url: https://registry.npmjs.org
@@ -37,4 +37,33 @@ jobs:
             - run: npm install --global npm@11
             - run: pnpm install --frozen-lockfile
             - run: pnpm run check
-            - run: npm publish --access public
+            - name: Require reproducible generated artifacts
+              run: git diff --exit-code -- dist types
+            - name: Create and verify the immutable package artifact
+              run: |
+                  mkdir -p artifacts
+                  pnpm pack --pack-destination artifacts
+                  pnpm run package:artifact artifacts/*.tgz
+                  node scripts/verify-packed-package.mjs pnpm artifacts/*.tgz
+                  sha256sum artifacts/*.tgz > artifacts/SHA256SUMS
+            - name: Publish the verified bytes with provenance
+              env:
+                  RELEASE_TAG: ${{ github.event.release.tag_name }}
+              run: |
+                  version="${RELEASE_TAG#v}"
+                  dist_tag=latest
+                  case "$version" in
+                      *-*) dist_tag=next ;;
+                  esac
+                  npm publish artifacts/*.tgz --access public --tag "$dist_tag"
+            - name: Verify registry metadata
+              env:
+                  PACKAGE_VERSION: ${{ github.event.release.tag_name }}
+              run: |
+                  expected="${PACKAGE_VERSION#v}"
+                  actual="$(npm view @fleetbase/storefront@"$expected" version)"
+                  test "$actual" = "$expected"
+            - name: Attach package and checksum to the GitHub Release
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: gh release upload "${{ github.event.release.tag_name }}" artifacts/*.tgz artifacts/SHA256SUMS --clobber

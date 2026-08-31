@@ -30,7 +30,9 @@ const shared = {
 export default [
     {
         ...shared,
-        external: ['@fleetbase/sdk', 'countries-list', 'date-fns'],
+        // Keep @fleetbase/sdk internal until its package exports resolve
+        // consistently in webpack and CommonJS clean-room consumers.
+        external: ['countries-list', 'date-fns'],
         plugins: [resolve, commonjs(), compileTypeScript()],
         output: {
             file: 'dist/esm/storefront.js',
@@ -41,9 +43,6 @@ export default [
     },
     {
         ...shared,
-        // @fleetbase/sdk@1.2.13 advertises a `.js` CommonJS target inside a
-        // `type: module` package. Bundle it until upstream ships a genuine
-        // `.cjs` entry; externalizing it makes clean CommonJS consumers fail.
         external: ['countries-list', 'date-fns'],
         plugins: [resolve, commonjs(), compileTypeScript(), callableCommonJsDefault],
         output: {

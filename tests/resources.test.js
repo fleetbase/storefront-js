@@ -151,6 +151,11 @@ describe('resource and store contracts', () => {
         const monday = new StoreHour({ day: 'Monday', start: '09:00', end: '17:00' }, adapter);
         const always = new StoreHour({ day: 'Tuesday', start: '00:00:00', end: '23:59:59' }, adapter);
         const closed = new StoreHour({ day: 'Wednesday', start: null, end: null }, adapter);
+        const closesOnly = new StoreHour({ day: 'Thursday', start: null, end: '17:00' }, adapter);
+        const opensOnly = new StoreHour({ day: 'Friday', start: '09:00', end: null }, adapter);
+        const exactly23Hours = new StoreHour({ day: 'Saturday', start: '00:00', end: '23:00' }, adapter);
+        const invalidStart = new StoreHour({ day: 'Sunday', start: 'invalid', end: '17:00' }, adapter);
+        const invalidEnd = new StoreHour({ day: 'Sunday', start: '09:00', end: 'invalid' }, adapter);
         const invalid = new StoreHour({ day: 'Other', start: 2, end: 'invalid' }, adapter);
         const location = new StoreLocation(
             {
@@ -188,6 +193,13 @@ describe('resource and store contracts', () => {
         expect(closed.startDateInstance).toBeNull();
         expect(closed.endDateInstance).toBeNull();
         expect(closed.humanReadableHours).toBe('Closed');
+        expect(closesOnly.isClosed).toBe(false);
+        expect(opensOnly.isClosed).toBe(false);
+        expect(exactly23Hours.is24Hours).toBe(false);
+        expect(invalidStart.is24Hours).toBe(false);
+        expect(invalidStart.humanReadableHoursRange).toBe('invalid - 17:00');
+        expect(invalidEnd.is24Hours).toBe(false);
+        expect(invalidEnd.humanReadableHoursRange).toBe('09:00 - invalid');
         expect(invalid.startDateInstance).toBeNull();
         expect(invalid.is24Hours).toBe(false);
         expect(invalid.humanReadableHoursRange).toBe('2 - invalid');

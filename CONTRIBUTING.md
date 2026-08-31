@@ -20,7 +20,10 @@ For package changes, build one tarball and test the artifact rather than importi
 mkdir -p artifacts
 pnpm pack --pack-destination artifacts
 node scripts/verify-packed-package.mjs pnpm artifacts/*.tgz
+node scripts/verify-framework-consumers.mjs artifacts/*.tgz
 ```
+
+The framework gate builds Vite, webpack, Next.js client/server, and Ember Vite/Embroider consumers from the tarball. Critical request, authentication, hydration, hours/currency, and validation logic is mutation-tested separately with `pnpm run test:mutation`; the CI gate fails below an 80% mutation score.
 
 ## Compatibility
 

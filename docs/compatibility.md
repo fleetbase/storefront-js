@@ -11,6 +11,8 @@
 | Package managers      | npm, pnpm, Yarn 4, and Bun                                 |
 | Browser               | Self-contained UMD bundle with no DOM access during import |
 | Server rendering      | Package import has no browser-global dependency            |
+| Bundlers              | Vite 8 and webpack 5                                       |
+| Frameworks            | Next.js 16 client/server and Ember 7 with Vite/Embroider   |
 
 The CI matrix installs the exact packed tarball rather than linking the repository source. Claims are expanded only after a distinct runtime or resolver path has a maintained fixture.
 

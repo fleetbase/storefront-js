@@ -183,9 +183,9 @@ pnpm install --frozen-lockfile
 pnpm run check
 ```
 
-`pnpm run check` validates formatting, linting, strict consumer types, 100% statement/branch/function/line coverage, ESM, callable CommonJS, the browser bundle, package contents, and package declarations. CI additionally installs the packed tarball through npm, pnpm, Yarn, and Bun.
+`pnpm run check` validates formatting, linting, strict consumer types, 100% statement/branch/function/line coverage, ESM, callable CommonJS, the browser bundle, package contents, and package declarations. CI additionally installs the exact packed tarball through npm, pnpm, Yarn, and Bun; builds Vite, webpack, Next.js, and Ember/Embroider consumers; and enforces mutation coverage on critical behavior.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow, [SECURITY.md](SECURITY.md) for vulnerability reporting, [docs/api-contract.md](docs/api-contract.md) for the audited endpoint mapping, and [docs/releasing.md](docs/releasing.md) for the release process. Existing consumers upgrading from v1.1 can use the [v1.2 migration guide](docs/migration-v1.2.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow, [SECURITY.md](SECURITY.md) for vulnerability reporting, the [API reference](docs/api-reference.md), [audited endpoint mapping](docs/api-contract.md), and [release process](docs/releasing.md). Existing consumers upgrading from v1.1 can use the [v1.2 migration guide](docs/migration-v1.2.md).
 
 ## License
 
