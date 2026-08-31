@@ -5,7 +5,7 @@ import Review from './review.js';
 import { Collection, Place, register } from '@fleetbase/sdk';
 
 export default class Store extends Resource {
-    constructor(attributes = {}, adapter, options = {}) {
+    constructor(attributes = {}, adapter = undefined, options = {}) {
         super(attributes, adapter, 'store', options);
     }
 
@@ -15,12 +15,16 @@ export default class Store extends Resource {
         });
     }
 
+    getTags(params = {}) {
+        return this.adapter.get('tags', params);
+    }
+
     getLocations(params = {}) {
         return this.adapter.get('locations', { store: this.id, ...params }).then((storeLocations) => {
             return new Collection(
                 storeLocations.map((attributes) => {
                     if (attributes.place) {
-                        attributes.place = new Place(attributes.place);
+                        attributes.place = new Place(attributes.place, this.adapter);
                     }
 
                     return new StoreLocation(attributes, this.adapter);

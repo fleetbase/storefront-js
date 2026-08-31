@@ -32,7 +32,7 @@ export const cartActions = new StoreActions({
 });
 
 export default class Cart extends Resource {
-    constructor(attributes = {}, adapter, options = {}) {
+    constructor(attributes = {}, adapter = undefined, options = {}) {
         super(attributes, adapter, 'cart', { actions: cartActions, ...options });
     }
 
@@ -65,17 +65,12 @@ export default class Cart extends Resource {
     }
 
     subtotal() {
-        let subtotal = 0;
-
-        this.contents().forEach((cartItem) => {
-            subtotal += cartItem.subtotal;
-        });
-
-        return subtotal;
+        return this.contents().reduce((subtotal, cartItem) => subtotal + Number(cartItem?.subtotal || 0), 0);
     }
 
     contents() {
-        return this.getAttribute('items', []);
+        const items = this.getAttribute('items', []);
+        return isArray(items) ? items : [];
     }
 
     hasProduct(productId) {
@@ -83,13 +78,7 @@ export default class Cart extends Resource {
     }
 
     get isEmpty() {
-        const contents = this.contents();
-
-        if (!isArray(contents)) {
-            return true;
-        }
-
-        return contents.length === 0;
+        return this.contents().length === 0;
     }
 
     get isNotEmpty() {

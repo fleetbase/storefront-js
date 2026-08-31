@@ -1,4 +1,4 @@
-import { assert } from 'chai';
+import { describe, expect, it } from 'vitest';
 import Storefront, { Network, Product, Store, StoreLocation } from '../src/storefront.js';
 
 const NETWORK_KEY = `network_${'a'.repeat(32)}`;
@@ -24,9 +24,11 @@ class FakeAdapter {
 
 describe('Storefront SDK marketplace contracts', () => {
     it('validates store and network keys without live credentials', () => {
-        assert.instanceOf(new Storefront(NETWORK_KEY, { adapter: new FakeAdapter() }), Storefront);
-        assert.instanceOf(new Storefront(STORE_KEY, { adapter: new FakeAdapter() }), Storefront);
-        assert.throws(() => new Storefront('network_too_short', { adapter: new FakeAdapter() }), /Invalid Storefront key/);
+        expect(new Storefront(NETWORK_KEY, { adapter: new FakeAdapter() })).toBeInstanceOf(Storefront);
+        expect(new Storefront(STORE_KEY, { adapter: new FakeAdapter() })).toBeInstanceOf(Storefront);
+        expect(new Storefront(STORE_KEY).getAdapter()).toBeDefined();
+        expect(Storefront.newInstance(STORE_KEY, { adapter: new FakeAdapter() })).toBeInstanceOf(Storefront);
+        expect(() => new Storefront('network_too_short', { adapter: new FakeAdapter() })).toThrow(/Invalid Storefront key/);
     });
 
     it('preserves raw about and lookup behavior while offering typed owner hydration', async () => {
@@ -36,10 +38,10 @@ describe('Storefront SDK marketplace contracts', () => {
         });
         const storefront = new Storefront(NETWORK_KEY, { adapter });
 
-        assert.deepEqual(await storefront.about(), { id: 'network_public', is_network: true, is_store: false });
-        assert.instanceOf(await storefront.getOwner(), Network);
-        assert.deepEqual(await storefront.lookup('store_public'), { id: 'store_public', is_network: false, is_store: true });
-        assert.instanceOf(await storefront.lookupResource('store_public'), Store);
+        expect(await storefront.about()).toEqual({ id: 'network_public', is_network: true, is_store: false });
+        expect(await storefront.getOwner()).toBeInstanceOf(Network);
+        expect(await storefront.lookup('store_public')).toEqual({ id: 'store_public', is_network: false, is_store: true });
+        expect(await storefront.lookupResource('store_public')).toBeInstanceOf(Store);
     });
 
     it('hydrates searched products and their embedded merchants with the active adapter', async () => {
@@ -49,12 +51,12 @@ describe('Storefront SDK marketplace contracts', () => {
         const storefront = new Storefront(NETWORK_KEY, { adapter });
         const products = await storefront.search('coffee', { with_store: true });
 
-        assert.lengthOf(products, 1);
-        assert.instanceOf(products[0], Product);
-        assert.strictEqual(products[0].adapter, adapter);
-        assert.instanceOf(products[0].merchant, Store);
-        assert.strictEqual(products[0].merchant.adapter, adapter);
-        assert.deepInclude(adapter.calls[0], {
+        expect(products).toHaveLength(1);
+        expect(products[0]).toBeInstanceOf(Product);
+        expect(products[0].adapter).toBe(adapter);
+        expect(products[0].merchant).toBeInstanceOf(Store);
+        expect(products[0].merchant.adapter).toBe(adapter);
+        expect(adapter.calls[0]).toMatchObject({
             endpoint: 'search',
             params: { query: 'coffee', with_store: true },
         });
@@ -67,10 +69,10 @@ describe('Storefront SDK marketplace contracts', () => {
 
         const returned = storefront.setAdapter(nextAdapter);
 
-        assert.strictEqual(returned, storefront);
-        assert.strictEqual(storefront.getAdapter(), nextAdapter);
+        expect(returned).toBe(storefront);
+        expect(storefront.getAdapter()).toBe(nextAdapter);
         for (const storeName of ['products', 'categories', 'foodTrucks', 'reviews', 'customers', 'cart', 'checkout']) {
-            assert.strictEqual(storefront[storeName].adapter, nextAdapter, `${storeName} uses the replacement adapter`);
+            expect(storefront[storeName].adapter, `${storeName} uses the replacement adapter`).toBe(nextAdapter);
         }
     });
 
@@ -103,23 +105,23 @@ describe('Storefront SDK marketplace contracts', () => {
         const reviews = await network.getReviews('store_public', { limit: 10 });
         const tags = await network.getTags();
 
-        assert.instanceOf(stores[0], Store);
-        assert.instanceOf(locations[0], StoreLocation);
-        assert.strictEqual(locations[0].storeId, 'store_public');
-        assert.deepEqual(locations[0].storeData, { id: 'store_public', name: 'Cafe' });
-        assert.instanceOf(locations[0].merchant, Store);
-        assert.strictEqual(locations[0].merchant.adapter, adapter);
-        assert.equal(categories[0].resource, 'category');
-        assert.instanceOf(products[0], Product);
-        assert.instanceOf(products[0].merchant, Store);
-        assert.instanceOf(store, Store);
-        assert.equal(gateways[0].resource, 'payment-gateway');
-        assert.equal(reviews[0].resource, 'review');
-        assert.deepEqual(tags, ['coffee', 'open-late']);
-        assert.deepInclude(adapter.calls.find((call) => call.endpoint === 'search'), {
+        expect(stores[0]).toBeInstanceOf(Store);
+        expect(locations[0]).toBeInstanceOf(StoreLocation);
+        expect(locations[0].storeId).toBe('store_public');
+        expect(locations[0].storeData).toEqual({ id: 'store_public', name: 'Cafe' });
+        expect(locations[0].merchant).toBeInstanceOf(Store);
+        expect(locations[0].merchant.adapter).toBe(adapter);
+        expect(categories[0].resource).toBe('category');
+        expect(products[0]).toBeInstanceOf(Product);
+        expect(products[0].merchant).toBeInstanceOf(Store);
+        expect(store).toBeInstanceOf(Store);
+        expect(gateways[0].resource).toBe('payment-gateway');
+        expect(reviews[0].resource).toBe('review');
+        expect(tags).toEqual(['coffee', 'open-late']);
+        expect(adapter.calls.find((call) => call.endpoint === 'search')).toMatchObject({
             params: { query: 'coffee', with_store: true, limit: 5 },
         });
-        assert.deepInclude(adapter.calls.find((call) => call.endpoint === 'reviews'), {
+        expect(adapter.calls.find((call) => call.endpoint === 'reviews')).toMatchObject({
             params: { store: 'store_public', limit: 10 },
         });
     });
@@ -134,10 +136,10 @@ describe('Storefront SDK marketplace contracts', () => {
             adapter
         );
 
-        assert.deepEqual(location.storeData, { id: 'store_legacy', name: 'Legacy Cafe' });
-        assert.equal(location.storeId, 'store_legacy');
-        assert.lengthOf(location.hours, 0);
-        assert.instanceOf(location.merchant, Store);
+        expect(location.storeData).toEqual({ id: 'store_legacy', name: 'Legacy Cafe' });
+        expect(location.storeId).toBe('store_legacy');
+        expect(location.hours).toHaveLength(0);
+        expect(location.merchant).toBeInstanceOf(Store);
     });
 
     it('propagates network helper failures without unconditional console output', async () => {
@@ -146,9 +148,9 @@ describe('Storefront SDK marketplace contracts', () => {
 
         try {
             await network.getStores();
-            assert.fail('Expected getStores() to reject');
+            throw new Error('Expected getStores() to reject');
         } catch (caught) {
-            assert.strictEqual(caught, error);
+            expect(caught).toBe(error);
         }
     });
 });

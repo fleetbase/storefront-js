@@ -54,7 +54,7 @@ export const customerActions = new StoreActions({
 });
 
 export default class Customer extends Resource {
-    constructor(attributes = {}, adapter, options = {}) {
+    constructor(attributes = {}, adapter = undefined, options = {}) {
         super(attributes, adapter, 'customer', {
             actions: customerActions,
             ...options,
@@ -64,8 +64,8 @@ export default class Customer extends Resource {
     /**
      * Set a new adapter to the resource instance, this will update the Store instance
      *
-     * @param {Adapter} adapter
-     * @return {Resource} this
+     * @param {import('@fleetbase/sdk').Adapter} adapter
+     * @return {this}
      */
     setAdapter(adapter) {
         this.adapter = adapter;
@@ -82,53 +82,60 @@ export default class Customer extends Resource {
     }
 
     async syncDevice(token, platform) {
-        try {
-            const headers = { 'Customer-Token': this.token };
-            const response = await this.adapter.setHeaders(headers).post('customers/register-device', { token, platform });
-            return response;
-        } catch (error) {
-            console.error(`Error making request to register customer device token:`, error);
-            throw error;
-        }
+        return this.performAuthorizedRequest('customers/register-device', { token, platform }, 'POST');
     }
 
-    async performAuthorizedRequest(endpoint, params = {}, method = 'GET') {
-        try {
-            const headers = { 'Customer-Token': this.token };
-            const response = await this.adapter.setHeaders(headers)[method.toLowerCase()](endpoint, params);
-            return response;
-        } catch (error) {
-            console.error(`Error in ${method} request to ${endpoint}:`, error);
-            throw error;
-        }
+    performAuthorizedRequest(endpoint, params = {}, method = 'GET', options = {}) {
+        const requestOptions = {
+            ...options,
+            headers: {
+                ...options.headers,
+                'Customer-Token': this.token,
+            },
+        };
+
+        return this.adapter[method.toLowerCase()](endpoint, params, requestOptions);
     }
 
     async getSavedPlaces() {
-        try {
-            const places = await this.performAuthorizedRequest('customers/places');
-            return new Collection(places.map((attributes) => new Place(attributes, this.adapter)));
-        } catch (error) {
-            console.error('Failed to retrieve saved places');
-            throw error;
-        }
+        const places = await this.performAuthorizedRequest('customers/places');
+        return new Collection(places.map((attributes) => new Place(attributes, this.adapter)));
     }
 
     async getOrderHistory(params = {}) {
-        try {
-            const orders = await this.performAuthorizedRequest('customers/orders', params);
-            return new Collection(orders.map((attributes) => new Order(attributes, this.adapter)));
-        } catch (error) {
-            console.error('Failed to retrieve order history');
-            throw error;
-        }
+        const orders = await this.performAuthorizedRequest('customers/orders', params);
+        return new Collection(orders.map((attributes) => new Order(attributes, this.adapter)));
     }
 
     getStripeEphemeralKey(params = {}) {
-        return this.adapter.setHeaders({ 'Customer-Token': this.token }).post('customers/stripe-ephemeral-key', params);
+        return this.performAuthorizedRequest('customers/stripe-ephemeral-key', params, 'POST');
     }
 
     getStripeSetupIntent(params = {}) {
-        return this.adapter.setHeaders({ 'Customer-Token': this.token }).post('customers/stripe-setup-intent', params);
+        return this.performAuthorizedRequest('customers/stripe-setup-intent', params, 'POST');
+    }
+
+    startAccountClosure(params = {}, options = {}) {
+        return this.performAuthorizedRequest('customers/account-closure', params, 'POST', options);
+    }
+
+    confirmAccountClosure(code, params = {}, options = {}) {
+        return this.performAuthorizedRequest('customers/confirm-account-closure', { code, ...params }, 'POST', options);
+    }
+
+    requestPhoneVerification(phone, params = {}, options = {}) {
+        return this.performAuthorizedRequest('customers/request-phone-verification', { phone, ...params }, 'POST', options);
+    }
+
+    verifyPhoneNumber(code, phone, params = {}, options = {}) {
+        return this.performAuthorizedRequest('customers/verify-phone-number', { code, phone, ...params }, 'POST', options);
+    }
+
+    updateContactAlias(attributes = {}, options = {}) {
+        return this.performAuthorizedRequest(`contacts/${this.id}`, attributes, 'PUT', options).then((response) => {
+            this.syncAttributes(response);
+            return this;
+        });
     }
 }
 

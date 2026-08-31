@@ -4,7 +4,7 @@ import { Collection, lookup, register } from '@fleetbase/sdk';
 import { format } from 'date-fns';
 
 export default class StoreLocation extends Resource {
-    constructor(attributes = {}, adapter, options = {}) {
+    constructor(attributes = {}, adapter = undefined, options = {}) {
         super(attributes, adapter, 'store-location', options);
     }
 
@@ -41,7 +41,7 @@ export default class StoreLocation extends Resource {
     }
 
     get isAlwaysOpen() {
-        return this.hours.every((hour) => hour?.is24Hours);
+        return this.hours.length > 0 && this.hours.every((hour) => hour?.is24Hours);
     }
 
     get today() {
@@ -63,7 +63,9 @@ export default class StoreLocation extends Resource {
         for (let i = 0; i < this.hours.length; i++) {
             const hour = this.hours.objectAt(i);
 
-            schedule[hour.day].pushObject(hour);
+            if (schedule[hour.day]) {
+                schedule[hour.day].pushObject(hour);
+            }
         }
 
         return schedule;

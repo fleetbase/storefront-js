@@ -1,5 +1,6 @@
 import Resource from '../resource.js';
-import { Order, StoreActions, isResource, register } from '@fleetbase/sdk';
+import Order from './order.js';
+import { StoreActions, isResource, register } from '@fleetbase/sdk';
 
 export const checkoutActions = new StoreActions({
     create: undefined,
@@ -28,7 +29,7 @@ export const checkoutActions = new StoreActions({
     },
 
     captureOrder: function (token, params = {}, options = {}) {
-        return this.adapter.post(`${this.namespace}/capture`, { token, ...params }, options).then((orderJson) => new Order(orderJson));
+        return this.adapter.post(`${this.namespace}/capture`, { token, ...params }, options).then((orderJson) => new Order(orderJson, this.adapter));
     },
 
     createStripeSetupIntent: function (customer, params = {}, options = {}) {
@@ -54,10 +55,34 @@ export const checkoutActions = new StoreActions({
 
         return this.adapter.put(`${this.namespace}/stripe-update-payment-intent`, { paymentIntent, customer, cart, serviceQuote, ...orderOptions }, options);
     },
+
+    getStatus: function (checkout, token, options = {}) {
+        if (isResource(checkout)) {
+            checkout = checkout.id;
+        }
+
+        return this.adapter.get(`${this.namespace}/status`, { checkout, token }, options);
+    },
+
+    captureQPay: function (checkout, params = {}, options = {}) {
+        if (isResource(checkout)) {
+            checkout = checkout.id;
+        }
+
+        return this.adapter.post(`${this.namespace}/capture-qpay`, { checkout, ...params }, options);
+    },
+
+    captureQPayCallback: function (checkout, params = {}, options = {}) {
+        if (isResource(checkout)) {
+            checkout = checkout.id;
+        }
+
+        return this.adapter.get(`${this.namespace}/capture-qpay`, { checkout, ...params }, options);
+    },
 });
 
 export default class Checkout extends Resource {
-    constructor(attributes = {}, adapter, options = {}) {
+    constructor(attributes = {}, adapter = undefined, options = {}) {
         super(attributes, adapter, 'checkout', { actions: checkoutActions, ...options });
     }
 
@@ -67,6 +92,26 @@ export default class Checkout extends Resource {
 
     captureOrder() {
         return this.store.captureOrder(...arguments);
+    }
+
+    createStripeSetupIntent() {
+        return this.store.createStripeSetupIntent(...arguments);
+    }
+
+    updateStripePaymentIntent() {
+        return this.store.updateStripePaymentIntent(...arguments);
+    }
+
+    getStatus() {
+        return this.store.getStatus(...arguments);
+    }
+
+    captureQPay() {
+        return this.store.captureQPay(...arguments);
+    }
+
+    captureQPayCallback() {
+        return this.store.captureQPayCallback(...arguments);
     }
 }
 

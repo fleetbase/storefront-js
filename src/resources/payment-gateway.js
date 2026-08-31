@@ -2,7 +2,7 @@ import Resource from '../resource.js';
 import { register } from '@fleetbase/sdk';
 
 export default class PaymentGateway extends Resource {
-    constructor(attributes = {}, adapter, options = {}) {
+    constructor(attributes = {}, adapter = undefined, options = {}) {
         super(attributes, adapter, 'payment-gateway', options);
     }
 
@@ -20,6 +20,10 @@ export default class PaymentGateway extends Resource {
 
     get isStripeGateway() {
         return this.type === 'stripe';
+    }
+
+    get isQPayGateway() {
+        return this.type === 'qpay' || this.code === 'qpay';
     }
 
     setCheckoutToken(token) {

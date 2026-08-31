@@ -1,5 +1,5 @@
 export default class StoreHour extends Resource {
-    constructor(attributes: {}, adapter: any, options?: {});
+    constructor(attributes?: {}, adapter?: any, options?: {});
     get day(): any;
     get isClosed(): boolean;
     get is24Hours(): boolean;
@@ -12,4 +12,4 @@ export default class StoreHour extends Resource {
     destroy(): void;
     reload(): void;
 }
-import Resource from '../resource';
+import Resource from '../resource.js';

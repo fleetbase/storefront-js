@@ -5,8 +5,8 @@ export default class StorefrontResource extends Resource {
     /**
      * Set a new adapter to the resource instance, this will update the Store instance
      *
-     * @param {Adapter} adapter
-     * @return {Resource} this
+     * @param {import('@fleetbase/sdk').Adapter} adapter
+     * @return {this}
      */
     setAdapter(adapter) {
         this.adapter = adapter;

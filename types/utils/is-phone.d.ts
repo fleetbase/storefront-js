@@ -1,2 +1,2 @@
+export function isPhone(phone?: string): boolean;
 export default isPhone;
-declare function isPhone(phone?: string): boolean;

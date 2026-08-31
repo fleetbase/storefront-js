@@ -5,7 +5,7 @@ import { Collection, register } from '@fleetbase/sdk';
 import Store from './store.js';
 
 export default class Product extends Resource {
-    constructor(attributes = {}, adapter, options = {}) {
+    constructor(attributes = {}, adapter = undefined, options = {}) {
         super(attributes, adapter, 'product', options);
     }
 
@@ -15,6 +15,18 @@ export default class Product extends Resource {
 
     addons() {
         return this.getAttribute('addon_categories');
+    }
+
+    images() {
+        return this.getAttribute('images') ?? [];
+    }
+
+    videos() {
+        return this.getAttribute('videos') ?? [];
+    }
+
+    hours() {
+        return this.getAttribute('hours') ?? [];
     }
 
     get isOnSale() {

@@ -3,7 +3,7 @@ import Product from './product.js';
 import { Collection, register } from '@fleetbase/sdk';
 
 export default class Category extends Resource {
-    constructor(attributes = {}, adapter, options = {}) {
+    constructor(attributes = {}, adapter = undefined, options = {}) {
         super(attributes, adapter, 'category', options);
     }
 

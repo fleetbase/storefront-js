@@ -3,12 +3,12 @@ import { Adapter, Collection, ServiceQuote, register } from '@fleetbase/sdk';
 import { formatCurrency, isEmpty, isArray } from '../utils/index.js';
 
 export default class DeliveryServiceQuote extends ServiceQuote {
-    constructor(attributes = {}, adapter, options = {}) {
+    constructor(attributes = {}, adapter = undefined, options = {}) {
         let finalAttributes = attributes;
         let finalAdapter = adapter;
 
         // If `attributes` is actually an Adapter, adjust the arguments accordingly.
-        if (attributes instanceof Adapter) {
+        if (attributes instanceof Adapter || (attributes && typeof attributes.get === 'function' && typeof attributes.post === 'function')) {
             finalAttributes = {};
             finalAdapter = attributes;
         }
@@ -21,7 +21,7 @@ export default class DeliveryServiceQuote extends ServiceQuote {
      * Set a new adapter to the resource instance, this will update the Store instance
      *
      * @param {Adapter} adapter
-     * @return {Resource} this
+     * @return {this}
      */
     setAdapter(adapter) {
         this.adapter = adapter;
@@ -60,24 +60,19 @@ export default class DeliveryServiceQuote extends ServiceQuote {
             cart = cart.id;
         }
 
-        try {
-            const serviceQuotes = await this.adapter.get('service-quotes/from-cart', {
-                origin,
-                destination,
-                cart,
-                config,
-                all,
-            });
+        const serviceQuotes = await this.adapter.get('service-quotes/from-cart', {
+            origin,
+            destination,
+            cart,
+            config,
+            all,
+        });
 
-            if (isArray(serviceQuotes)) {
-                return new Collection(serviceQuotes.map((serviceQuote) => new DeliveryServiceQuote(serviceQuote, this.adapter)));
-            }
-
-            return new DeliveryServiceQuote(serviceQuotes, this.adapter);
-        } catch (error) {
-            console.error('Error fetching service quotes:', error);
-            throw error;
+        if (isArray(serviceQuotes)) {
+            return new Collection(serviceQuotes.map((serviceQuote) => new DeliveryServiceQuote(serviceQuote, this.adapter)));
         }
+
+        return new DeliveryServiceQuote(serviceQuotes, this.adapter);
     }
 
     static async getFromCart(adapter, origin, destination, cart, config = 'storefront', all = false) {

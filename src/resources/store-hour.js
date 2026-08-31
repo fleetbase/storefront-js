@@ -3,7 +3,7 @@ import { format, parse, isValid } from 'date-fns';
 import { register } from '@fleetbase/sdk';
 
 export default class StoreHour extends Resource {
-    constructor(attributes = {}, adapter, options = {}) {
+    constructor(attributes = {}, adapter = undefined, options = {}) {
         super(attributes, adapter, 'store-hour', options);
     }
 
@@ -18,7 +18,12 @@ export default class StoreHour extends Resource {
     get is24Hours() {
         const start = this.startDateInstance;
         const end = this.endDateInstance;
-        const diff = Math.abs(start - end);
+
+        if (!isValid(start) || !isValid(end)) {
+            return false;
+        }
+
+        const diff = Math.abs(start.getTime() - end.getTime());
         const hours = Math.floor(diff / 1000 / 60) / 60;
 
         return hours > 23;
@@ -30,6 +35,9 @@ export default class StoreHour extends Resource {
         }
 
         const start = this.getAttribute('start');
+        if (typeof start !== 'string') {
+            return null;
+        }
         const includesSeconds = start.split(':').length === 3;
         const format = includesSeconds ? 'HH:mm:ss' : 'HH:mm';
 
@@ -42,6 +50,9 @@ export default class StoreHour extends Resource {
         }
 
         const end = this.getAttribute('end');
+        if (typeof end !== 'string') {
+            return null;
+        }
         const includesSeconds = end.split(':').length === 3;
         const format = includesSeconds ? 'HH:mm:ss' : 'HH:mm';
 
@@ -50,7 +61,7 @@ export default class StoreHour extends Resource {
 
     get humanReadableHoursRange() {
         if (!isValid(this.startDateInstance) || !isValid(this.endDateInstance)) {
-            return `${this.start} - ${this.end}`;
+            return `${this.getAttribute('start')} - ${this.getAttribute('end')}`;
         }
 
         return `${format(this.startDateInstance, 'p')} - ${format(this.endDateInstance, 'p')}`;

@@ -1,1 +1,2 @@
-export default function formatCurrency(amount?: number, currency?: string, currencyDisplay?: string): string;
+export function formatCurrency(amount?: number, currency?: string, currencyDisplay?: string): string;
+export default formatCurrency;

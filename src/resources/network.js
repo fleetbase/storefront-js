@@ -8,7 +8,7 @@ import StoreLocation from './store-location.js';
 import { Collection, register } from '@fleetbase/sdk';
 
 export default class Network extends Resource {
-    constructor(attributes = {}, adapter, options = {}) {
+    constructor(attributes = {}, adapter = undefined, options = {}) {
         super(attributes, adapter, 'network', options);
     }
 

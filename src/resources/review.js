@@ -14,20 +14,20 @@ export const reviewActions = new StoreActions({
 });
 
 export default class Review extends Resource {
-    constructor(attributes = {}, adapter, options = {}) {
+    constructor(attributes = {}, adapter = undefined, options = {}) {
         super(attributes, adapter, 'review', options);
     }
 
     getMedia() {
-        // @todo
+        return this.getPhotos();
     }
 
     getPhotos() {
-        // @todo
+        return this.getAttribute('photos') ?? [];
     }
 
     getVideos() {
-        // @todo
+        return this.getMedia().filter((media) => media?.type?.startsWith('video/'));
     }
 }
 

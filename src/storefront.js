@@ -1,10 +1,11 @@
 import StorefrontStore from './store.js';
 import { isKeyValid } from './utils/index.js';
-import { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Review, Network, FoodTruck } from './resources.js';
+import { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Review, Network, FoodTruck, Order } from './resources.js';
 import { cartActions } from './resources/cart.js';
 import { customerActions } from './resources/customer.js';
 import { checkoutActions } from './resources/checkout.js';
 import { reviewActions } from './resources/review.js';
+import { orderActions } from './resources/order-actions.js';
 import { Collection, lookup, detectAdapter } from '@fleetbase/sdk';
 
 /**
@@ -48,6 +49,7 @@ export default class Storefront {
         this.customers = new StorefrontStore('customer', this.adapter).extendActions(customerActions);
         this.cart = new StorefrontStore('cart', this.adapter).extendActions(cartActions);
         this.checkout = new StorefrontStore('checkout', this.adapter).extendActions(checkoutActions);
+        this.orders = new StorefrontStore('order', this.adapter).extendActions(orderActions);
 
         return this;
     }
@@ -102,4 +104,4 @@ export default class Storefront {
     }
 }
 
-export { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Review, Network, FoodTruck, lookup };
+export { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Review, Network, FoodTruck, Order, lookup };

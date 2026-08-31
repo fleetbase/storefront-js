@@ -1,5 +1,5 @@
 import Store from './store.js';
-import { isPhone } from './utils';
+import { isPhone } from './utils/index.js';
 
 export default class CustomerStore extends Store {
     constructor() {

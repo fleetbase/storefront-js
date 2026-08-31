@@ -4,28 +4,14 @@ export function isEmpty(obj) {
         return none;
     }
 
+    const objectType = typeof obj;
+
     if (typeof obj.size === 'number') {
         return !obj.size;
     }
 
-    const objectType = typeof obj;
-
-    if (objectType === 'object') {
-        const { size } = obj;
-        if (typeof size === 'number') {
-            return !size;
-        }
-    }
-
     if (typeof obj.length === 'number' && objectType !== 'function') {
         return !obj.length;
-    }
-
-    if (objectType === 'object') {
-        const { length } = obj;
-        if (typeof length === 'number') {
-            return !length;
-        }
     }
 
     return false;

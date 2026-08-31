@@ -1,7 +1,7 @@
 {
     "name": "@fleetbase/storefront",
     "version": "1.1.14",
-    "description": "Fleetbase Storefront JS & Node SDK",
+    "description": "Official JavaScript SDK for the Fleetbase Storefront API",
     "license": "AGPL-3.0-or-later",
     "author": "Ronald A. Richardson <ron@fleetbase.io> (https://ron.dev)",
     "type": "module",
@@ -10,47 +10,103 @@
         "logistics",
         "headless ecommerce"
     ],
-    "main": "dist/cjs/storefront.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/fleetbase/storefront-js.git"
+    },
+    "homepage": "https://github.com/fleetbase/storefront-js#readme",
+    "bugs": {
+        "url": "https://github.com/fleetbase/storefront-js/issues"
+    },
+    "engines": {
+        "node": ">=22"
+    },
+    "packageManager": "pnpm@9.15.4",
+    "sideEffects": true,
+    "files": [
+        "dist/esm/storefront.js",
+        "dist/esm/storefront.js.map",
+        "dist/cjs/storefront.cjs",
+        "dist/cjs/storefront.cjs.map",
+        "dist/@storefront.min.js",
+        "dist/@storefront.min.js.map",
+        "types",
+        "README.md",
+        "CHANGELOG.md",
+        "LICENSE.md"
+    ],
+    "main": "dist/cjs/storefront.cjs",
     "module": "dist/esm/storefront.js",
+    "types": "types/storefront.d.ts",
     "exports": {
         ".": {
-            "import": "./dist/esm/storefront.js",
-            "require": "./dist/cjs/storefront.js"
-        }
+            "import": {
+                "types": "./types/storefront.d.ts",
+                "default": "./dist/esm/storefront.js"
+            },
+            "require": {
+                "types": "./types/storefront.d.cts",
+                "default": "./dist/cjs/storefront.cjs"
+            },
+            "default": "./dist/esm/storefront.js"
+        },
+        "./browser": {
+            "import": {
+                "types": "./types/storefront.d.ts",
+                "default": "./dist/@storefront.min.js"
+            },
+            "require": {
+                "types": "./types/storefront.d.cts",
+                "default": "./dist/cjs/storefront.cjs"
+            },
+            "default": "./dist/@storefront.min.js"
+        },
+        "./package.json": "./package.json"
+    },
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
     },
     "scripts": {
-        "prebuild": "npm run lint",
-        "lint": "eslint src",
+        "build": "pnpm run build:types && pnpm run bundle",
+        "lint": "eslint src tests vitest.config.js rollup.config.js",
         "lint:fix": "eslint src --fix",
         "lint:tests": "eslint tests",
         "bundle": "rollup -c",
         "dev": "rollup -c -w",
-        "test": "mocha -r @babel/register -r dotenv/config 'tests/*.test.js' --timeout 10000",
-        "format": "prettier . --write"
+        "test": "vitest run",
+        "test:coverage": "vitest run --coverage",
+        "test:watch": "vitest",
+        "typecheck": "tsc --noEmit",
+        "build:types": "tsc -p tsconfig.build.json && node scripts/create-cjs-types.mjs && prettier types --write",
+        "package:check": "publint && attw --pack . --profile node16",
+        "check": "pnpm run format:check && pnpm run lint && pnpm run typecheck && pnpm run test:coverage && pnpm run bundle && pnpm run package:check",
+        "format": "prettier . --write",
+        "format:check": "prettier . --check",
+        "changeset": "changeset",
+        "version-packages": "changeset version",
+        "release": "pnpm run check && changeset publish",
+        "prepack": "pnpm run build"
     },
     "dependencies": {
         "@fleetbase/sdk": "^1.2.13",
-        "countries-list": "^3.1.1",
-        "date-fns": "^4.1.0"
+        "countries-list": "^3.4.1",
+        "date-fns": "^4.4.0"
     },
     "devDependencies": {
-        "@babel/core": "^7.26.0",
-        "@babel/node": "^7.26.0",
-        "@babel/plugin-proposal-decorators": "^7.25.9",
-        "@babel/preset-env": "^7.26.0",
-        "@babel/register": "^7.25.9",
-        "@eslint/js": "^9.17.0",
-        "@rollup/plugin-babel": "^6.0.4",
-        "@rollup/plugin-commonjs": "^28.0.2",
-        "@rollup/plugin-eslint": "^9.0.5",
-        "@rollup/plugin-node-resolve": "^16.0.0",
-        "@rollup/plugin-terser": "^0.4.4",
-        "chai": "^5.1.2",
-        "dotenv": "^16.4.7",
-        "eslint": "^9.17.0",
-        "globals": "^15.14.0",
-        "mocha": "^11.0.1",
-        "prettier": "3.4.2",
-        "rollup": "^4.29.1"
+        "@arethetypeswrong/cli": "^0.18.2",
+        "@changesets/cli": "^2.29.7",
+        "@eslint/js": "^10.0.1",
+        "@rollup/plugin-commonjs": "^29.0.3",
+        "@rollup/plugin-node-resolve": "^16.0.3",
+        "@rollup/plugin-terser": "^1.0.0",
+        "@vitest/coverage-v8": "^4.0.0",
+        "eslint": "^10.0.0",
+        "globals": "^17.0.0",
+        "prettier": "^3.9.0",
+        "publint": "^0.3.15",
+        "rollup": "^4.63.0",
+        "typescript": "^5.9.0",
+        "vitest": "^4.0.0"
     }
 }
