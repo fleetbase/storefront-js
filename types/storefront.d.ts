@@ -33,16 +33,41 @@ export default class Storefront {
     cart: StorefrontStore;
     checkout: StorefrontStore;
     orders: StorefrontStore;
-    /** loads information about this storefront */
-    about(options?: {}): any;
-    /** loads the storefront owner as a typed Store or Network resource */
-    getOwner(): any;
-    /** lookup a specific store or network provided the ID */
-    lookup(id: any, options?: {}): any;
-    /** lookup a store or network as a typed resource */
-    lookupResource(id: any): any;
-    /** search products in store or network */
-    search(query: any, options?: {}): any;
+    /**
+     * Loads information about this storefront.
+     *
+     * @param {{ resource?: boolean }} options
+     * @returns {Promise<Record<string, any> | Store | Network>}
+     */
+    about(options?: { resource?: boolean }): Promise<Record<string, any> | Store | Network>;
+    /** @returns {Promise<Store | Network>} Loads the storefront owner as a typed resource. */
+    getOwner(): Promise<Store | Network>;
+    /**
+     * Looks up a specific store or network by public ID.
+     *
+     * @param {string} id
+     * @param {{ resource?: boolean }} options
+     * @returns {Promise<Record<string, any> | Store | Network>}
+     */
+    lookup(
+        id: string,
+        options?: {
+            resource?: boolean;
+        }
+    ): Promise<Record<string, any> | Store | Network>;
+    /**
+     * @param {string} id
+     * @returns {Promise<Store | Network>}
+     */
+    lookupResource(id: string): Promise<Store | Network>;
+    /**
+     * Searches products in the current store or network.
+     *
+     * @param {string} query
+     * @param {Record<string, any>} options
+     * @returns {Promise<Collection<Product>>}
+     */
+    search(query: string, options?: Record<string, any>): Promise<Collection<Product>>;
     hydrateOwner(attributes?: {}): Store | Network;
     setAdapter(adapter: any): this;
     getAdapter(): any;
@@ -50,6 +75,7 @@ export default class Storefront {
 import StorefrontStore from './store.js';
 import { Store } from './resources.js';
 import { Network } from './resources.js';
+import { Collection } from '@fleetbase/sdk';
 import { Product } from './resources.js';
 import { Category } from './resources.js';
 import { Customer } from './resources.js';

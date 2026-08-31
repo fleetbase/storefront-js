@@ -41,7 +41,7 @@ declare module '@fleetbase/sdk' {
         hasAttribute(attribute: string): boolean;
         syncAttributes(attributes: Record<string, any>): this;
         serialize(): Record<string, any>;
-        destroy(options?: Record<string, unknown>): Promise<any>;
+        destroy(options?: Record<string, unknown>): any;
     }
 
     export class Order extends Resource {}

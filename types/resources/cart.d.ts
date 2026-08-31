@@ -5,7 +5,7 @@ export default class Cart extends Resource {
     update(cartItemId: any, quantity: any, data?: {}, options?: {}): any;
     remove(cartItemId: any, options?: {}): any;
     empty(options?: {}): any;
-    delete(): Promise<any>;
+    delete(): any;
     refresh(): any;
     subtotal(): any;
     contents(): any[];

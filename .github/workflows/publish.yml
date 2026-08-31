@@ -1,0 +1,40 @@
+name: Publish
+
+on:
+    release:
+        types: [published]
+
+permissions:
+    contents: read
+    id-token: write
+
+concurrency:
+    group: npm-production
+    cancel-in-progress: false
+
+jobs:
+    npm:
+        name: Publish verified package
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        environment: npm-production
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.event.release.tag_name }}
+            - uses: pnpm/action-setup@v4
+              with:
+                  version: 9.15.4
+            - uses: actions/setup-node@v6
+              with:
+                  node-version: 24
+                  registry-url: https://registry.npmjs.org
+                  package-manager-cache: false
+            - name: Require tag and package version parity
+              env:
+                  RELEASE_TAG: ${{ github.event.release.tag_name }}
+              run: node -e "const version = require('./package.json').version; const expected = 'v' + version; if (process.env.RELEASE_TAG !== expected) throw new Error('Release tag ' + process.env.RELEASE_TAG + ' does not match package ' + expected)"
+            - run: npm install --global npm@11
+            - run: pnpm install --frozen-lockfile
+            - run: pnpm run check
+            - run: npm publish --access public

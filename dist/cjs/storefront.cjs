@@ -6508,27 +6508,47 @@ class Storefront {
         return this;
     }
 
-    /** loads information about this storefront */
+    /**
+     * Loads information about this storefront.
+     *
+     * @param {{ resource?: boolean }} options
+     * @returns {Promise<Record<string, any> | Store | Network>}
+     */
     about(options = {}) {
         return this.adapter.get('about').then((attributes) => (options.resource ? this.hydrateOwner(attributes) : attributes));
     }
 
-    /** loads the storefront owner as a typed Store or Network resource */
+    /** @returns {Promise<Store | Network>} Loads the storefront owner as a typed resource. */
     getOwner() {
         return this.about({ resource: true });
     }
 
-    /** lookup a specific store or network provided the ID */
+    /**
+     * Looks up a specific store or network by public ID.
+     *
+     * @param {string} id
+     * @param {{ resource?: boolean }} options
+     * @returns {Promise<Record<string, any> | Store | Network>}
+     */
     lookup(id, options = {}) {
         return this.adapter.get(`lookup/${id}`).then((attributes) => (options.resource ? this.hydrateOwner(attributes) : attributes));
     }
 
-    /** lookup a store or network as a typed resource */
+    /**
+     * @param {string} id
+     * @returns {Promise<Store | Network>}
+     */
     lookupResource(id) {
         return this.lookup(id, { resource: true });
     }
 
-    /** search products in store or network */
+    /**
+     * Searches products in the current store or network.
+     *
+     * @param {string} query
+     * @param {Record<string, any>} options
+     * @returns {Promise<Collection<Product>>}
+     */
     search(query, options = {}) {
         return this.adapter.get('search', { query, ...options }).then((products) => {
             return new at(products.map((product) => new Product(product, this.adapter)));

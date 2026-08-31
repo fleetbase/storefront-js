@@ -1,0 +1,36 @@
+name: Release PR
+
+on:
+    push:
+        branches: [main]
+
+permissions:
+    contents: write
+    pull-requests: write
+
+concurrency:
+    group: release-pr
+    cancel-in-progress: false
+
+jobs:
+    version:
+        name: Maintain release PR
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        steps:
+            - uses: actions/checkout@v6
+            - uses: pnpm/action-setup@v4
+              with:
+                  version: 9.15.4
+            - uses: actions/setup-node@v6
+              with:
+                  node-version: 24
+                  cache: pnpm
+            - run: pnpm install --frozen-lockfile
+            - uses: changesets/action@v1
+              with:
+                  version: pnpm run version-packages
+                  title: 'chore: release packages'
+                  commit: 'chore: release packages'
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
