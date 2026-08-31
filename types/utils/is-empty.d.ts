@@ -1,2 +1,2 @@
+export declare function isEmpty(obj: unknown): boolean;
 export default isEmpty;
-declare function isEmpty(obj: any): boolean;

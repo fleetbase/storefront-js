@@ -1,2 +1,2 @@
+export declare function isKeyValid(key: unknown): boolean;
 export default isKeyValid;
-declare function isKeyValid(key: any): any;

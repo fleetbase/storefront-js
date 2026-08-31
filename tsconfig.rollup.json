@@ -1,0 +1,13 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "noEmit": false,
+        "declaration": false,
+        "emitDeclarationOnly": false,
+        "sourceMap": true,
+        "module": "ESNext",
+        "moduleResolution": "Bundler"
+    },
+    "include": ["src/**/*.ts"],
+    "exclude": ["tests", "types", "dist", "coverage"]
+}

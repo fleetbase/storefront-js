@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "allowJs": false,
+        "noEmit": true,
+        "strict": true,
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "target": "ES2022",
+        "lib": ["ES2022", "DOM"],
+        "skipLibCheck": false,
+        "baseUrl": ".",
+        "paths": {
+            "@fleetbase/sdk": ["types-internal/fleetbase-sdk.d.ts"]
+        }
+    },
+    "include": ["src/**/*.ts", "types-internal/**/*.d.ts"]
+}
