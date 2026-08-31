@@ -5,6 +5,8 @@ export default class Product extends Resource {
     get isOnSale(): any;
     get isNotOnSale(): boolean;
     get formattedAmount(): string;
+    get merchant(): Store | null;
     getReviews(): any;
 }
 import Resource from '../resource';
+import Store from './store';

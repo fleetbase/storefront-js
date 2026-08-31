@@ -43,7 +43,7 @@ If you would like to make contributions to the Fleetbase Javascript SDK document
 ```js
 import Storefront, { Product } from "@fleetbase/storefront";
 
-const storefront = new Storefront("Your Store Key");
+const storefront = new Storefront("store_your_public_storefront_key");
 
 // list products
 storefront.products.findAll();
@@ -62,6 +62,40 @@ storefront.cart.retrieve().then((cart) => {
 // checkout
 storefront.checkout.capture();
 ```
+
+## Marketplace owners
+
+Storefront keys identify either one store (`store_...`) or a marketplace network
+(`network_...`). Existing `about()` and `lookup()` calls continue to return raw
+objects. Use the typed helpers when resource methods and the active adapter must be
+preserved:
+
+```js
+const marketplace = new Storefront("network_your_public_storefront_key");
+const network = await marketplace.getOwner();
+
+const stores = await network.getStores({
+  query: "coffee",
+  sort: "nearest",
+  location: [106.9177, 47.9185],
+  limit: 20,
+  offset: 0,
+});
+const products = await network.search("latte", { limit: 20 });
+const locations = await network.getStoreLocations({ with_store: true });
+
+// Embedded merchant data is normalized across current and legacy responses.
+const merchant = locations[0].merchant;
+```
+
+Network resources also expose `getCategories()`, `getTags()`, `lookupStore()`,
+`getReviews(storeId)`, and `getPaymentGateways()`. All returned resources retain the
+Storefront instance's current adapter and headers. Calling `setAdapter()` rebuilds
+the SDK stores so locale and customer-token header changes apply consistently.
+
+Marketplace keys are public client credentials, not customer authentication. Pass
+customer tokens only through the SDK adapter headers and never commit real keys to
+fixtures or tests.
 
 ## Create a custom adapter
 

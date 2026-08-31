@@ -1,6 +1,6 @@
 import Resource from '../resource.js';
 import StoreHour from './store-hour.js';
-import { Collection, register } from '@fleetbase/sdk';
+import { Collection, lookup, register } from '@fleetbase/sdk';
 import { format } from 'date-fns';
 
 export default class StoreLocation extends Resource {
@@ -17,7 +17,27 @@ export default class StoreLocation extends Resource {
     }
 
     get hours() {
-        return new Collection(this.getAttribute('hours').map((attributes) => new StoreHour(attributes)));
+        return new Collection((this.getAttribute('hours') || []).map((attributes) => new StoreHour(attributes, this.adapter)));
+    }
+
+    /** Raw embedded merchant payload, normalized across API response versions. */
+    get storeData() {
+        const embeddedStore = this.getAttribute('store_data');
+        const legacyStore = this.getAttribute('store');
+
+        return embeddedStore || (legacyStore && typeof legacyStore === 'object' ? legacyStore : null);
+    }
+
+    /** Public store identifier for this location. */
+    get storeId() {
+        const store = this.getAttribute('store');
+
+        return typeof store === 'string' ? store : this.storeData?.id || this.storeData?.public_id;
+    }
+
+    /** Typed embedded merchant when requested with `with_store`. */
+    get merchant() {
+        return this.storeData ? lookup('resource', 'Store', this.storeData, this.adapter) : null;
     }
 
     get isAlwaysOpen() {
