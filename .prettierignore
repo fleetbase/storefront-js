@@ -2,6 +2,8 @@
 /dist/
 dist/
 /tmp/
+/.cache/
+/reports/
 
 # dependencies
 /node_modules/

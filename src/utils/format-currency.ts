@@ -1,0 +1,9 @@
+export function formatCurrency(amount = 0, currency = 'USD', currencyDisplay: Intl.NumberFormatOptions['currencyDisplay'] = 'symbol') {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency,
+        currencyDisplay,
+    }).format(amount);
+}
+
+export default formatCurrency;
