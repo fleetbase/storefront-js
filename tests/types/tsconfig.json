@@ -1,0 +1,10 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "baseUrl": "../..",
+        "paths": {},
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext"
+    },
+    "include": ["consumer.ts", "consumer.cts", "../../types/**/*.d.ts"]
+}

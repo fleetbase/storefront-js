@@ -1,12 +1,18 @@
+import Resource from '../resource.js';
+import Review from './review.js';
+import { Adapter, Collection } from '@fleetbase/sdk';
+import Store from './store.js';
+import type { Attributes } from '../types.js';
 export default class Product extends Resource {
-    constructor(attributes: {}, adapter: any, options?: {});
-    variants(): any;
-    addons(): any;
-    get isOnSale(): any;
+    constructor(attributes?: Attributes, adapter?: Adapter, options?: Attributes);
+    variants(): unknown;
+    addons(): unknown;
+    images(): unknown[];
+    videos(): unknown[];
+    hours(): unknown[];
+    get isOnSale(): boolean;
     get isNotOnSale(): boolean;
-    get formattedAmount(): string;
+    get formattedAmount(): string | null;
     get merchant(): Store | null;
-    getReviews(): any;
+    getReviews(): Promise<Collection<Review>>;
 }
-import Resource from '../resource';
-import Store from './store';
