@@ -1,20 +1,20 @@
 # Storefront JavaScript SDK modernization and release plan
 
-Status: implementation complete on PR #12; prerelease acceptance and protected publication remain post-merge release gates
+Status: implementation complete on PR #12 and staged through release PR #14; application acceptance and protected publication remain release gates
 
 Audit baseline: `main` at `dbc6456` (`v1.1.14`) on 2026-08-31
 
-Proposed release: `v1.2.0` if every compatibility gate passes; otherwise `v2.0.0`
+Release branch: `release/v1.2.0`; the release remains blocked from `main` until every compatibility and acceptance gate passes
 
 ## Implementation checkpoint
 
-PR #12 now contains the strict TypeScript refactor, executable API/wire snapshots, exact 100% maintained-source coverage, generated declarations, genuine ESM/CommonJS/browser exports, packed npm/pnpm/Yarn/Bun fixtures, Vite/webpack/Next.js/Ember-Embroider builds, mutation testing, immutable action pins, dependency automation, a non-destructive live smoke workflow, Changesets release PR automation, npm trusted-publishing workflow, checksummed release artifacts, and updated public documentation.
+PR #12 now contains the strict TypeScript refactor, executable API/wire snapshots, exact 100% maintained-source coverage, generated declarations, genuine ESM/CommonJS/browser exports, packed npm/pnpm/Yarn/Bun fixtures, Vite/webpack/Next.js/Ember-Embroider builds, mutation testing, immutable action pins, dependency automation, a non-destructive live smoke workflow, release-branch tagging, npm trusted publishing, checksummed release artifacts, and updated public documentation.
 
 Final local evidence on Node 24: 364/364 statements, 306/306 branches, 189/189 functions, and 343/343 lines; 86.32% mutation score across 190 critical-path mutants; zero known production advisories; and a 360,212-byte compressed/1,767,919-byte unpacked tarball. The exact tarball passed ESM, callable CommonJS, Node16/NodeNext/Bundler declarations, pnpm clean-room installation, Vite 8, webpack 5, Next.js 16 client/server, and Ember 7 Vite/Embroider builds.
 
 The upstream `@fleetbase/sdk@1.2.13` package cannot safely remain external because its advertised CommonJS file is inside a `type: module` boundary and webpack reports its ESM entry as having no exports. Storefront therefore bundles a patched build-time copy into every runtime artifact and no longer installs the vulnerable upstream graph in consuming applications. This compatibility boundary is covered by packed CommonJS and framework fixtures and can be removed after an upstream packaging/security release.
 
-Review and merge do not themselves publish `v1.2.0`. The owner-only release gates remain: configure the documented GitHub environments and npm trusted publisher, record Storefront Web/App and marketplace acceptance against a prerelease, approve the protected production environment, and verify npm provenance and attached checksums after the first publish.
+PR #12 must merge into `release/v1.2.0` before release PR #14 can merge to `main`. Merging PR #14 validates the release branch, package version, and release notes, creates tag `v1.2.0`, and starts the protected publisher. The owner-only gates remain: configure the documented GitHub environments and npm trusted publisher, record Storefront Web/App and marketplace acceptance, approve the protected production environment, and verify npm provenance and attached checksums after publication.
 
 ## Executive assessment
 
@@ -181,7 +181,7 @@ For each slice:
 - run old-versus-new public/wire contracts;
 - keep 100% coverage across all four metrics;
 - run mutation targets relevant to the slice;
-- update API documentation and a Changeset;
+- update API documentation and release-note text;
 - remove compatibility code only with evidence it is unreachable or after an explicit deprecation cycle.
 
 Exit criteria: no maintained runtime JavaScript remains outside intentional compatibility/build files; all public behavior is parity-tested; no `any` leaks into the public declaration surface without a reviewed reason; dead code is removed with tests proving package/API integrity.
@@ -200,17 +200,17 @@ Required branch protection should include quality, supported Node matrix, packag
 
 ### Phase 5 — automatic, reviewable release CI
 
-Adopt Changesets because it makes SemVer intent and user-facing notes reviewable per PR and maintains a release PR. Use separate jobs/actions so version-PR permissions do not grant publish permissions.
+Use reviewed `release/v<version>` branches because they make SemVer intent, included pull requests, package metadata, and user-facing notes explicit before a release reaches `main`. Keep tag creation and package publishing in separate least-privilege workflows.
 
 Release flow:
 
-1. Every user-visible PR adds a Changeset; CI reports whether one is missing without blocking test-only/internal changes that use an empty Changeset.
-2. Changesets maintains a version/changelog PR on `main`.
-3. Merging that reviewed release PR runs all required CI again and creates one immutable packed artifact.
-4. Publish the artifact first as `v1.2.0-rc.N` under npm dist-tag `next`.
+1. Every user-visible PR records release-note text and targets the appropriate `release/v<version>` branch.
+2. The release branch owns the exact `package.json`, `CHANGELOG.md`, and `RELEASE.md` version state and remains open as a pull request to `main`.
+3. Merging that reviewed release PR validates branch/version/note parity and creates the immutable `v<version>` tag.
+4. A prerelease branch such as `release/v1.2.0-rc.N` publishes under npm dist-tag `next` using a protected environment.
 5. Run clean-room installs, supported runtime/framework/package-manager tests, and the live non-destructive smoke suite against the registry release candidate.
-6. On explicit protected-environment approval, promote/publish the exact verified artifact to npm `latest`; publish the same bytes to GitHub Packages only if that registry remains a supported requirement.
-7. Create the signed `vX.Y.Z` tag and GitHub Release from the reviewed changelog, attach checksums/package metadata, and verify registry version, dist-tags, provenance, tarball integrity, and install smoke.
+6. On explicit protected-environment approval, publish the stable tag's exact verified artifact to npm `latest`; publish the same bytes to GitHub Packages only if that registry remains a supported requirement.
+7. Create the GitHub Release from the reviewed `RELEASE.md`, attach checksums/package metadata, and verify registry version, dist-tags, provenance, tarball integrity, and install smoke.
 8. Automatically open a rollback/deprecation procedure on post-publish failure. npm packages are immutable: recovery means restoring dist-tags or publishing a fixed patch, never rewriting a version.
 
 Use npm trusted publishing (OIDC) and automatic provenance rather than a long-lived npm automation token. Limit the publish job to `contents: write` and `id-token: write`, protect it with the release environment, and never publish directly from arbitrary tags or pull requests.
@@ -256,7 +256,7 @@ Keep reviews bounded and bisectable:
 3. Test runner, fake adapter, contract snapshots, and 100% behavioral coverage.
 4. Package metadata/module/type/tarball repair plus consumer fixtures.
 5. CI/security workflow modernization.
-6. Changesets and trusted-publishing dry run.
+6. Release-branch tagging and trusted-publishing dry run.
 7. Typed refactor slices, one or more PRs following the Phase 3 order.
 8. Documentation/migration/support policy.
 9. `v1.2.0-rc.N` release PR and ecosystem validation.
@@ -276,7 +276,7 @@ The modernization is complete only when all of the following are evidenced in CI
 - valid discoverable declarations and reviewed public API report;
 - deterministic build and intentional tarball manifest/size;
 - secret-free PR CI, least-privilege pinned workflows, branch protection, and dependency automation;
-- reviewed Changeset/changelog, prerelease verification, npm trusted-publishing provenance, GitHub Release, checksum/integrity verification, and post-publish install smoke;
+- reviewed release notes/changelog, prerelease verification, npm trusted-publishing provenance, GitHub Release, checksum/integrity verification, and post-publish install smoke;
 - updated README/API/migration/support/security/contributing documentation;
 - Storefront Web/App and marketplace consumer acceptance recorded for the release candidate.
 
@@ -290,5 +290,4 @@ The modernization is complete only when all of the following are evidenced in CI
 - [GitHub Actions: publishing Node.js packages](https://docs.github.com/en/actions/tutorials/publish-packages/publish-nodejs-packages)
 - [TypeScript: publishing declaration files](https://www.typescriptlang.org/docs/handbook/declaration-files/publishing.html)
 - [TypeScript conditional exports and module resolution](https://www.typescriptlang.org/docs/handbook/modules/reference.html)
-- [Changesets release action](https://github.com/changesets/action)
 - [publint package compatibility linting](https://github.com/publint/publint)

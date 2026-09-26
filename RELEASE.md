@@ -1,6 +1,7 @@
 > v1.2.0 ~ "Modern Storefront SDK"
 
 ---
+
 ## Highlights
 
 - Modernizes the SDK implementation with strict TypeScript while preserving the existing public API and request contracts.
@@ -14,6 +15,8 @@ This release is intended to remain compatible with applications using `v1.1.14`.
 README and migration guide for the supported runtime matrix and packaging details.
 
 ---
+
 ## Need help?
+
 - [GitHub Discussions](https://github.com/fleetbase/fleetbase/discussions)
 - [Discord](https://discord.gg/HnTqQ6zAVn)

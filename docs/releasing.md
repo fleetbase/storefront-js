@@ -2,30 +2,32 @@
 
 ## One-time repository setup
 
-1. Create a protected GitHub environment named `npm-production` and require release-owner approval.
-2. Configure npm trusted publishing for package `@fleetbase/storefront`:
+1. Ensure the repository can inherit the organization `_GITHUB_AUTH_TOKEN` secret required by the shared release-tag workflow.
+2. Create a protected GitHub environment named `npm-production` and require release-owner approval.
+3. Configure npm trusted publishing for package `@fleetbase/storefront`:
     - provider: GitHub Actions;
     - organization: `fleetbase`;
     - repository: `storefront-js`;
     - workflow filename: `publish.yml`;
     - environment: `npm-production`;
     - allowed action: publish.
-3. After the first successful trusted publish, disable token-based publishing and revoke the old automation token.
-4. Create a `storefront-smoke` environment with the public, non-production `FLEETBASE_STOREFRONT_PUBLIC_KEY` secret and optional `FLEETBASE_STOREFRONT_HOST` variable.
-5. Protect `main` with the required quality, supported Node, packed-artifact, framework/package-manager compatibility, mutation, dependency-review, security, and CodeQL checks.
+4. After the first successful trusted publish, disable token-based publishing and revoke the old automation token.
+5. Create a `storefront-smoke` environment with the public, non-production `FLEETBASE_STOREFRONT_PUBLIC_KEY` secret and optional `FLEETBASE_STOREFRONT_HOST` variable.
+6. Protect `main` and active `release/**` branches with the required quality, supported Node, packed-artifact, framework/package-manager compatibility, mutation, dependency-review, security, and CodeQL checks.
 
 ## Release flow
 
-1. Every consumer-visible pull request adds a Changeset.
-2. `release-pr.yml` maintains a version and changelog pull request on `main`.
-3. Review and merge the release pull request after the normal CI gates pass.
-4. Create and publish a GitHub Release whose tag exactly matches `v<package.json version>`.
-5. `publish.yml` checks out that immutable tag, requires tag/version parity, runs the complete suite, packs once, verifies that tarball, publishes those exact bytes through npm OpenID Connect, verifies registry metadata, and attaches the tarball and SHA-256 checksum to the GitHub Release.
-6. Verify the npm dist-tags, provenance, attached checksum, and clean registry installs before announcing the release.
+1. Collect consumer-visible work on a branch named `release/v<version>` created from current `main`.
+2. Set `package.json` to that exact version, update `CHANGELOG.md`, and replace `RELEASE.md` with release-specific notes whose first line names `v<version>`.
+3. Target feature pull requests for the release at the release branch, then merge them only after their normal CI gates pass.
+4. Keep the release pull request targeted at `main`. Confirm its complete quality, runtime, packed-artifact, framework/package-manager, mutation, dependency-review, security, CodeQL, and application-acceptance gates.
+5. Merge the release pull request. `release.yml` validates the branch, package version, and release notes through the organization release workflow and pushes the immutable `v<version>` tag.
+6. The tag starts `publish.yml`, which checks out that exact revision, reruns the complete suite, packs and verifies one tarball, publishes those bytes through npm OpenID Connect, verifies registry metadata, and creates the GitHub Release with the tarball and SHA-256 checksum attached.
+7. Verify the npm dist-tag, provenance, GitHub Release, attached checksum, and clean registry installs before announcing the release.
 
 ## Prereleases
 
-Use Changesets prerelease mode and publish release candidates under the npm `next` dist-tag. Validate application consumers against the registry artifact before leaving prerelease mode and publishing the stable version.
+Use a branch such as `release/v1.2.0-rc.1` for a release candidate. The publish workflow detects the prerelease suffix and publishes it under the npm `next` dist-tag. Validate application consumers against the registry artifact before preparing the stable release branch.
 
 An npm prerelease and its later stable version are necessarily different immutable package versions. Validate each from its own packed artifact; never claim that `1.2.0-rc.N` and `1.2.0` are byte-identical. Within each version, CI verifies and publishes one tarball without rebuilding it.
 
@@ -36,3 +38,5 @@ Third-party actions are pinned to reviewed commit SHAs. Dependabot checks action
 ## Recovery
 
 npm versions are immutable. Do not attempt to rewrite a published version. On failure, restore the previous dist-tag or publish a corrected patch release, then document the incident in the release notes.
+
+The publish workflow is retry-safe only when an existing registry version has exactly the same SHA-512 integrity as the locally verified tarball. It refuses to continue when the bytes differ.

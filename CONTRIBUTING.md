@@ -27,17 +27,13 @@ The framework gate builds Vite, webpack, Next.js client/server, and Ember Vite/E
 
 ## Compatibility
 
-Preserve the default `Storefront` constructor, `Storefront.newInstance`, named resource exports, store properties, arguments and defaults, request contracts, returned resource classes, and synchronous error behavior. Intentional breaking changes require a major Changeset and migration documentation.
+Preserve the default `Storefront` constructor, `Storefront.newInstance`, named resource exports, store properties, arguments and defaults, request contracts, returned resource classes, and synchronous error behavior. Intentional breaking changes require a major-version release branch and migration documentation.
 
-## Changesets
+## Release notes
 
-User-visible changes require a Changeset:
+User-visible changes must update the unreleased section of `CHANGELOG.md` or include clear release-note text in the pull request. The release owner moves those entries into the versioned section and updates `RELEASE.md` on `release/v<version>`.
 
-```sh
-pnpm changeset
-```
-
-Use an empty Changeset only for internal changes that do not affect consumers. Release PRs are generated automatically from Changesets.
+Internal-only changes should say explicitly that they do not affect consumers.
 
 ## Pull requests
 

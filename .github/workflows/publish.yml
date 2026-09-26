@@ -1,8 +1,8 @@
 name: Publish
 
 on:
-    release:
-        types: [published]
+    push:
+        tags: ['v*']
 
 permissions:
     contents: write
@@ -21,7 +21,7 @@ jobs:
         steps:
             - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
               with:
-                  ref: ${{ github.event.release.tag_name }}
+                  ref: ${{ github.ref_name }}
             - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
               with:
                   version: 9.15.4
@@ -32,7 +32,7 @@ jobs:
                   package-manager-cache: false
             - name: Require tag and package version parity
               env:
-                  RELEASE_TAG: ${{ github.event.release.tag_name }}
+                  RELEASE_TAG: ${{ github.ref_name }}
               run: node -e "const version = require('./package.json').version; const expected = 'v' + version; if (process.env.RELEASE_TAG !== expected) throw new Error('Release tag ' + process.env.RELEASE_TAG + ' does not match package ' + expected)"
             - run: npm install --global npm@11
             - run: pnpm install --frozen-lockfile
@@ -48,22 +48,37 @@ jobs:
                   sha256sum artifacts/*.tgz > artifacts/SHA256SUMS
             - name: Publish the verified bytes with provenance
               env:
-                  RELEASE_TAG: ${{ github.event.release.tag_name }}
+                  RELEASE_TAG: ${{ github.ref_name }}
               run: |
                   version="${RELEASE_TAG#v}"
                   dist_tag=latest
                   case "$version" in
                       *-*) dist_tag=next ;;
                   esac
-                  npm publish artifacts/*.tgz --access public --tag "$dist_tag"
+                  package="@fleetbase/storefront@$version"
+                  local_integrity="sha512-$(openssl dgst -sha512 -binary artifacts/*.tgz | openssl base64 -A)"
+                  published_integrity="$(npm view "$package" dist.integrity 2>/dev/null || true)"
+                  if [ -n "$published_integrity" ]; then
+                      test "$published_integrity" = "$local_integrity"
+                      echo "$package already contains the verified release bytes"
+                  else
+                      npm publish artifacts/*.tgz --access public --tag "$dist_tag"
+                  fi
             - name: Verify registry metadata
               env:
-                  PACKAGE_VERSION: ${{ github.event.release.tag_name }}
+                  PACKAGE_VERSION: ${{ github.ref_name }}
               run: |
                   expected="${PACKAGE_VERSION#v}"
                   actual="$(npm view @fleetbase/storefront@"$expected" version)"
                   test "$actual" = "$expected"
-            - name: Attach package and checksum to the GitHub Release
+            - name: Create the GitHub Release and attach verified artifacts
               env:
                   GH_TOKEN: ${{ github.token }}
-              run: gh release upload "${{ github.event.release.tag_name }}" artifacts/*.tgz artifacts/SHA256SUMS --clobber
+                  RELEASE_TAG: ${{ github.ref_name }}
+              run: |
+                  if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+                      gh release edit "$RELEASE_TAG" --title "$RELEASE_TAG" --notes-file RELEASE.md
+                  else
+                      gh release create "$RELEASE_TAG" --verify-tag --title "$RELEASE_TAG" --notes-file RELEASE.md
+                  fi
+                  gh release upload "$RELEASE_TAG" artifacts/*.tgz artifacts/SHA256SUMS --clobber
