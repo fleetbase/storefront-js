@@ -48,6 +48,7 @@ jobs:
                   sha256sum artifacts/*.tgz > artifacts/SHA256SUMS
             - name: Publish the verified bytes with provenance
               env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
                   RELEASE_TAG: ${{ github.ref_name }}
               run: |
                   version="${RELEASE_TAG#v}"
