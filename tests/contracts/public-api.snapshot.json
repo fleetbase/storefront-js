@@ -44,6 +44,7 @@
             "performAuthorizedRequest",
             "requestPhoneVerification",
             "setAdapter",
+            "socketToken",
             "startAccountClosure",
             "syncDevice",
             "token",

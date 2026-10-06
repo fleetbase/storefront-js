@@ -85,6 +85,7 @@ describe('store action wire contracts', () => {
             'customers/orders': [{ id: 'order_1' }],
             'customers/stripe-ephemeral-key': { key: 'ephemeral' },
             'customers/stripe-setup-intent': { secret: 'setup' },
+            'customers/socket-token': { token: 'jwt', expires_in: 900, expires_at: '2026-01-01T00:15:00.000Z' },
             'customers/account-closure': { started: true },
             'customers/confirm-account-closure': { confirmed: true },
             'customers/request-phone-verification': { sent: true },
@@ -98,6 +99,8 @@ describe('store action wire contracts', () => {
         expect((await customer.getOrderHistory({ limit: 5 }))[0]).toBeInstanceOf(FleetbaseOrder);
         await expect(customer.getStripeEphemeralKey({ version: '2026' })).resolves.toEqual({ key: 'ephemeral' });
         await expect(customer.getStripeSetupIntent()).resolves.toEqual({ secret: 'setup' });
+        await expect(customer.socketToken()).resolves.toEqual({ token: 'jwt', expires_in: 900, expires_at: '2026-01-01T00:15:00.000Z' });
+        expect(adapter.calls).toContainEqual(expect.objectContaining({ method: 'post', endpoint: 'customers/socket-token', params: {} }));
         await expect(customer.startAccountClosure({ reason: 'unused' }, { timeout: 2 })).resolves.toEqual({ started: true });
         await expect(customer.confirmAccountClosure('1234', { reason: 'unused' })).resolves.toEqual({ confirmed: true });
         await expect(customer.requestPhoneVerification('+12025550100', { locale: 'en' })).resolves.toEqual({ sent: true });
