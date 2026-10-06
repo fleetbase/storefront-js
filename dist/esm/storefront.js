@@ -486,6 +486,14 @@ class Customer extends StorefrontResource {
     getStripeSetupIntent(params = {}) {
         return this.performAuthorizedRequest('customers/stripe-setup-intent', params, 'POST');
     }
+    /**
+     * Mint a short-lived realtime (socket) token for this customer: `POST customers/socket-token`.
+     * The token lets the customer subscribe to their own channels, such as their orders.
+     * Refresh it about 60 seconds before `expires_in` elapses.
+     */
+    socketToken(params = {}, options = {}) {
+        return this.performAuthorizedRequest('customers/socket-token', params, 'POST', options);
+    }
     startAccountClosure(params = {}, options = {}) {
         return this.performAuthorizedRequest('customers/account-closure', params, 'POST', options);
     }
