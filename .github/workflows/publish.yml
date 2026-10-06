@@ -62,7 +62,7 @@ jobs:
                       test "$published_integrity" = "$local_integrity"
                       echo "$package already contains the verified release bytes"
                   else
-                      npm publish artifacts/*.tgz --access public --tag "$dist_tag"
+                      npm publish ./artifacts/*.tgz --access public --tag "$dist_tag"
                   fi
             - name: Verify registry metadata
               env:
