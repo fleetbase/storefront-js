@@ -168,6 +168,47 @@ const orders = await customer.getOrderHistory({ limit: 20 });
 
 SMS, Apple, Facebook, and Google login helpers remain available. Authorized requests attach `Customer-Token` per request instead of mutating shared adapter headers.
 
+## Realtime order updates
+
+Realtime channels require a short-lived socket token. A signed-in customer can mint one with `customer.socketToken()` (`POST customers/socket-token`, sent with the customer's `Customer-Token`). It resolves to `{ token, expires_in, expires_at }`; the token only authorizes that customer's own channels, such as `order.{order id}` for their orders.
+
+```js
+import { create } from 'socketcluster-client';
+
+const customer = await storefront.customers.login('person@example.com', 'password');
+
+// Keep the token in memory only; SocketCluster calls loadToken() before every (re)connect.
+let current = null;
+const remember = ({ token, expires_in }) => {
+    current = { token, refreshAt: Date.now() + (expires_in - 60) * 1000 };
+    return token;
+};
+const authEngine = {
+    saveToken: async (_name, token) => token,
+    removeToken: async () => {
+        const token = current?.token ?? null;
+        current = null;
+        return token;
+    },
+    loadToken: async () => (current && Date.now() < current.refreshAt ? current.token : remember(await customer.socketToken())),
+};
+
+const socket = create({ hostname: 'socket.example.com', secure: true, port: 443, authEngine });
+
+// Refresh about 60 seconds before the token expires.
+setInterval(async () => {
+    if (current && Date.now() >= current.refreshAt) {
+        await socket.authenticate(remember(await customer.socketToken()));
+    }
+}, 15_000);
+
+for await (const event of socket.subscribe(`order.${order.id}`)) {
+    console.log(event.event, event.data);
+}
+```
+
+`checkout.initialize()` responses also carry a `socket_token` scoped to that checkout's `checkout.{checkout id}` channel. A server without realtime authentication configured answers `customers/socket-token` with `404`; in that case connect without a token as before.
+
 ## Adapter replacement
 
 ```js

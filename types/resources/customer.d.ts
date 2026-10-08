@@ -1,6 +1,6 @@
 import Resource from '../resource.js';
 import { Adapter, Collection, Order, Place, StoreActions } from '@fleetbase/sdk';
-import type { Attributes, RequestOptions } from '../types.js';
+import type { Attributes, RequestOptions, SocketTokenResponse } from '../types.js';
 export declare const customerActions: StoreActions;
 export default class Customer extends Resource {
     constructor(attributes?: Attributes, adapter?: Adapter, options?: Attributes);
@@ -18,6 +18,12 @@ export default class Customer extends Resource {
     getOrderHistory(params?: Attributes): Promise<Collection<Order>>;
     getStripeEphemeralKey(params?: Attributes): Promise<unknown>;
     getStripeSetupIntent(params?: Attributes): Promise<unknown>;
+    /**
+     * Mint a short-lived realtime (socket) token for this customer: `POST customers/socket-token`.
+     * The token lets the customer subscribe to their own channels, such as their orders.
+     * Refresh it about 60 seconds before `expires_in` elapses.
+     */
+    socketToken(params?: Attributes, options?: RequestOptions): Promise<SocketTokenResponse>;
     startAccountClosure(params?: Attributes, options?: RequestOptions): Promise<unknown>;
     confirmAccountClosure(code: string, params?: Attributes, options?: RequestOptions): Promise<unknown>;
     requestPhoneVerification(phone: string, params?: Attributes, options?: RequestOptions): Promise<unknown>;

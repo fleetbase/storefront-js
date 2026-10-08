@@ -49,7 +49,7 @@ The executable wire assertions are in `tests/actions.test.js`; the frozen JavaSc
 
 ## Customer routes
 
-The static customer-store actions cover creation, email/password login, SMS login, verification codes, and Apple/Facebook/Google login. A hydrated `Customer` supplies request-scoped `Customer-Token` authentication for device registration, places, orders, Stripe helpers, account closure, phone verification, and the compatibility `contacts/{id}` update alias.
+The static customer-store actions cover creation, email/password login, SMS login, verification codes, and Apple/Facebook/Google login. A hydrated `Customer` supplies request-scoped `Customer-Token` authentication for device registration, places, orders, realtime socket tokens (`POST customers/socket-token` via `customer.socketToken()`), Stripe helpers, account closure, phone verification, and the compatibility `contacts/{id}` update alias.
 
 The SDK deliberately passes the token in each request's options instead of mutating adapter-global headers. This preserves the server contract while preventing one customer session from leaking into another request.
 

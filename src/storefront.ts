@@ -197,3 +197,4 @@ export default class Storefront {
 }
 
 export { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Review, Network, FoodTruck, Order, lookup };
+export type { SocketTokenResponse } from './types.js';
