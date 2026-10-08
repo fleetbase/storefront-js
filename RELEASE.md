@@ -1,18 +1,19 @@
-> v1.2.0 ~ "Modern Storefront SDK"
+> v2.0.0 ~ "Built on the core SDK v2, with realtime socket tokens"
 
 ---
 
 ## Highlights
 
-- Modernizes the SDK implementation with strict TypeScript while preserving the existing public API and request contracts.
-- Adds current marketplace and network helpers documented by the Storefront and Core APIs.
-- Ships verified ESM, CommonJS, browser, and TypeScript entry points with smaller, cleaner package contents.
-- Adds complete behavioral test coverage, mutation testing, dependency review, CodeQL, and packed-package validation.
-- Verifies consumers using npm, pnpm, Yarn, Bun, Vite, webpack, Next.js, and Ember.
-- Adds automated, protected npm publishing with provenance and checksummed GitHub release artifacts.
+- Builds on `@fleetbase/sdk` 2 as a regular dependency instead of a bundled copy of 1.2.13. Requests use the core SDK's Fetch transport; axios is no longer included.
+- Applications that also use the core SDK share one copy of it, so resources, adapters and `instanceof` checks match on both sides.
+- `customer.socketToken()` mints a customer-scoped realtime token (`POST customers/socket-token`) for authenticated socket channels.
 
-This release is intended to remain compatible with applications using `v1.1.14`. See the
-README and migration guide for the supported runtime matrix and packaging details.
+## Breaking changes
+
+- Resources follow core SDK 2 behaviour. For example, `getAttribute(name, fallback)` returns the fallback for `null` values as well as missing ones, and `Point` serializes as GeoJSON `[longitude, latitude]`.
+- Signed-out customer requests no longer send an empty `Customer-Token` header.
+
+The Storefront API surface (constructor, stores, actions and resource methods) is unchanged. Applications that also import `@fleetbase/sdk` should use v2.
 
 ---
 

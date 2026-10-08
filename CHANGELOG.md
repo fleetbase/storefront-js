@@ -2,6 +2,13 @@
 
 Release branches update this file with the user-visible changes included in each package version.
 
+## 2.0.0
+
+- Built on `@fleetbase/sdk` 2 as a regular dependency instead of a bundled copy of 1.2.13. Requests use the core SDK's Fetch transport, and axios is no longer included.
+- Resources follow core SDK 2 behaviour; for example, `getAttribute(name, fallback)` returns the fallback for `null` values as well as missing ones.
+- Signed-out customer requests no longer send an empty `Customer-Token` header.
+- Added `customer.socketToken()` for authenticated realtime channels.
+
 ## 1.2.0
 
 - Modernized the maintained SDK source with strict TypeScript while preserving the v1.1.14 public and request contracts.
