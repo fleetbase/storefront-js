@@ -70,8 +70,17 @@ jobs:
                   PACKAGE_VERSION: ${{ github.ref_name }}
               run: |
                   expected="${PACKAGE_VERSION#v}"
-                  actual="$(npm view @fleetbase/storefront@"$expected" version)"
-                  test "$actual" = "$expected"
+                  # npm can take minutes to serve a version it has just accepted; keep asking
+                  # for about ten minutes before failing.
+                  for delay in 10 15 20 30 45 60 60 60 60 60 60 60 60 60 0; do
+                      actual="$(npm view @fleetbase/storefront@"$expected" version 2>/dev/null || true)"
+                      if [ "$actual" = "$expected" ]; then
+                          exit 0
+                      fi
+                      sleep "$delay"
+                  done
+                  echo "::error::@fleetbase/storefront@$expected did not become available from the registry."
+                  exit 1
             - name: Create the GitHub Release and attach verified artifacts
               env:
                   GH_TOKEN: ${{ github.token }}

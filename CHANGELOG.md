@@ -2,6 +2,11 @@
 
 Release branches update this file with the user-visible changes included in each package version.
 
+## 2.0.1
+
+- Requires `@fleetbase/sdk` 2.1.1, so multi-value query parameters (several tags, several cart origins) reach the API intact; the browser bundle is rebuilt with it.
+- Publishing waits for npm to serve the new version before verifying it.
+
 ## 2.0.0
 
 - Built on `@fleetbase/sdk` 2 as a regular dependency instead of a bundled copy of 1.2.13. Requests use the core SDK's Fetch transport, and axios is no longer included.
