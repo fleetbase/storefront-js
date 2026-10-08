@@ -5,10 +5,10 @@ import Product from './product.js';
 import Review from './review.js';
 import Store from './store.js';
 import StoreLocation from './store-location.js';
-import { Adapter, Collection } from '@fleetbase/sdk';
+import { type AdapterLike, Collection } from '@fleetbase/sdk';
 import type { Attributes, ResourceConstructor } from '../types.js';
 export default class Network extends Resource {
-    constructor(attributes?: Attributes, adapter?: Adapter, options?: Attributes);
+    constructor(attributes?: Attributes, adapter?: AdapterLike, options?: Attributes);
     getTags(params?: Attributes): Promise<unknown>;
     getResourceCollection<T>(endpoint: string, ResourceClass: ResourceConstructor<T>, params?: Attributes): Promise<Collection<T>>;
     getStores(params?: Attributes): Promise<Collection<Store>>;

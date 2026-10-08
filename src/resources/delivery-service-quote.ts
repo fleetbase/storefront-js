@@ -1,37 +1,20 @@
-import StorefrontStore from '../store.js';
-import { Adapter, Collection, ServiceQuote, register } from '@fleetbase/sdk';
+import { Adapter, type AdapterLike, Collection, ServiceQuote, register } from '@fleetbase/sdk';
 import { formatCurrency, isEmpty, isArray } from '../utils/index.js';
-import type { Attributes, ResolvableIdentifier } from '../types.js';
+import type { Attributes, ResolvableIdentifier, StorefrontAdapter } from '../types.js';
 
 export default class DeliveryServiceQuote extends ServiceQuote {
-    constructor(attributes: Attributes | Adapter = {}, adapter?: Adapter, options: Attributes = {}) {
+    constructor(attributes: Attributes | AdapterLike = {}, adapter?: AdapterLike, options: Attributes = {}) {
         let finalAttributes: Attributes = attributes as Attributes;
-        let finalAdapter: Adapter | undefined = adapter;
+        let finalAdapter: AdapterLike | undefined = adapter;
 
         // If `attributes` is actually an Adapter, adjust the arguments accordingly.
         if (attributes instanceof Adapter || (attributes && typeof attributes.get === 'function' && typeof attributes.post === 'function')) {
             finalAttributes = {};
-            finalAdapter = attributes as Adapter;
+            finalAdapter = attributes as AdapterLike;
         }
 
         // Call `super()` exactly once with the resolved arguments.
-        super(finalAttributes, finalAdapter, 'service-quote', options);
-    }
-
-    /**
-     * Set a new adapter to the resource instance, this will update the Store instance
-     *
-     * @param {Adapter} adapter
-     * @return {this}
-     */
-    setAdapter(adapter: Adapter) {
-        this.adapter = adapter;
-        this.store = new StorefrontStore(this.resource, adapter, {
-            onAfterFetch: this.syncAttributes.bind(this),
-            actions: this.options?.actions,
-        });
-
-        return this;
+        super(finalAttributes, finalAdapter, options);
     }
 
     get formattedAmount() {
@@ -61,7 +44,7 @@ export default class DeliveryServiceQuote extends ServiceQuote {
             cart = cart.id;
         }
 
-        const serviceQuotes = await this.adapter.get<Attributes | Attributes[]>('service-quotes/from-cart', {
+        const serviceQuotes = await (this.adapter as StorefrontAdapter).get<Attributes | Attributes[]>('service-quotes/from-cart', {
             origin,
             destination,
             cart,
@@ -70,13 +53,13 @@ export default class DeliveryServiceQuote extends ServiceQuote {
         });
 
         if (isArray(serviceQuotes)) {
-            return new Collection(serviceQuotes.map((serviceQuote: Attributes) => new DeliveryServiceQuote(serviceQuote, this.adapter)));
+            return new Collection<DeliveryServiceQuote>(serviceQuotes.map((serviceQuote: Attributes) => new DeliveryServiceQuote(serviceQuote, this.adapter)));
         }
 
         return new DeliveryServiceQuote(serviceQuotes, this.adapter);
     }
 
-    static async getFromCart(adapter: Adapter, origin: ResolvableIdentifier, destination: ResolvableIdentifier, cart: ResolvableIdentifier, config = 'storefront', all = false) {
+    static async getFromCart(adapter: AdapterLike, origin: ResolvableIdentifier, destination: ResolvableIdentifier, cart: ResolvableIdentifier, config = 'storefront', all = false) {
         const quote = new DeliveryServiceQuote(adapter);
         return quote.fetchServiceQuotesFromCart(origin, destination, cart, config, all);
     }

@@ -1,8 +1,8 @@
 import Resource from '../resource.js';
-import { Adapter } from '@fleetbase/sdk';
+import { type AdapterLike } from '@fleetbase/sdk';
 import type { Attributes } from '../types.js';
 export default class StoreHour extends Resource {
-    constructor(attributes?: Attributes, adapter?: Adapter, options?: Attributes);
+    constructor(attributes?: Attributes, adapter?: AdapterLike, options?: Attributes);
     get day(): string;
     get isClosed(): boolean;
     get is24Hours(): boolean;
@@ -10,8 +10,8 @@ export default class StoreHour extends Resource {
     get endDateInstance(): Date | null;
     get humanReadableHoursRange(): string;
     get humanReadableHours(): string;
-    create(): void;
-    update(): void;
-    destroy(): void;
-    reload(): void;
+    create(): never;
+    update(): never;
+    destroy(): never;
+    reload(): never;
 }

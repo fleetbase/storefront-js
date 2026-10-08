@@ -1,10 +1,10 @@
 import Resource from '../resource.js';
 import Product from './product.js';
-import { Adapter, Collection, register } from '@fleetbase/sdk';
+import { type AdapterLike, Collection, register } from '@fleetbase/sdk';
 import type { Attributes } from '../types.js';
 
 export default class Category extends Resource {
-    constructor(attributes: Attributes = {}, adapter?: Adapter, options: Attributes = {}) {
+    constructor(attributes: Attributes = {}, adapter?: AdapterLike, options: Attributes = {}) {
         super(attributes, adapter, 'category', options);
     }
 

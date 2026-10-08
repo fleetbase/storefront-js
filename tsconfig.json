@@ -7,11 +7,7 @@
         "moduleResolution": "NodeNext",
         "target": "ES2022",
         "lib": ["ES2022", "DOM"],
-        "skipLibCheck": false,
-        "baseUrl": ".",
-        "paths": {
-            "@fleetbase/sdk": ["types-internal/fleetbase-sdk.d.ts"]
-        }
+        "skipLibCheck": false
     },
-    "include": ["src/**/*.ts", "types-internal/**/*.d.ts"]
+    "include": ["src/**/*.ts"]
 }

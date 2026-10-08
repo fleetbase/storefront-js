@@ -30,9 +30,9 @@ const shared = {
 export default [
     {
         ...shared,
-        // Keep @fleetbase/sdk internal until its package exports resolve
-        // consistently in webpack and CommonJS clean-room consumers.
-        external: ['countries-list', 'date-fns'],
+        // The core SDK is a real dependency, shared with the application; only the
+        // standalone browser bundle below inlines it.
+        external: ['@fleetbase/sdk', 'countries-list', 'date-fns'],
         plugins: [resolve, commonjs(), compileTypeScript()],
         output: {
             file: 'dist/esm/storefront.js',
@@ -43,7 +43,7 @@ export default [
     },
     {
         ...shared,
-        external: ['countries-list', 'date-fns'],
+        external: ['@fleetbase/sdk', 'countries-list', 'date-fns'],
         plugins: [resolve, commonjs(), compileTypeScript(), callableCommonJsDefault],
         output: {
             file: 'dist/cjs/storefront.cjs',

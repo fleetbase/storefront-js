@@ -5,11 +5,11 @@ import Product from './product.js';
 import Review from './review.js';
 import Store from './store.js';
 import StoreLocation from './store-location.js';
-import { Adapter, Collection, register } from '@fleetbase/sdk';
+import { type AdapterLike, Collection, register } from '@fleetbase/sdk';
 import type { Attributes, ResourceConstructor } from '../types.js';
 
 export default class Network extends Resource {
-    constructor(attributes: Attributes = {}, adapter?: Adapter, options: Attributes = {}) {
+    constructor(attributes: Attributes = {}, adapter?: AdapterLike, options: Attributes = {}) {
         super(attributes, adapter, 'network', options);
     }
 
@@ -19,7 +19,7 @@ export default class Network extends Resource {
 
     async getResourceCollection<T>(endpoint: string, ResourceClass: ResourceConstructor<T>, params: Attributes = {}): Promise<Collection<T>> {
         const resources = await this.adapter.get<Attributes[]>(endpoint, params);
-        return new Collection(resources.map((attributes: Attributes) => new ResourceClass(attributes, this.adapter)));
+        return new Collection<T>(resources.map((attributes: Attributes) => new ResourceClass(attributes, this.adapter)));
     }
 
     async getStores(params: Attributes = {}) {

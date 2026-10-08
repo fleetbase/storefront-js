@@ -1,9 +1,9 @@
 import Resource from '../resource.js';
 import StoreHour from './store-hour.js';
-import { Adapter, Collection } from '@fleetbase/sdk';
+import { type AdapterLike, Collection } from '@fleetbase/sdk';
 import type { Attributes } from '../types.js';
 export default class StoreLocation extends Resource {
-    constructor(attributes?: Attributes, adapter?: Adapter, options?: Attributes);
+    constructor(attributes?: Attributes, adapter?: AdapterLike, options?: Attributes);
     get latitude(): number | undefined;
     get longitude(): number | undefined;
     get hours(): Collection<StoreHour>;
@@ -16,7 +16,7 @@ export default class StoreLocation extends Resource {
     get isAlwaysOpen(): boolean;
     get today(): Collection<StoreHour>;
     get schedule(): Record<string, Collection<StoreHour>>;
-    create(): void;
-    update(): void;
-    destroy(): void;
+    create(): never;
+    update(): never;
+    destroy(): never;
 }
