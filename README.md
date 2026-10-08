@@ -24,6 +24,8 @@ yarn add @fleetbase/storefront
 bun add @fleetbase/storefront
 ```
 
+It is built on the core [`@fleetbase/sdk`](https://github.com/fleetbase/fleetbase-js) 2, which installs with it. Applications that use both should keep them on the same major version so they share one copy.
+
 The package supports Node.js 22 and 24, native ECMAScript modules (ESM), CommonJS, browsers, server-side rendering, and TypeScript `node16`, `nodenext`, and `bundler` resolution. See the [compatibility policy](docs/compatibility.md) for the tested matrix.
 
 ## Quick start

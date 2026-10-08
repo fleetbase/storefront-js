@@ -9,7 +9,7 @@ describe('resource and store contracts', () => {
     it('serializes registered resources and rebuilds stores when adapters change', () => {
         const adapter = new FakeAdapter();
         const store = new StorefrontStore('product', adapter);
-        expect(store.extendActions()).toBeUndefined();
+        expect(store.extendActions()).toBe(store);
         expect(store.serialize({ id: 'product_1' })).toBeInstanceOf(Product);
 
         const resource = new StorefrontResource({ id: 'custom_1' }, adapter, 'storefront-resource');
@@ -17,6 +17,19 @@ describe('resource and store contracts', () => {
         expect(resource.setAdapter(nextAdapter)).toBe(resource);
         expect(resource.adapter).toBe(nextAdapter);
         expect(resource.store.adapter).toBe(nextAdapter);
+    });
+
+    it('keeps the core resource update and empty for resources that do not replace them', async () => {
+        const adapter = new FakeAdapter({ 'put:storefront-resources/custom_1': { id: 'custom_1', name: 'Renamed' } });
+        const resource = new StorefrontResource({ id: 'custom_1', name: 'Original' }, adapter, 'storefront-resource');
+
+        await resource.update({ name: 'Renamed' });
+        expect(adapter.calls[0]).toMatchObject({ method: 'put', endpoint: 'storefront-resources/custom_1', params: { name: 'Renamed' } });
+        expect(resource.getAttribute('name')).toBe('Renamed');
+
+        expect(resource.empty()).toBe(resource);
+        expect(resource.getAttribute('name')).toBeNull();
+        expect(new StoreLocation({}, adapter).hours).toHaveLength(0);
     });
 
     it('implements cart actions, coercion, totals, and empty states', async () => {

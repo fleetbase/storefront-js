@@ -1,11 +1,11 @@
 import Resource from '../resource.js';
-import { Adapter, register } from '@fleetbase/sdk';
+import { type AdapterLike, register } from '@fleetbase/sdk';
 import type { Attributes } from '../types.js';
 
 export default class PaymentGateway extends Resource {
     private token?: string;
 
-    constructor(attributes: Attributes = {}, adapter?: Adapter, options: Attributes = {}) {
+    constructor(attributes: Attributes = {}, adapter?: AdapterLike, options: Attributes = {}) {
         super(attributes, adapter, 'payment-gateway', options);
     }
 
@@ -38,27 +38,27 @@ export default class PaymentGateway extends Resource {
     }
 
     // remove default resource methods
-    findRecord() {
+    findRecord(): never {
         throw new Error('There is no findRecord() method for payment gateways!');
     }
 
     // remove default resource methods
-    create() {
+    override create(): never {
         throw new Error('There is no create() method for payment gateways!');
     }
 
     // remove default resource methods
-    update() {
+    override update(): never {
         throw new Error('There is no update() method for payment gateways!');
     }
 
     // remove default resource methods
-    destroy() {
+    override destroy(): never {
         throw new Error('There is no destroy() method for payment gateways!');
     }
 
     // remove default resource methods
-    reload() {
+    override reload(): never {
         throw new Error('There is no reload() method for payment gateways!');
     }
 }

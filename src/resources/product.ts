@@ -1,12 +1,12 @@
 import Resource from '../resource.js';
 import Review from './review.js';
 import { formatCurrency, isEmpty } from '../utils/index.js';
-import { Adapter, Collection, register } from '@fleetbase/sdk';
+import { type AdapterLike, Collection, register } from '@fleetbase/sdk';
 import Store from './store.js';
 import type { Attributes } from '../types.js';
 
 export default class Product extends Resource {
-    constructor(attributes: Attributes = {}, adapter?: Adapter, options: Attributes = {}) {
+    constructor(attributes: Attributes = {}, adapter?: AdapterLike, options: Attributes = {}) {
         super(attributes, adapter, 'product', options);
     }
 
@@ -19,15 +19,15 @@ export default class Product extends Resource {
     }
 
     images(): unknown[] {
-        return this.getAttribute('images') ?? [];
+        return (this.getAttribute('images') ?? []) as unknown[];
     }
 
     videos(): unknown[] {
-        return this.getAttribute('videos') ?? [];
+        return (this.getAttribute('videos') ?? []) as unknown[];
     }
 
     hours(): unknown[] {
-        return this.getAttribute('hours') ?? [];
+        return (this.getAttribute('hours') ?? []) as unknown[];
     }
 
     get isOnSale(): boolean {
@@ -68,7 +68,7 @@ export default class Product extends Resource {
 
     getReviews(): Promise<Collection<Review>> {
         return this.adapter.get<Attributes[]>('reviews', { store: this.id }).then((reviews) => {
-            return new Collection(reviews.map((attributes: Attributes) => new Review(attributes, this.adapter)));
+            return new Collection<Review>(reviews.map((attributes: Attributes) => new Review(attributes, this.adapter)));
         });
     }
 }

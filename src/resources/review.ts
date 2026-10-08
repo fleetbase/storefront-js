@@ -1,5 +1,5 @@
 import Resource from '../resource.js';
-import { Adapter, StoreActions, register } from '@fleetbase/sdk';
+import { type AdapterLike, StoreActions, register } from '@fleetbase/sdk';
 import type { Attributes, RequestOptions } from '../types.js';
 import type StorefrontStore from '../store.js';
 
@@ -16,7 +16,7 @@ export const reviewActions = new StoreActions({
 });
 
 export default class Review extends Resource {
-    constructor(attributes: Attributes = {}, adapter?: Adapter, options: Attributes = {}) {
+    constructor(attributes: Attributes = {}, adapter?: AdapterLike, options: Attributes = {}) {
         super(attributes, adapter, 'review', options);
     }
 

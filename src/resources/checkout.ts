@@ -1,6 +1,6 @@
 import Resource from '../resource.js';
 import Order from './order.js';
-import { Adapter, StoreActions, isResource, register } from '@fleetbase/sdk';
+import { type AdapterLike, StoreActions, isResource, register } from '@fleetbase/sdk';
 import type { Attributes, RequestOptions, ResourceIdentifier } from '../types.js';
 import type StorefrontStore from '../store.js';
 
@@ -20,19 +20,19 @@ export const checkoutActions = new StoreActions({
         options: RequestOptions = {}
     ) {
         if (isResource(customer)) {
-            customer = customer.id;
+            customer = customer.id as string;
         }
 
         if (isResource(cart)) {
-            cart = cart.id;
+            cart = cart.id as string;
         }
 
         if (isResource(serviceQuote)) {
-            serviceQuote = serviceQuote.id;
+            serviceQuote = serviceQuote.id as string;
         }
 
         if (isResource(gateway)) {
-            gateway = gateway.getAttribute('code');
+            gateway = gateway.getAttribute('code') as string;
         }
 
         return this.adapter.get(`${this.namespace}/before`, { ...orderOptions, customer, cart, serviceQuote, gateway }, options);
@@ -44,7 +44,7 @@ export const checkoutActions = new StoreActions({
 
     createStripeSetupIntent: function (this: StorefrontStore, customer: ResourceIdentifier, params: Attributes = {}, options: RequestOptions = {}) {
         if (isResource(customer)) {
-            customer = customer.id;
+            customer = customer.id as string;
         }
 
         return this.adapter.post(`${this.namespace}/stripe-setup-intent`, { customer, ...params }, options);
@@ -60,15 +60,15 @@ export const checkoutActions = new StoreActions({
         options: RequestOptions = {}
     ) {
         if (isResource(customer)) {
-            customer = customer.id;
+            customer = customer.id as string;
         }
 
         if (isResource(cart)) {
-            cart = cart.id;
+            cart = cart.id as string;
         }
 
         if (isResource(serviceQuote)) {
-            serviceQuote = serviceQuote.id;
+            serviceQuote = serviceQuote.id as string;
         }
 
         return this.adapter.put(`${this.namespace}/stripe-update-payment-intent`, { paymentIntent, customer, cart, serviceQuote, ...orderOptions }, options);
@@ -76,7 +76,7 @@ export const checkoutActions = new StoreActions({
 
     getStatus: function (this: StorefrontStore, checkout: ResourceIdentifier, token: string, options: RequestOptions = {}) {
         if (isResource(checkout)) {
-            checkout = checkout.id;
+            checkout = checkout.id as string;
         }
 
         return this.adapter.get(`${this.namespace}/status`, { checkout, token }, options);
@@ -84,7 +84,7 @@ export const checkoutActions = new StoreActions({
 
     captureQPay: function (this: StorefrontStore, checkout: ResourceIdentifier, params: Attributes = {}, options: RequestOptions = {}) {
         if (isResource(checkout)) {
-            checkout = checkout.id;
+            checkout = checkout.id as string;
         }
 
         return this.adapter.post(`${this.namespace}/capture-qpay`, { checkout, ...params }, options);
@@ -92,7 +92,7 @@ export const checkoutActions = new StoreActions({
 
     captureQPayCallback: function (this: StorefrontStore, checkout: ResourceIdentifier, params: Attributes = {}, options: RequestOptions = {}) {
         if (isResource(checkout)) {
-            checkout = checkout.id;
+            checkout = checkout.id as string;
         }
 
         return this.adapter.get(`${this.namespace}/capture-qpay`, { checkout, ...params }, options);
@@ -100,7 +100,7 @@ export const checkoutActions = new StoreActions({
 });
 
 export default class Checkout extends Resource {
-    constructor(attributes: Attributes = {}, adapter?: Adapter, options: Attributes = {}) {
+    constructor(attributes: Attributes = {}, adapter?: AdapterLike, options: Attributes = {}) {
         super(attributes, adapter, 'checkout', { actions: checkoutActions, ...options });
     }
 

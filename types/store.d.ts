@@ -1,8 +1,14 @@
-import { Store, StoreActions } from '@fleetbase/sdk';
-import type { Adapter } from '@fleetbase/sdk';
-import type { Attributes } from './types.js';
-export default class StorefrontStore<T = unknown> extends Store<T> {
-    constructor(resource: string, adapter: Adapter, options?: Attributes);
-    extendActions(actions?: StoreActions | Array<undefined>): this;
-    serialize(json: Attributes): T;
+import { Store } from '@fleetbase/sdk';
+import type { AdapterLike, Collection } from '@fleetbase/sdk';
+import type { Attributes, StorefrontAdapter } from './types.js';
+/**
+ * A Storefront API store. The core SDK store already serializes JSON into registered
+ * resources and extends itself with actions; this keeps Storefront's public class name
+ * and its contract that listing endpoints resolve to collections.
+ */
+export default class StorefrontStore<T = any> extends Store<T> {
+    adapter: StorefrontAdapter;
+    constructor(resource: string, adapter?: AdapterLike | null, options?: Attributes);
+    findAll(options?: {}): Promise<Collection<T>>;
+    query(query?: Attributes, options?: {}): Promise<Collection<T>>;
 }

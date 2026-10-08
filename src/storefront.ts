@@ -7,8 +7,8 @@ import { checkoutActions } from './resources/checkout.js';
 import { reviewActions } from './resources/review.js';
 import { orderActions } from './resources/order-actions.js';
 import { Collection, lookup, detectAdapter } from '@fleetbase/sdk';
-import type { Adapter } from '@fleetbase/sdk';
-import type { Attributes, RequestOptions, ResourceIdentifier, StorefrontConfig } from './types.js';
+import type { AdapterLike } from '@fleetbase/sdk';
+import type { Attributes, RequestOptions, ResourceIdentifier, StorefrontAdapter, StorefrontConfig } from './types.js';
 
 export interface ReviewStoreActions {
     count(storeId?: string, options?: RequestOptions): Promise<unknown>;
@@ -76,7 +76,7 @@ export type OrderStore = StorefrontStore<Order> & OrderStoreActions;
 export default class Storefront {
     version: string;
     options: Attributes;
-    adapter: Adapter;
+    adapter: StorefrontAdapter;
     products!: StorefrontStore<Product>;
     categories!: StorefrontStore<Category>;
     foodTrucks!: StorefrontStore<FoodTruck>;
@@ -108,7 +108,7 @@ export default class Storefront {
             throw new Error('⚠️ Invalid Storefront key given to Storefront SDK');
         }
 
-        this.adapter = config.adapter || detectAdapter(this.options);
+        this.adapter = (config.adapter || detectAdapter(this.options)) as StorefrontAdapter;
 
         this.initializeStores();
     }
@@ -169,7 +169,7 @@ export default class Storefront {
      */
     search(query: string, options: Attributes = {}): Promise<Collection<Product>> {
         return this.adapter.get<Attributes[]>('search', { query, ...options }).then((products) => {
-            return new Collection(products.map((product: Attributes) => new Product(product, this.adapter)));
+            return new Collection<Product>(products.map((product: Attributes) => new Product(product, this.adapter)));
         });
     }
 
@@ -185,8 +185,8 @@ export default class Storefront {
         return new Storefront(...args);
     }
 
-    setAdapter(adapter: Adapter) {
-        this.adapter = adapter;
+    setAdapter(adapter: AdapterLike) {
+        this.adapter = adapter as StorefrontAdapter;
 
         return this.initializeStores();
     }

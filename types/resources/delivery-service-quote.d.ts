@@ -1,14 +1,7 @@
-import { Adapter, Collection, ServiceQuote } from '@fleetbase/sdk';
+import { type AdapterLike, Collection, ServiceQuote } from '@fleetbase/sdk';
 import type { Attributes, ResolvableIdentifier } from '../types.js';
 export default class DeliveryServiceQuote extends ServiceQuote {
-    constructor(attributes?: Attributes | Adapter, adapter?: Adapter, options?: Attributes);
-    /**
-     * Set a new adapter to the resource instance, this will update the Store instance
-     *
-     * @param {Adapter} adapter
-     * @return {this}
-     */
-    setAdapter(adapter: Adapter): this;
+    constructor(attributes?: Attributes | AdapterLike, adapter?: AdapterLike, options?: Attributes);
     get formattedAmount(): string | null;
     fromCart(...args: Parameters<DeliveryServiceQuote['fetchServiceQuotesFromCart']>): Promise<DeliveryServiceQuote | Collection<DeliveryServiceQuote>>;
     fetchServiceQuotesFromCart(
@@ -19,7 +12,7 @@ export default class DeliveryServiceQuote extends ServiceQuote {
         all?: boolean
     ): Promise<DeliveryServiceQuote | Collection<DeliveryServiceQuote>>;
     static getFromCart(
-        adapter: Adapter,
+        adapter: AdapterLike,
         origin: ResolvableIdentifier,
         destination: ResolvableIdentifier,
         cart: ResolvableIdentifier,

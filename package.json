@@ -93,6 +93,7 @@
         "prepack": "pnpm run build"
     },
     "dependencies": {
+        "@fleetbase/sdk": "^2.0.0",
         "countries-list": "^3.4.1",
         "date-fns": "^4.4.0"
     },
@@ -103,7 +104,6 @@
         "@rollup/plugin-node-resolve": "^16.0.3",
         "@rollup/plugin-terser": "^1.0.0",
         "@rollup/plugin-typescript": "^12.3.0",
-        "@fleetbase/sdk": "1.2.13",
         "@stryker-mutator/core": "10.0.0",
         "@stryker-mutator/vitest-runner": "10.0.0",
         "@vitest/coverage-v8": "^4.0.0",
@@ -125,10 +125,6 @@
     },
     "pnpm": {
         "overrides": {
-            "@babel/runtime": "7.28.4",
-            "axios": "1.20.0",
-            "follow-redirects": "1.16.0",
-            "form-data": "4.0.6",
             "qs": "6.16.0"
         }
     }

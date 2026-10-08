@@ -1,11 +1,11 @@
 import Resource from '../resource.js';
 import StoreHour from './store-hour.js';
-import { Adapter, Collection, lookup, register } from '@fleetbase/sdk';
+import { type AdapterLike, Collection, lookup, register } from '@fleetbase/sdk';
 import { format } from 'date-fns';
 import type { Attributes } from '../types.js';
 
 export default class StoreLocation extends Resource {
-    constructor(attributes: Attributes = {}, adapter?: Adapter, options: Attributes = {}) {
+    constructor(attributes: Attributes = {}, adapter?: AdapterLike, options: Attributes = {}) {
         super(attributes, adapter, 'store-location', options);
     }
 
@@ -18,8 +18,9 @@ export default class StoreLocation extends Resource {
     }
 
     get hours(): Collection<StoreHour> {
-        const hours = this.getAttribute<Attributes[]>('hours', []);
-        return new Collection((hours || []).map((attributes) => new StoreHour(attributes, this.adapter)));
+        // The SDK returns the default when hours are null or missing.
+        const hours = this.getAttribute('hours', []) as Attributes[];
+        return new Collection<StoreHour>(hours.map((attributes) => new StoreHour(attributes, this.adapter)));
     }
 
     /** Raw embedded merchant payload, normalized across API response versions. */
@@ -75,17 +76,17 @@ export default class StoreLocation extends Resource {
     }
 
     // remove default resource methods
-    create() {
+    override create(): never {
         throw new Error('There is no create() method store location!');
     }
 
     // remove default resource methods
-    update() {
+    override update(): never {
         throw new Error('There is no update() method store location!');
     }
 
     // remove default resource methods
-    destroy() {
+    override destroy(): never {
         throw new Error('There is no destroy() method store location!');
     }
 }

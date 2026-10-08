@@ -43,7 +43,6 @@
             "getStripeSetupIntent",
             "performAuthorizedRequest",
             "requestPhoneVerification",
-            "setAdapter",
             "socketToken",
             "startAccountClosure",
             "syncDevice",
@@ -51,7 +50,7 @@
             "updateContactAlias",
             "verifyPhoneNumber"
         ],
-        "DeliveryServiceQuote": ["constructor", "fetchServiceQuotesFromCart", "formattedAmount", "fromCart", "setAdapter"],
+        "DeliveryServiceQuote": ["constructor", "fetchServiceQuotesFromCart", "formattedAmount", "fromCart"],
         "FoodTruck": ["constructor"],
         "Network": ["constructor", "getCategories", "getPaymentGateways", "getResourceCollection", "getReviews", "getStoreLocations", "getStores", "getTags", "lookupStore", "search"],
         "Order": ["constructor"],

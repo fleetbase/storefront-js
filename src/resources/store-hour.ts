@@ -1,10 +1,10 @@
 import Resource from '../resource.js';
 import { format, parse, isValid } from 'date-fns';
-import { Adapter, register } from '@fleetbase/sdk';
+import { type AdapterLike, register } from '@fleetbase/sdk';
 import type { Attributes } from '../types.js';
 
 export default class StoreHour extends Resource {
-    constructor(attributes: Attributes = {}, adapter?: Adapter, options: Attributes = {}) {
+    constructor(attributes: Attributes = {}, adapter?: AdapterLike, options: Attributes = {}) {
         super(attributes, adapter, 'store-hour', options);
     }
 
@@ -84,22 +84,22 @@ export default class StoreHour extends Resource {
     }
 
     // remove default resource methods
-    create() {
+    override create(): never {
         throw new Error('There is no create() method store location!');
     }
 
     // remove default resource methods
-    update() {
+    override update(): never {
         throw new Error('There is no update() method store location!');
     }
 
     // remove default resource methods
-    destroy() {
+    override destroy(): never {
         throw new Error('There is no destroy() method store location!');
     }
 
     // remove default resource methods
-    reload() {
+    override reload(): never {
         throw new Error('There is no reload() method store location!');
     }
 }
