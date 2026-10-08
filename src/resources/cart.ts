@@ -1,6 +1,6 @@
 import Resource from '../resource.js';
 import Product from './product.js';
-import { Adapter, StoreActions, register } from '@fleetbase/sdk';
+import { type AdapterLike, StoreActions, register } from '@fleetbase/sdk';
 import type { Attributes, RequestOptions } from '../types.js';
 import type StorefrontStore from '../store.js';
 
@@ -34,7 +34,7 @@ export const cartActions = new StoreActions({
 });
 
 export default class Cart extends Resource {
-    constructor(attributes: Attributes = {}, adapter?: Adapter, options: Attributes = {}) {
+    constructor(attributes: Attributes = {}, adapter?: AdapterLike, options: Attributes = {}) {
         super(attributes, adapter, 'cart', { actions: cartActions, ...options });
     }
 

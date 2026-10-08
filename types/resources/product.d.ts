@@ -1,10 +1,10 @@
 import Resource from '../resource.js';
 import Review from './review.js';
-import { Adapter, Collection } from '@fleetbase/sdk';
+import { type AdapterLike, Collection } from '@fleetbase/sdk';
 import Store from './store.js';
 import type { Attributes } from '../types.js';
 export default class Product extends Resource {
-    constructor(attributes?: Attributes, adapter?: Adapter, options?: Attributes);
+    constructor(attributes?: Attributes, adapter?: AdapterLike, options?: Attributes);
     variants(): unknown;
     addons(): unknown;
     images(): unknown[];

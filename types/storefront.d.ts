@@ -1,9 +1,8 @@
-import './fleetbase-sdk.js';
 import StorefrontStore from './store.js';
 import { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Review, Network, FoodTruck, Order } from './resources.js';
 import { Collection, lookup } from '@fleetbase/sdk';
-import type { Adapter } from '@fleetbase/sdk';
-import type { Attributes, RequestOptions, ResourceIdentifier, StorefrontConfig } from './types.js';
+import type { AdapterLike } from '@fleetbase/sdk';
+import type { Attributes, RequestOptions, ResourceIdentifier, StorefrontAdapter, StorefrontConfig } from './types.js';
 export interface ReviewStoreActions {
     count(storeId?: string, options?: RequestOptions): Promise<unknown>;
 }
@@ -64,7 +63,7 @@ export type OrderStore = StorefrontStore<Order> & OrderStoreActions;
 export default class Storefront {
     version: string;
     options: Attributes;
-    adapter: Adapter;
+    adapter: StorefrontAdapter;
     products: StorefrontStore<Product>;
     categories: StorefrontStore<Category>;
     foodTrucks: StorefrontStore<FoodTruck>;
@@ -120,8 +119,8 @@ export default class Storefront {
     search(query: string, options?: Attributes): Promise<Collection<Product>>;
     hydrateOwner(attributes?: Attributes): Store | Network;
     static newInstance(...args: ConstructorParameters<typeof Storefront>): Storefront;
-    setAdapter(adapter: Adapter): this;
-    getAdapter(): Adapter;
+    setAdapter(adapter: AdapterLike): this;
+    getAdapter(): StorefrontAdapter;
 }
 export { Product, Category, Customer, Cart, Store, StoreLocation, StoreHour, DeliveryServiceQuote, Checkout, PaymentGateway, Review, Network, FoodTruck, Order, lookup };
 export type { SocketTokenResponse } from './types.js';

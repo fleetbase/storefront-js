@@ -1,6 +1,6 @@
 import Resource from '../resource.js';
 import StorefrontStore from '../store.js';
-import { Adapter, Collection, Order, Place, StoreActions, register } from '@fleetbase/sdk';
+import { type AdapterLike, Collection, Order, Place, StoreActions, register } from '@fleetbase/sdk';
 import { isPhone } from '../utils/is-phone.js';
 import type { Attributes, RequestOptions, SocketTokenResponse } from '../types.js';
 
@@ -55,27 +55,11 @@ export const customerActions = new StoreActions({
 });
 
 export default class Customer extends Resource {
-    constructor(attributes: Attributes = {}, adapter?: Adapter, options: Attributes = {}) {
+    constructor(attributes: Attributes = {}, adapter?: AdapterLike, options: Attributes = {}) {
         super(attributes, adapter, 'customer', {
             actions: customerActions,
             ...options,
         });
-    }
-
-    /**
-     * Set a new adapter to the resource instance, this will update the Store instance
-     *
-     * @param {import('@fleetbase/sdk').Adapter} adapter
-     * @return {this}
-     */
-    setAdapter(adapter: Adapter) {
-        this.adapter = adapter;
-        this.store = new StorefrontStore(this.resource, adapter, {
-            onAfterFetch: this.syncAttributes.bind(this),
-            actions: this.options?.actions,
-        }) as StorefrontStore & Record<string, (...args: unknown[]) => unknown>;
-
-        return this;
     }
 
     get token(): string | undefined {
@@ -90,9 +74,10 @@ export default class Customer extends Resource {
     performAuthorizedRequest<T = unknown>(endpoint: string, params: Attributes = {}, method = 'GET', options: RequestOptions = {}): Promise<T> {
         const requestOptions: RequestOptions = {
             ...options,
+            // Signed out there is no token; send no header rather than "undefined".
             headers: {
                 ...options.headers,
-                'Customer-Token': this.token,
+                ...(this.token ? { 'Customer-Token': this.token } : {}),
             },
         };
 

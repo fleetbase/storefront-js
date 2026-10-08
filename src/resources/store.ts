@@ -2,11 +2,11 @@ import Resource from '../resource.js';
 import StoreLocation from './store-location.js';
 import PaymentGateway from './payment-gateway.js';
 import Review from './review.js';
-import { Adapter, Collection, Place, register } from '@fleetbase/sdk';
+import { type AdapterLike, Collection, Place, register } from '@fleetbase/sdk';
 import type { Attributes } from '../types.js';
 
 export default class Store extends Resource {
-    constructor(attributes: Attributes = {}, adapter?: Adapter, options: Attributes = {}) {
+    constructor(attributes: Attributes = {}, adapter?: AdapterLike, options: Attributes = {}) {
         super(attributes, adapter, 'store', options);
     }
 
