@@ -93,7 +93,7 @@
         "prepack": "pnpm run build"
     },
     "dependencies": {
-        "@fleetbase/sdk": "^2.1.0",
+        "@fleetbase/sdk": "^2.1.1",
         "countries-list": "^3.4.1",
         "date-fns": "^4.4.0"
     },

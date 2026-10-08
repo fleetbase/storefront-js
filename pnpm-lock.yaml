@@ -11,8 +11,8 @@ importers:
     .:
         dependencies:
             '@fleetbase/sdk':
-                specifier: ^2.1.0
-                version: 2.1.0
+                specifier: ^2.1.1
+                version: 2.1.1
             countries-list:
                 specifier: ^3.4.1
                 version: 3.4.1
@@ -365,8 +365,8 @@ packages:
         resolution: { integrity: sha512-+CNAzxglkrpNf/kKywqQfk74QjtceuOE7Qm+AF8miRvPF/wmmK5+OJOgVh3AVTT3RP2mH3+FOaxlE5v72owk0A== }
         engines: { node: ^20.19.0 || ^22.13.0 || >=24 }
 
-    '@fleetbase/sdk@2.1.0':
-        resolution: { integrity: sha512-8d3cViE5H083fAoAAi1FYXt04IjWlAxSanh8Do1kVDixfu7yKv9O8Plc5R1EgPh4Kjh2BeffW9Ur0oR7TTZtcA== }
+    '@fleetbase/sdk@2.1.1':
+        resolution: { integrity: sha512-TqN0cbJeOeC4nyJR5TwNKqlnv3F/sk6K0n7Qz5u5vo9jnYpdCAI9THc+9AvvxoplAGN7gr1uoyOY7fTQCP1ULw== }
         engines: { node: '>=20.19.4' }
 
     '@humanfs/core@0.19.1':
@@ -3002,7 +3002,7 @@ snapshots:
             '@eslint/core': 1.2.1
             levn: 0.4.1
 
-    '@fleetbase/sdk@2.1.0': {}
+    '@fleetbase/sdk@2.1.1': {}
 
     '@humanfs/core@0.19.1': {}
 
